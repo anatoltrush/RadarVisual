@@ -1,32 +1,54 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-{
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
+
+    isCanStopped = false;
+
+    thrRcv = std::thread(&MainWindow::canRcv, this);
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow(){
+    isCanStopped = true;
+    if (thrRcv.joinable()) thrRcv.join();
+
     delete ui;
 }
 
-void MainWindow::paintEvent(QPaintEvent *)
-{
-    /*QPainter painter(this);
-    QColor coordLineColor(255, 0, 0, 255);
+void MainWindow::on_pBStartApply_clicked(){
+    if(ui->rBInpCAN->isChecked()){
 
-    QPen apen = QPen(coordLineColor);
-    apen.setWidth(5);
-    painter.setPen(apen);
+    }
+    if(ui->rBInpZMQ->isChecked()){
 
-    painter.drawLine(QLine(0,0,300,0));
-    painter.drawLine(QLine(0,0,0,300));
+    }
+    if(ui->rBInpFile->isChecked()){
 
-    painter.drawText(QPoint(5,13), "0,0");
-    painter.drawText(QPoint(280,13), "300");
-    painter.drawText(QPoint(5,295), "300");*/
+    }
 }
 
+void MainWindow::on_rBInpCAN_clicked(){
+
+}
+
+void MainWindow::on_rBInpZMQ_clicked(){
+
+}
+
+void MainWindow::on_rBInpFile_clicked(){
+
+}
+
+void MainWindow::on_cBInpRadNum_activated(int index){
+
+}
+
+void MainWindow::canRcv(){
+    canfd_frame pframe;
+    size_t nbytes = 0;
+    while(!isCanStopped){
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::cout << "MainWindow::canRcv()" << std::endl;
+    }
+}

@@ -1,6 +1,6 @@
 #include "visualgl.h"
 
-VisualGL::VisualGL()
+VisualGL::VisualGL(QWidget *parent):QOpenGLWidget(parent)
 {
 
 }

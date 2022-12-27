@@ -6,7 +6,7 @@
 class VisualGL : public QOpenGLWidget
 {
 public:
-    VisualGL();
+    VisualGL(QWidget *parent = 0);
 };
 
 #endif // VISUALGL_H
