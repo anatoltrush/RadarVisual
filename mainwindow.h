@@ -2,10 +2,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMessageBox>
 
 #include <thread>
 #include <iostream>
+
+#include <net/if.h>
 #include <linux/can.h>
+#include <linux/can/raw.h>
+#include <sys/ioctl.h>
 
 #include "filter.h"
 
@@ -39,15 +44,22 @@ private:
 
     // --- Input from CAN ---
     int handle = 0;
+    struct sockaddr_can sockAddr;
+    struct ifreq ifr;
     std::string deviceName;
+    //std::atomic<std::string> deviceName;
     std::thread thrRcv;
     bool isCanStopped = true;
 
+    bool openCan(const QString &device);
     void canRcv();
 
     // --- Input from ZMQ ---
 
     // --- Input from File ---
+
+    uint8_t* resData;
+    uint8_t resDataLen = 0;
 
     Filter filter;
 };
