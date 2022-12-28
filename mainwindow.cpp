@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     isCanStopped = false;
 
     thrRcv = std::thread(&MainWindow::canRcv, this);
+
+    on_cBInpRadNum_activated(ui->cBInpRadNum->currentIndex());
 }
 
 MainWindow::~MainWindow(){
@@ -22,7 +24,7 @@ void MainWindow::on_pBStartApply_clicked(){
             QMessageBox::information(this, "Info","Empty input data");
             return;
         }
-        bool isCanOpened = openCan(ui->lEInpCAN->text());
+        bool isCanOpened = openCan(ui->lEInpCAN->text().toStdString());
         if(isCanOpened)
             ui->pBStartApply->setStyleSheet("background-color: green");
         else
@@ -54,14 +56,9 @@ void MainWindow::on_rBInpFile_clicked(){
 
 }
 
-void MainWindow::on_cBInpRadNum_activated(int index){
-
-}
-
-bool MainWindow::openCan(const QString &device){
-    bool isOpened = false;
-    handle = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-    std::string infoMess;
+bool MainWindow::openCan(const std::string &device){
+    isCanOpened = false;
+    handle = socket(PF_CAN, SOCK_RAW, CAN_RAW);    
     if(handle != -1){
         can_err_mask_t err_mask = CAN_ERR_MASK;
         setsockopt(handle, SOL_CAN_RAW, CAN_RAW_ERR_FILTER, &err_mask, sizeof(err_mask));
@@ -74,28 +71,28 @@ bool MainWindow::openCan(const QString &device){
 
         sockAddr.can_family = AF_CAN;
 
-        if(device.isEmpty()) sockAddr.can_ifindex = 0;
+        if(device.empty()) sockAddr.can_ifindex = 0;
         else{
             //strncpy(ifr.ifr_name, device.toStdString().c_str(), device.length());
-            strcpy(ifr.ifr_name, device.toStdString().c_str());
+            strcpy(ifr.ifr_name, device.c_str());
             if(ioctl(handle, SIOCGIFINDEX, &ifr) == 0){
                 sockAddr.can_ifindex = ifr.ifr_ifindex;
             }
             else{
-                infoMess = "Failed to retrieve the interface index. Error: ";
-                infoMess.append(strerror(errno));
-                ui->statBar->showMessage(QString::fromStdString(infoMess));
+                statRadMess = "Failed to retrieve the interface index. Error: ";
+                statRadMess.append(strerror(errno));
+                ui->statBar->showMessage(statRadMess);
                 return false;
             }
         }
 
         int enable_canfd = 0;
-        infoMess = "CAN interface ---> " + device.toStdString() + " <---";
+        statRadMess = "CAN interface ---> " + QString::fromStdString(device) + " <---";
         if(setsockopt(handle, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &enable_canfd, sizeof(enable_canfd)) == 0)
-            infoMess.append(" is set to CAN FD capable");
+            statRadMess.append(" is set to CAN FD capable");
         else
-            infoMess.append(" is not CAN FD capable");
-        ui->statBar->showMessage(QString::fromStdString(infoMess));
+            statRadMess.append(" is not CAN FD capable");
+        ui->statBar->showMessage(statRadMess);
 
         timeval tv;
         tv.tv_sec = 0;
@@ -103,34 +100,43 @@ bool MainWindow::openCan(const QString &device){
         setsockopt(handle, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
 
         if(bind(handle, reinterpret_cast<struct sockaddr *>(&sockAddr), sizeof(sockAddr)) == 0){
-            isOpened = true;
-            deviceName = device.toStdString();
+            isCanOpened = true;
+            deviceName = device;
         }
         else{
-            infoMess = "Failed to bind socket. Error: ";
-            infoMess.append(strerror(errno));
-            ui->statBar->showMessage(QString::fromStdString(infoMess));
+            statRadMess = "Failed to bind socket. Error: ";
+            statRadMess.append(strerror(errno));
+            ui->statBar->showMessage(statRadMess);
         }
     }
     else{
-        infoMess = "Can't open socket ";
-        infoMess.append(strerror(errno));
-        ui->statBar->showMessage(QString::fromStdString(infoMess));
+        statRadMess = "Can't open socket ";
+        statRadMess.append(strerror(errno));
+        ui->statBar->showMessage(statRadMess);
     }
-    return isOpened;
+    return isCanOpened;
 }
 
 void MainWindow::canRcv(){
+    QString statLocalMess;
     canfd_frame pframe;
-    size_t nbytes = 0;
-
-    std::string strSrc = &deviceName.back();
-
+    int nbytes = 0;
     while(!isCanStopped){
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
-        //nbytes = read(handle, &pframe, sizeof(pframe));
+        std::string strSource = &deviceName.back();
+        if(!isCanOpened) continue;
 
+        nbytes = read(handle, &pframe, sizeof(pframe));
+
+        if(nbytes <= 0){
+            statLocalMess = statRadMess + " | Failed to receive CAN data";
+        }
+        else{
+            msgNumCan++;
+            statLocalMess = statRadMess + " | " + QString::number(nbytes) + " bytes received";
+        }
+        ui->statBar->showMessage(statLocalMess);
         //std::cout << deviceName << std::endl;
     }
 }

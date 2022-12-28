@@ -11,6 +11,7 @@
 #include <linux/can.h>
 #include <linux/can/raw.h>
 #include <sys/ioctl.h>
+#include <unistd.h>
 
 #include "filter.h"
 
@@ -33,25 +34,29 @@ private slots:
     void on_rBInpZMQ_clicked();
     void on_rBInpFile_clicked();
 
-    void on_cBInpRadNum_activated(int index);
+    void on_cBInpRadNum_activated(int index){currRadar = index;}
 
 private:
     Ui::MainWindow *ui;
 
+    QString statRadMess;
+
     uint64_t msgNumCan = 0;
     uint64_t msgNumZmq = 0;
     uint64_t msgNumFile = 0;
+
+    int currRadar = -1;
 
     // --- Input from CAN ---
     int handle = 0;
     struct sockaddr_can sockAddr;
     struct ifreq ifr;
     std::string deviceName;
-    //std::atomic<std::string> deviceName;
     std::thread thrRcv;
     bool isCanStopped = true;
+    bool isCanOpened = false;
 
-    bool openCan(const QString &device);
+    bool openCan(const std::string &device);
     void canRcv();
 
     // --- Input from ZMQ ---
