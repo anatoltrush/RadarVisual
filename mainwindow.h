@@ -3,9 +3,11 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include <thread>
 #include <iostream>
+#include <fstream>
 
 #include <net/if.h>
 #include <linux/can.h>
@@ -13,14 +15,19 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
-#include "filter.h"
+#include "converter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+struct CanLine{
+    QString timeStamp;
+    QString canNum;
+    QString canData;
+};
+
+class MainWindow : public QMainWindow{
     Q_OBJECT
 
 public:
@@ -34,7 +41,7 @@ private slots:
     void on_rBInpZMQ_clicked();
     void on_rBInpFile_clicked();
 
-    void on_cBInpRadNum_activated(int index){currRadar = index;}
+    void on_cBInpRadNum_activated(int index){converter.currRadarNum = index;}
 
 private:
     Ui::MainWindow *ui;
@@ -44,8 +51,6 @@ private:
     uint64_t msgNumCan = 0;
     uint64_t msgNumZmq = 0;
     uint64_t msgNumFile = 0;
-
-    int currRadar = -1;
 
     // --- Input from CAN ---
     int handle = 0;
@@ -62,10 +67,15 @@ private:
     // --- Input from ZMQ ---
 
     // --- Input from File ---
+    QString pathFileCanLog;
+    int wordsCount(const std::string& fname);
+    std::vector<CanLine> canLines;
+    void fillCanLines(QFile &file, int linesAmount);
+    void playCanFile();
 
     uint8_t* resData;
     uint8_t resDataLen = 0;
 
-    Filter filter;
+    Converter converter;
 };
 #endif // MAINWINDOW_H

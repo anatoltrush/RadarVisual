@@ -19,27 +19,48 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::on_pBStartApply_clicked(){
+    // from CAN
     if(ui->rBInpCAN->isChecked()){
         if(ui->lEInpCAN->text().isEmpty()){
-            QMessageBox::information(this, "Info","Empty input data");
+            QMessageBox::information(this, "Input from file","Empty input data");
             return;
         }
+        // --- --- ---
         bool isCanOpened = openCan(ui->lEInpCAN->text().toStdString());
         if(isCanOpened)
             ui->pBStartApply->setStyleSheet("background-color: green");
         else
             ui->pBStartApply->setStyleSheet("background-color: red");
     }
+
+    // from ZMQ
     if(ui->rBInpZMQ->isChecked()){
         if(ui->lEInpZMQ->text().isEmpty()){
-            QMessageBox::information(this, "Info","Empty input data");
+            QMessageBox::information(this, "Input from ZMQ","Empty input data");
             return;
         }
+        // --- --- ---
     }
+
+    // from file
     if(ui->rBInpFile->isChecked()){
         if(ui->lEInpFile->text().isEmpty()){
-            QMessageBox::information(this, "Info","Empty input data");
+            QMessageBox::information(this, "Input from log file","Empty input data");
             return;
+        }
+        // --- --- ---
+        pathFileCanLog = ui->lEInpFile->text();
+        QFile file(pathFileCanLog);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+            ui->pBStartApply->setStyleSheet("background-color: red");
+            QMessageBox::critical(this, "Error","File not found");
+            return;
+        }
+        else{
+            int stringCount = wordsCount(pathFileCanLog.toStdString()) / 3; // 3 words in line
+            fillCanLines(file, stringCount); // ...loading...
+            ui->pBStartApply->setStyleSheet("background-color: green");
+            playCanFile();
         }
     }
 }
@@ -53,7 +74,8 @@ void MainWindow::on_rBInpZMQ_clicked(){
 }
 
 void MainWindow::on_rBInpFile_clicked(){
-
+    pathFileCanLog = QFileDialog::getOpenFileName(this, tr("Open CAN log"), "", tr("Log files (*.log)"));
+    ui->lEInpFile->setText(pathFileCanLog);
 }
 
 bool MainWindow::openCan(const std::string &device){
@@ -73,7 +95,6 @@ bool MainWindow::openCan(const std::string &device){
 
         if(device.empty()) sockAddr.can_ifindex = 0;
         else{
-            //strncpy(ifr.ifr_name, device.toStdString().c_str(), device.length());
             strcpy(ifr.ifr_name, device.c_str());
             if(ioctl(handle, SIOCGIFINDEX, &ifr) == 0){
                 sockAddr.can_ifindex = ifr.ifr_ifindex;
@@ -127,7 +148,7 @@ void MainWindow::canRcv(){
         std::string strSource = &deviceName.back();
         if(!isCanOpened) continue;
 
-        nbytes = read(handle, &pframe, sizeof(pframe));
+        nbytes = read(handle, &pframe, sizeof(pframe)); // FIXME: change function
 
         if(nbytes <= 0){
             statLocalMess = statRadMess + " | Failed to receive CAN data";
@@ -139,4 +160,36 @@ void MainWindow::canRcv(){
         ui->statBar->showMessage(statLocalMess);
         //std::cout << deviceName << std::endl;
     }
+}
+
+int MainWindow::wordsCount(const std::string &fname){
+    std::ifstream file(fname);
+    if(!file) throw std::runtime_error("can`t open file: " + fname);
+    return std::distance((std::istream_iterator<std::string>(file)), (std::istream_iterator<std::string>()));
+}
+
+void MainWindow::fillCanLines(QFile &file, int linesAmount){
+    canLines.clear();
+    ui->progressBar->setValue(0);
+    int percent = 0;
+    QTextStream in(&file);
+    while (!in.atEnd()){
+        QString line = in.readLine();
+        QStringList strList = line.split(u' ', Qt::SkipEmptyParts);
+
+        CanLine canLine; // TODO: fill can line
+        canLine.timeStamp = strList[0];
+        canLine.timeStamp.remove(0, 1);
+        canLine.timeStamp.chop(1);
+        canLine.canNum = strList[1];
+        canLine.canData = strList[2];
+        canLines.push_back(canLine);
+
+        percent = (canLines.size() / (float)linesAmount) * 100;
+        ui->progressBar->setValue(percent);
+    }
+}
+
+void MainWindow::playCanFile(){
+    // TODO: play can lines
 }

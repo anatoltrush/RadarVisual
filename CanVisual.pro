@@ -8,13 +8,13 @@ LIBS    += -lglu32 -lopengl32
 }
 
 SOURCES += \
-    filter.cpp \
+    converter.cpp \
     main.cpp \
     mainwindow.cpp \
     visualgl.cpp
 
 HEADERS += \
-    filter.h \
+    converter.h \
     mainwindow.h \
     visualgl.h
 

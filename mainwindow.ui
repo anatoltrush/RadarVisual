@@ -42,7 +42,7 @@
       <x>10</x>
       <y>50</y>
       <width>321</width>
-      <height>241</height>
+      <height>271</height>
      </rect>
     </property>
     <property name="title">
@@ -51,6 +51,70 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
       <layout class="QGridLayout" name="gridLayout_2">
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lEInpFile">
+         <property name="placeholderText">
+          <string>/home/user/Desktop/candump-2022-05-14.log</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QRadioButton" name="rBInpZMQ">
+         <property name="text">
+          <string>ZMQ Socket</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lInpRadNum">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Choose radar:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QRadioButton" name="rBInpCAN">
+         <property name="text">
+          <string>CAN</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lEInpZMQ">
+         <property name="placeholderText">
+          <string>tcp://127.0.0.1:7001</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QPushButton" name="pBStartApply">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Start/Apply</string>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="0">
         <widget class="QRadioButton" name="rBInpFile">
          <property name="text">
@@ -107,78 +171,7 @@
          </item>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="lEInpFile">
-         <property name="placeholderText">
-          <string>/home/user/Desktop/candump-2022-05-14.log</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QRadioButton" name="rBInpCAN">
-         <property name="text">
-          <string>CAN</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QRadioButton" name="rBInpZMQ">
-         <property name="text">
-          <string>ZMQ Socket</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="lEInpCAN">
-         <property name="placeholderText">
-          <string>can0; vcan1; emuccan0</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lEInpZMQ">
-         <property name="placeholderText">
-          <string>tcp://127.0.0.1:7001</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lInpRadNum">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Choose radar:</string>
-         </property>
-        </widget>
-       </item>
        <item row="5" column="1">
-        <widget class="QPushButton" name="pBStartApply">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>15</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Start/Apply</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
         <widget class="Line" name="line_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
@@ -194,6 +187,27 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lEInpCAN">
+         <property name="placeholderText">
+          <string>can0; vcan1; emuccan0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lProgress">
+         <property name="text">
+          <string>Progress:</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
@@ -203,7 +217,7 @@
      <rect>
       <x>330</x>
       <y>50</y>
-      <width>191</width>
+      <width>193</width>
       <height>561</height>
      </rect>
     </property>
