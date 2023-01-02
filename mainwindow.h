@@ -79,3 +79,4 @@ private:
     Converter converter;
 };
 #endif // MAINWINDOW_H
+// TODO: Add range in properties

@@ -188,6 +188,7 @@ void MainWindow::fillCanLines(QFile &file, int linesAmount){
         percent = (canLines.size() / (float)linesAmount) * 100;
         ui->progressBar->setValue(percent);
     }
+    if(percent >= 100) ui->statBar->showMessage("File loaded: " + pathFileCanLog);
 }
 
 void MainWindow::playCanFile(){
