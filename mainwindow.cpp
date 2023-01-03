@@ -6,7 +6,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     isCanStopped = false;
 
+#ifdef __WIN32
+#else
     thrRcv = std::thread(&MainWindow::canRcv, this);
+#endif
 
     on_cBInpRadNum_activated(ui->cBInpRadNum->currentIndex());
 }
@@ -26,7 +29,10 @@ void MainWindow::on_pBStartApply_clicked(){
             return;
         }
         // --- --- ---
+#ifdef __WIN32
+#else
         bool isCanOpened = openCan(ui->lEInpCAN->text().toStdString());
+#endif
         if(isCanOpened)
             ui->pBStartApply->setStyleSheet("background-color: green");
         else
@@ -78,6 +84,8 @@ void MainWindow::on_rBInpFile_clicked(){
     ui->lEInpFile->setText(pathFileCanLog);
 }
 
+#ifdef __WIN32
+#else
 bool MainWindow::openCan(const std::string &device){
     isCanOpened = false;
     handle = socket(PF_CAN, SOCK_RAW, CAN_RAW);    
@@ -137,7 +145,10 @@ bool MainWindow::openCan(const std::string &device){
     }
     return isCanOpened;
 }
+#endif
 
+#ifdef __WIN32
+#else
 void MainWindow::canRcv(){
     QString statLocalMess;
     canfd_frame pframe;
@@ -161,6 +172,7 @@ void MainWindow::canRcv(){
         //std::cout << deviceName << std::endl;
     }
 }
+#endif
 
 int MainWindow::wordsCount(const std::string &fname){
     std::ifstream file(fname);

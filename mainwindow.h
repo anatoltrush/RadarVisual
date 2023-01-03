@@ -8,12 +8,15 @@
 #include <thread>
 #include <iostream>
 #include <fstream>
+#include <unistd.h>
 
+#ifdef __WIN32
+#else
 #include <net/if.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
 #include <sys/ioctl.h>
-#include <unistd.h>
+#endif
 
 #include "converter.h"
 
@@ -54,15 +57,21 @@ private:
 
     // --- Input from CAN ---
     int handle = 0;
+#ifdef __WIN32
+#else
     struct sockaddr_can sockAddr;
     struct ifreq ifr;
+#endif
     std::string deviceName;
     std::thread thrRcv;
     bool isCanStopped = true;
     bool isCanOpened = false;
 
+#ifdef __WIN32
+#else
     bool openCan(const std::string &device);
     void canRcv();
+#endif
 
     // --- Input from ZMQ ---
 
@@ -80,3 +89,4 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: Add range in properties
+// TODO: Change UI

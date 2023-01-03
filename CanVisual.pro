@@ -9,14 +9,17 @@ LIBS    += -lglu32 -lopengl32
 
 SOURCES += \
     converter.cpp \
+    displaydata.cpp \
     main.cpp \
     mainwindow.cpp \
     visualgl.cpp
 
 HEADERS += \
     converter.h \
+    displaydata.h \
     mainwindow.h \
     visualgl.h
 
 FORMS += \
+    displaydata.ui \
     mainwindow.ui
