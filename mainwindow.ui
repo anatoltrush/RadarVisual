@@ -106,7 +106,6 @@
          <property name="font">
           <font>
            <pointsize>15</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -385,9 +384,9 @@
    <widget class="VisualGL" name="displayWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>600</x>
       <y>70</y>
-      <width>640</width>
+      <width>480</width>
       <height>480</height>
      </rect>
     </property>

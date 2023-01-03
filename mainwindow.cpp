@@ -187,14 +187,17 @@ void MainWindow::fillCanLines(QFile &file, int linesAmount){
     QTextStream in(&file);
     while (!in.atEnd()){
         QString line = in.readLine();
-        QStringList strList = line.split(u' ', Qt::SkipEmptyParts);
+        QStringList strList1 = line.split(u' ', Qt::SkipEmptyParts);
 
-        CanLine canLine; // TODO: fill can line
-        canLine.timeStamp = strList[0];
+        CanLine canLine;
+        canLine.timeStamp = strList1[0];
         canLine.timeStamp.remove(0, 1);
         canLine.timeStamp.chop(1);
-        canLine.canNum = strList[1];
-        canLine.canData = strList[2];
+        canLine.canNum = strList1[1];
+
+        QStringList strList2 = strList1[2].split(u'#', Qt::SkipEmptyParts);
+        canLine.canId = strList2[0];
+        canLine.canData = strList2[1];
         canLines.push_back(canLine);
 
         percent = (canLines.size() / (float)linesAmount) * 100;

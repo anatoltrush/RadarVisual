@@ -27,6 +27,7 @@ QT_END_NAMESPACE
 struct CanLine{
     QString timeStamp;
     QString canNum;
+    QString canId;
     QString canData;
 };
 
