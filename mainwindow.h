@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QApplication>
+#include <QScreen>
 
 #include <thread>
 #include <iostream>
@@ -19,6 +21,7 @@
 #endif
 
 #include "converter.h"
+#include "displaydata.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -45,10 +48,12 @@ private slots:
     void on_rBInpZMQ_clicked();
     void on_rBInpFile_clicked();
 
-    void on_cBInpRadNum_activated(int index){converter.currRadarNum = index;}
+    void on_pBAddDisplay_clicked();
 
 private:
     Ui::MainWindow *ui;
+
+    DisplayData* displays[RADAR_NUM];
 
     QString statRadMess;
 
@@ -90,4 +95,7 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: Add range in properties
-// TODO: Change UI
+// TODO: OverLap
+// TODO: Play button in read from file
+// TODO: Show OpenGL point
+// TODO: Save aspect ratio OpenGL widget

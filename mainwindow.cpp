@@ -4,6 +4,11 @@
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
+    for (int i = 0; i < RADAR_NUM; i++){
+        displays[i] = new DisplayData(this);
+        displays[i]->setWindowTitle("Display " + QString::number(i));
+    }
+
     isCanStopped = false;
 
 #ifdef __WIN32
@@ -11,12 +16,31 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     thrRcv = std::thread(&MainWindow::canRcv, this);
 #endif
 
-    on_cBInpRadNum_activated(ui->cBInpRadNum->currentIndex());
+    // Placing
+    QScreen* screen = QApplication::primaryScreen();
+    int wScrn = screen->geometry().width();
+    int hScrn = screen->geometry().height();
+
+    int wFir = this->width();
+    int wSec = displays[0]->width();
+    int hFir = this->height();
+
+    int fullW = wFir + wSec;
+    int sideGap = (wScrn - fullW) / 2;
+    int upGap = (hScrn - hFir) / 2;
+
+    this->move(sideGap, upGap);
+
+    on_pBAddDisplay_clicked();
+    this->show();
 }
 
 MainWindow::~MainWindow(){
     isCanStopped = true;
     if (thrRcv.joinable()) thrRcv.join();
+
+    for (int i = 0; i < RADAR_NUM; i++)
+        delete displays[i];
 
     delete ui;
 }
@@ -208,4 +232,15 @@ void MainWindow::fillCanLines(QFile &file, int linesAmount){
 
 void MainWindow::playCanFile(){
     // TODO: play can lines
+}
+
+void MainWindow::on_pBAddDisplay_clicked(){
+    for (int i = 0; i < RADAR_NUM; i++) {
+        if(displays[i]->isHidden()){
+            displays[i]->move(this->geometry().topRight().x(), this->pos().y());
+            displays[i]->show();
+            return;
+        }
+    }
+    QMessageBox::information(this, "Info", "All displays shown");
 }

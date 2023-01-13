@@ -2,40 +2,24 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>768</height>
+    <width>400</width>
+    <height>600</height>
    </rect>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
   </property>
   <property name="windowTitle">
    <string>CanVisual</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="Line" name="lineDisplay">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>40</y>
-      <width>20</width>
-      <height>661</height>
-     </rect>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Sunken</enum>
-    </property>
-    <property name="lineWidth">
-     <number>3</number>
-    </property>
-    <property name="midLineWidth">
-     <number>3</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="gBInput">
     <property name="geometry">
      <rect>
@@ -51,30 +35,40 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="lEInpFile">
-         <property name="placeholderText">
-          <string>/home/user/Desktop/candump-2022-05-14.log</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QRadioButton" name="rBInpZMQ">
-         <property name="text">
-          <string>ZMQ Socket</string>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="lInpRadNum">
+        <widget class="QLabel" name="lProgress">
+         <property name="text">
+          <string>Progress:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lEInpZMQ">
+         <property name="placeholderText">
+          <string>tcp://127.0.0.1:7001</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="Line" name="line_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text">
-          <string>Choose radar:</string>
+         <property name="lineWidth">
+          <number>3</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
@@ -88,14 +82,21 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lEInpZMQ">
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lEInpCAN">
          <property name="placeholderText">
-          <string>tcp://127.0.0.1:7001</string>
+          <string>can0; vcan1; emuccan0</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="1" column="0">
+        <widget class="QRadioButton" name="rBInpZMQ">
+         <property name="text">
+          <string>ZMQ Socket</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
         <widget class="QPushButton" name="pBStartApply">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -114,6 +115,13 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lEInpFile">
+         <property name="placeholderText">
+          <string>/home/user/Desktop/candump-2022-05-14.log</string>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="0">
         <widget class="QRadioButton" name="rBInpFile">
          <property name="text">
@@ -121,287 +129,32 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QComboBox" name="cBInpRadNum">
-         <item>
-          <property name="text">
-           <string>Radar 0</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Radar 1</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Radar 2</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Radar 3</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Radar 4</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Radar 5</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Radar 6</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Radar 7</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Radar 8</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="Line" name="line_2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="lineWidth">
-          <number>3</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="lEInpCAN">
-         <property name="placeholderText">
-          <string>can0; vcan1; emuccan0</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QProgressBar" name="progressBar">
-         <property name="value">
-          <number>0</number>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lProgress">
-         <property name="text">
-          <string>Progress:</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QPushButton" name="pBAddDisplay">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>50</y>
-      <width>193</width>
-      <height>561</height>
+      <x>130</x>
+      <y>350</y>
+      <width>181</width>
+      <height>141</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
-     <item>
-      <widget class="QGroupBox" name="gBClType">
-       <property name="title">
-        <string>Cluster type:</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QCheckBox" name="cBClMov">
-            <property name="text">
-             <string>moving</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="cBClStat">
-            <property name="text">
-             <string>stationary</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="cBClOnCom">
-            <property name="text">
-             <string>oncoming</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="cBClStatCond">
-            <property name="text">
-             <string>stationary candidate</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="cBClUnkn">
-            <property name="text">
-             <string>unknown</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="cBClCrossStat">
-            <property name="text">
-             <string>crossing stationary</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="cBClCrossMov">
-            <property name="text">
-             <string>crossing moving</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="cBClStop">
-            <property name="text">
-             <string>stopped</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_5">
-       <property name="title">
-        <string>Display:</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_4">
-        <item row="0" column="0">
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QRadioButton" name="rBDisplayRCS">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>RCS</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rBDisplayDist">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Dist</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rBDisplayVel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Vel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rBDisplayPdh0">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Pdh0</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="VisualGL" name="displayWidget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>600</x>
-      <y>70</y>
-      <width>480</width>
-      <height>480</height>
-     </rect>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Add Display</string>
     </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statBar"/>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>VisualGL</class>
-   <extends>QWidget</extends>
-   <header location="global">visualgl.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

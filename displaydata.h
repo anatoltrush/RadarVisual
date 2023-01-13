@@ -1,13 +1,13 @@
 #ifndef DISPLAYDATA_H
 #define DISPLAYDATA_H
 
-#include <QDialog>
+#include <QMainWindow>
 
-namespace Ui {
-class DisplayData;
-}
+#define RADAR_NUM   8
 
-class DisplayData : public QDialog
+namespace Ui {class DisplayData;}
+
+class DisplayData : public QMainWindow
 {
     Q_OBJECT
 
