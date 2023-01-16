@@ -23,16 +23,17 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     int wFir = this->width();
     int wSec = displays[0]->width();
-    int hFir = this->height();
+    int hSec = displays[0]->height();
 
     int fullW = wFir + wSec;
     int sideGap = (wScrn - fullW) / 2;
-    int upGap = (hScrn - hFir) / 2;
+    int upGap = (hScrn - hSec) / 2;
 
     this->move(sideGap, upGap);
+    // ---
 
     on_pBAddDisplay_clicked();
-    this->show();
+    this->setWindowFlags(Qt::WindowCloseButtonHint);
 }
 
 MainWindow::~MainWindow(){
@@ -49,24 +50,24 @@ void MainWindow::on_pBStartApply_clicked(){
     // from CAN
     if(ui->rBInpCAN->isChecked()){
         if(ui->lEInpCAN->text().isEmpty()){
-            QMessageBox::information(this, "Input from file","Empty input data");
+            QMessageBox::information(this, "Input from file", "Empty input data");
             return;
         }
         // --- --- ---
 #ifdef __WIN32
 #else
         bool isCanOpened = openCan(ui->lEInpCAN->text().toStdString());
-#endif
         if(isCanOpened)
             ui->pBStartApply->setStyleSheet("background-color: green");
         else
             ui->pBStartApply->setStyleSheet("background-color: red");
+#endif
     }
 
     // from ZMQ
     if(ui->rBInpZMQ->isChecked()){
         if(ui->lEInpZMQ->text().isEmpty()){
-            QMessageBox::information(this, "Input from ZMQ","Empty input data");
+            QMessageBox::information(this, "Input from ZMQ", "Empty input data");
             return;
         }
         // --- --- ---
@@ -75,23 +76,12 @@ void MainWindow::on_pBStartApply_clicked(){
     // from file
     if(ui->rBInpFile->isChecked()){
         if(ui->lEInpFile->text().isEmpty()){
-            QMessageBox::information(this, "Input from log file","Empty input data");
+            QMessageBox::information(this, "Input from log file", "Empty input data");
             return;
         }
         // --- --- ---
-        pathFileCanLog = ui->lEInpFile->text();
-        QFile file(pathFileCanLog);
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-            ui->pBStartApply->setStyleSheet("background-color: red");
-            QMessageBox::critical(this, "Error","File not found");
-            return;
-        }
-        else{
-            int stringCount = wordsCount(pathFileCanLog.toStdString()) / 3; // 3 words in line
-            fillCanLines(file, stringCount); // ...loading...
-            ui->pBStartApply->setStyleSheet("background-color: green");
-            playCanFile();
-        }
+        if(isFileLoaded) playCanFile();
+        else QMessageBox::information(this, "Input from log file", "File not loaded");
     }
 }
 
@@ -183,7 +173,7 @@ void MainWindow::canRcv(){
         std::string strSource = &deviceName.back();
         if(!isCanOpened) continue;
 
-        nbytes = read(handle, &pframe, sizeof(pframe)); // FIXME: change function
+        nbytes = read(handle, &pframe, sizeof(pframe));
 
         if(nbytes <= 0){
             statLocalMess = statRadMess + " | Failed to receive CAN data";
@@ -205,13 +195,17 @@ int MainWindow::wordsCount(const std::string &fname){
 }
 
 void MainWindow::fillCanLines(QFile &file, int linesAmount){
-    canLines.clear();
+    for (int i = 0; i < RADAR_NUM; i++)
+        displays[i]->canLines.clear();
+    // --- cleaned ---
     ui->progressBar->setValue(0);
     int percent = 0;
+    int countCanLine = 0;
     QTextStream in(&file);
     while (!in.atEnd()){
         QString line = in.readLine();
         QStringList strList1 = line.split(u' ', Qt::SkipEmptyParts);
+        if(strList1.size() < 3) break;
 
         CanLine canLine;
         canLine.timeStamp = strList1[0];
@@ -220,11 +214,17 @@ void MainWindow::fillCanLines(QFile &file, int linesAmount){
         canLine.canNum = strList1[1];
 
         QStringList strList2 = strList1[2].split(u'#', Qt::SkipEmptyParts);
+        if(strList2.size() < 2) break;
         canLine.canId = strList2[0];
         canLine.canData = strList2[1];
-        canLines.push_back(canLine);
 
-        percent = (canLines.size() / (float)linesAmount) * 100;
+        // --- send in Display ---
+        if(canLine.canId.size() != 3) continue;
+        int currIdIndex = canLine.canId[1].digitValue();
+        displays[currIdIndex]->canLines.push_back(canLine);
+
+        countCanLine++;
+        percent = (countCanLine / (float)linesAmount) * 100;
         ui->progressBar->setValue(percent);
     }
     if(percent >= 100) ui->statBar->showMessage("File loaded: " + pathFileCanLog);
@@ -235,7 +235,7 @@ void MainWindow::playCanFile(){
 }
 
 void MainWindow::on_pBAddDisplay_clicked(){
-    for (int i = 0; i < RADAR_NUM; i++) {
+    for (int i = 0; i < RADAR_NUM; i++){
         if(displays[i]->isHidden()){
             displays[i]->move(this->geometry().topRight().x(), this->pos().y());
             displays[i]->show();
@@ -243,4 +243,28 @@ void MainWindow::on_pBAddDisplay_clicked(){
         }
     }
     QMessageBox::information(this, "Info", "All displays shown");
+}
+
+void MainWindow::on_pBLoadFile_clicked(){
+    if(ui->lEInpFile->text().isEmpty()){
+        QMessageBox::information(this, "Input from log file","Empty input data");
+        return;
+    }
+    // --- --- ---
+
+    isFileLoaded = false;
+    pathFileCanLog = ui->lEInpFile->text();
+    QFile file(pathFileCanLog);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        ui->pBLoadFile->setStyleSheet("background-color: red");
+        QMessageBox::critical(this, "Error","File not found");
+        ui->progressBar->setValue(0);
+        return;
+    }
+    else{
+        int stringCount = wordsCount(pathFileCanLog.toStdString()) / 3; // 3 words in line
+        fillCanLines(file, stringCount); // ...loading...
+        ui->pBLoadFile->setStyleSheet("background-color: green");
+        isFileLoaded = true;
+    }
 }

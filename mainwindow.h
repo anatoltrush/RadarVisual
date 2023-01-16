@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QApplication>
+#include <QTextStream>
 #include <QScreen>
 
 #include <thread>
@@ -27,13 +28,6 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-struct CanLine{
-    QString timeStamp;
-    QString canNum;
-    QString canId;
-    QString canData;
-};
-
 class MainWindow : public QMainWindow{
     Q_OBJECT
 
@@ -42,13 +36,13 @@ public:
     ~MainWindow();
 
 private slots:
+    void on_pBLoadFile_clicked();
     void on_pBStartApply_clicked();
+    void on_pBAddDisplay_clicked();
 
     void on_rBInpCAN_clicked();
     void on_rBInpZMQ_clicked();
-    void on_rBInpFile_clicked();
-
-    void on_pBAddDisplay_clicked();
+    void on_rBInpFile_clicked();   
 
 private:
     Ui::MainWindow *ui;
@@ -82,9 +76,10 @@ private:
     // --- Input from ZMQ ---
 
     // --- Input from File ---
+    bool isFileLoaded = false;
     QString pathFileCanLog;
-    int wordsCount(const std::string& fname);
-    std::vector<CanLine> canLines;
+
+    int wordsCount(const std::string& fname);    
     void fillCanLines(QFile &file, int linesAmount);
     void playCanFile();
 
@@ -95,7 +90,6 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: Add range in properties
-// TODO: OverLap
-// TODO: Play button in read from file
 // TODO: Show OpenGL point
 // TODO: Save aspect ratio OpenGL widget
+// TODO: Display UI
