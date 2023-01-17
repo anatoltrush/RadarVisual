@@ -1,18 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QApplication>
-#include <QTextStream>
-#include <QScreen>
-
-#include <thread>
-#include <iostream>
-#include <fstream>
-#include <unistd.h>
-
 #ifdef __WIN32
 #else
 #include <net/if.h>
@@ -35,8 +23,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
-    void on_pBLoadFile_clicked();
+private slots:    
     void on_pBStartApply_clicked();
     void on_pBAddDisplay_clicked();
 
@@ -44,12 +31,16 @@ private slots:
     void on_rBInpZMQ_clicked();
     void on_rBInpFile_clicked();   
 
+    void on_pBLoadFile_clicked();
+    void on_pBPlayFile_clicked();
+    void on_pBStopFile_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     DisplayData* displays[RADAR_NUM];
 
-    QString statRadMess;
+    QString statusRadMess;
 
     uint64_t msgNumCan = 0;
     uint64_t msgNumZmq = 0;
@@ -64,6 +55,7 @@ private:
 #endif
     std::string deviceName;
     std::thread thrRcv;
+    std::thread thrPlayFile;
     bool isCanStopped = true;
     bool isCanOpened = false;
 
@@ -77,9 +69,10 @@ private:
 
     // --- Input from File ---
     bool isFileLoaded = false;
+    bool isPlay = false;
     QString pathFileCanLog;
+    std::vector<CanLine> canLines;
 
-    int wordsCount(const std::string& fname);    
     void fillCanLines(QFile &file, int linesAmount);
     void playCanFile();
 
@@ -89,7 +82,8 @@ private:
     Converter converter;
 };
 #endif // MAINWINDOW_H
-// TODO: Add range in properties
 // TODO: Show OpenGL point
 // TODO: Save aspect ratio OpenGL widget
 // TODO: Display UI
+// TODO: Convert data
+// TODO: ZMQ input

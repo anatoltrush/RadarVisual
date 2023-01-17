@@ -17,6 +17,7 @@ SOURCES += \
 HEADERS += \
     converter.h \
     displaydata.h \
+    entity.h \
     mainwindow.h \
     visualgl.h
 

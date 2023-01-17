@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 #else
     thrRcv = std::thread(&MainWindow::canRcv, this);
 #endif
+    thrPlayFile = std::thread(&MainWindow::playCanFile, this);
 
     // Placing
     QScreen* screen = QApplication::primaryScreen();
@@ -39,9 +40,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 MainWindow::~MainWindow(){
     isCanStopped = true;
     if (thrRcv.joinable()) thrRcv.join();
+    if (thrPlayFile.joinable()) thrPlayFile.join();
 
-    for (int i = 0; i < RADAR_NUM; i++)
-        delete displays[i];
+        for (int i = 0; i < RADAR_NUM; i++)
+            delete displays[i];
 
     delete ui;
 }
@@ -86,16 +88,19 @@ void MainWindow::on_pBStartApply_clicked(){
 }
 
 void MainWindow::on_rBInpCAN_clicked(){
-
+    ui->pBStartApply->setEnabled(true);
 }
 
 void MainWindow::on_rBInpZMQ_clicked(){
-
+    ui->pBStartApply->setEnabled(true);
 }
 
 void MainWindow::on_rBInpFile_clicked(){
+    ui->pBStartApply->setEnabled(false);
+
     pathFileCanLog = QFileDialog::getOpenFileName(this, tr("Open CAN log"), "", tr("Log files (*.log)"));
-    ui->lEInpFile->setText(pathFileCanLog);
+    if(!pathFileCanLog.isEmpty())
+        ui->lEInpFile->setText(pathFileCanLog);
 }
 
 #ifdef __WIN32
@@ -122,20 +127,20 @@ bool MainWindow::openCan(const std::string &device){
                 sockAddr.can_ifindex = ifr.ifr_ifindex;
             }
             else{
-                statRadMess = "Failed to retrieve the interface index. Error: ";
-                statRadMess.append(strerror(errno));
-                ui->statBar->showMessage(statRadMess);
+                statusRadMess = "Failed to retrieve the interface index. Error: ";
+                statusRadMess.append(strerror(errno));
+                ui->statBar->showMessage(statusRadMess);
                 return false;
             }
         }
 
         int enable_canfd = 0;
-        statRadMess = "CAN interface ---> " + QString::fromStdString(device) + " <---";
+        statusRadMess = "CAN interface ---> " + QString::fromStdString(device) + " <---";
         if(setsockopt(handle, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &enable_canfd, sizeof(enable_canfd)) == 0)
-            statRadMess.append(" is set to CAN FD capable");
+            statusRadMess.append(" is set to CAN FD capable");
         else
-            statRadMess.append(" is not CAN FD capable");
-        ui->statBar->showMessage(statRadMess);
+            statusRadMess.append(" is not CAN FD capable");
+        ui->statBar->showMessage(statusRadMess);
 
         timeval tv;
         tv.tv_sec = 0;
@@ -147,15 +152,15 @@ bool MainWindow::openCan(const std::string &device){
             deviceName = device;
         }
         else{
-            statRadMess = "Failed to bind socket. Error: ";
-            statRadMess.append(strerror(errno));
-            ui->statBar->showMessage(statRadMess);
+            statusRadMess = "Failed to bind socket. Error: ";
+            statusRadMess.append(strerror(errno));
+            ui->statBar->showMessage(statusRadMess);
         }
     }
     else{
-        statRadMess = "Can't open socket ";
-        statRadMess.append(strerror(errno));
-        ui->statBar->showMessage(statRadMess);
+        statusRadMess = "Can't open socket ";
+        statusRadMess.append(strerror(errno));
+        ui->statBar->showMessage(statusRadMess);
     }
     return isCanOpened;
 }
@@ -176,31 +181,22 @@ void MainWindow::canRcv(){
         nbytes = read(handle, &pframe, sizeof(pframe));
 
         if(nbytes <= 0){
-            statLocalMess = statRadMess + " | Failed to receive CAN data";
+            statLocalMess = statusRadMess + " | Failed to receive CAN data";
         }
         else{
             msgNumCan++;
-            statLocalMess = statRadMess + " | " + QString::number(nbytes) + " bytes received";
+            statLocalMess = statusRadMess + " | " + QString::number(nbytes) + " bytes received";
         }
         ui->statBar->showMessage(statLocalMess);
-        //std::cout << deviceName << std::endl;
+        //std::cout << deviceName << std::endl;        
     }
 }
 #endif
 
-int MainWindow::wordsCount(const std::string &fname){
-    std::ifstream file(fname);
-    if(!file) throw std::runtime_error("can`t open file: " + fname);
-    return std::distance((std::istream_iterator<std::string>(file)), (std::istream_iterator<std::string>()));
-}
-
 void MainWindow::fillCanLines(QFile &file, int linesAmount){
-    for (int i = 0; i < RADAR_NUM; i++)
-        displays[i]->canLines.clear();
-    // --- cleaned ---
+    canLines.clear();
     ui->progressBar->setValue(0);
     int percent = 0;
-    int countCanLine = 0;
     QTextStream in(&file);
     while (!in.atEnd()){
         QString line = in.readLine();
@@ -208,30 +204,51 @@ void MainWindow::fillCanLines(QFile &file, int linesAmount){
         if(strList1.size() < 3) break;
 
         CanLine canLine;
-        canLine.timeStamp = strList1[0];
-        canLine.timeStamp.remove(0, 1);
-        canLine.timeStamp.chop(1);
+        QString tmStmp = strList1[0];
+        tmStmp.remove(0, 1);
+        tmStmp.chop(1);
+        tmStmp.remove(QChar('.'));
+        canLine.timeStamp = tmStmp.toDouble();
         canLine.canNum = strList1[1];
 
         QStringList strList2 = strList1[2].split(u'#', Qt::SkipEmptyParts);
         if(strList2.size() < 2) break;
         canLine.canId = strList2[0];
         canLine.canData = strList2[1];
+        canLines.push_back(canLine);
 
-        // --- send in Display ---
-        if(canLine.canId.size() != 3) continue;
-        int currIdIndex = canLine.canId[1].digitValue();
-        displays[currIdIndex]->canLines.push_back(canLine);
-
-        countCanLine++;
-        percent = (countCanLine / (float)linesAmount) * 100;
+        percent = (canLines.size() / (float)linesAmount) * 100;
         ui->progressBar->setValue(percent);
     }
     if(percent >= 100) ui->statBar->showMessage("File loaded: " + pathFileCanLog);
 }
 
 void MainWindow::playCanFile(){
-    // TODO: play can lines
+    while(!isCanStopped){
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+        if(isPlay){
+            size_t currInd = 0;
+            double diffTime = GET_CUR_TIME_MICRO - canLines.front().timeStamp;
+            while (isPlay) {
+                std::this_thread::sleep_for(std::chrono::microseconds(1));
+
+                if(GET_CUR_TIME_MICRO >= (canLines[currInd].timeStamp + diffTime)){
+                    // TODO: Do smthng (distribution)
+                    std::cout << currInd << " | "<< GET_CUR_TIME_MICRO << " | " << canLines[currInd].canId.toStdString()
+                              << " | " << canLines[currInd].canData.toStdString() << std::endl;
+                    if(currInd >= (canLines.size() - 1)){
+                        isPlay = false;
+                        ui->pBStopFile->setEnabled(false);
+                        ui->pBPlayFile->setEnabled(true);
+                    }
+                    else{
+                        currInd++;
+                    }
+                }
+            }
+        }
+    }
 }
 
 void MainWindow::on_pBAddDisplay_clicked(){
@@ -259,12 +276,30 @@ void MainWindow::on_pBLoadFile_clicked(){
         ui->pBLoadFile->setStyleSheet("background-color: red");
         QMessageBox::critical(this, "Error","File not found");
         ui->progressBar->setValue(0);
+        // --- --- ---
+        ui->pBPlayFile->setEnabled(false);
         return;
     }
     else{
-        int stringCount = wordsCount(pathFileCanLog.toStdString()) / 3; // 3 words in line
+        std::ifstream fileStream(pathFileCanLog.toStdString());
+        int stringCount = std::distance((std::istream_iterator<std::string>(fileStream)),
+                                        (std::istream_iterator<std::string>())) / 3; // 3 words in line
         fillCanLines(file, stringCount); // ...loading...
         ui->pBLoadFile->setStyleSheet("background-color: green");
         isFileLoaded = true;
+        // --- --- ---
+        ui->pBPlayFile->setEnabled(true);
     }
+}
+
+void MainWindow::on_pBPlayFile_clicked(){
+    ui->pBPlayFile->setEnabled(false);
+    ui->pBStopFile->setEnabled(true);
+    isPlay = true;
+}
+
+void MainWindow::on_pBStopFile_clicked(){
+    ui->pBStopFile->setEnabled(false);
+    ui->pBPlayFile->setEnabled(true);
+    isPlay = false;
 }
