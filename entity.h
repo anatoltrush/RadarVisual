@@ -14,19 +14,16 @@
 #include <thread>
 #include <unistd.h>
 
+#define RADAR_NUM   8
+
 #define GET_CUR_TIME_MILLI (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 #define GET_CUR_TIME_MICRO (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 
 struct CanLine{
     double timeStamp;
     QString canNum;
-    QString canId;
-    QString canData;
-};
-
-struct CanFrame{
-    CanLine header;
-    std::vector<CanLine> clusters;
+    QString messId;
+    QString messData;
 };
 
 enum class Cluster_AmbigState{
@@ -70,6 +67,16 @@ struct ClusterQuality{
     Cluster_AmbigState ambigState   = Cluster_AmbigState::invalid;
     uint8_t invalidateState = 0;
     float Pdh0              = 0.0f;
+};
+
+struct CanFrame{
+    CanLine* header;
+    std::vector<ClusterInfo> generalInfo;
+    std::vector<ClusterQuality> qualityInfo;
+    void clear(){
+        generalInfo.clear();
+        qualityInfo.clear();
+    }
 };
 
 #endif // ENTITY_H

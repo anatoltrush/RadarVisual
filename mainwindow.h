@@ -82,8 +82,12 @@ private:
     Converter converter;
 };
 #endif // MAINWINDOW_H
-// TODO: Show OpenGL point
+// TODO: Parse clusterdata
+// TODO: Set limits
+
 // TODO: Save aspect ratio OpenGL widget
 // TODO: Display UI
-// TODO: Convert data
+
+// TODO: Show OpenGL point
+
 // TODO: ZMQ input

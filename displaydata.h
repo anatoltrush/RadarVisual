@@ -3,8 +3,6 @@
 
 #include "entity.h"
 
-#define RADAR_NUM   8
-
 namespace Ui {class DisplayData;}
 
 class DisplayData : public QMainWindow{
@@ -14,10 +12,18 @@ public:
     explicit DisplayData(QWidget *parent = nullptr);
     ~DisplayData();
 
+    uint8_t currRadInd = 0;
     CanFrame canFrame;
+
+    void receiveCanLine(CanLine* canLine);
+
+private slots:
+    void on_cmBRadNum_activated(int index){currRadInd = index;}
 
 private:
     Ui::DisplayData *ui;
+
+    int numExpect = -1;
 };
 
 #endif // DISPLAYDATA_H

@@ -115,7 +115,7 @@
          <item row="2" column="0">
           <widget class="QRadioButton" name="rBInpFile">
            <property name="text">
-            <string>File</string>
+            <string>Log file</string>
            </property>
           </widget>
          </item>

@@ -213,8 +213,8 @@ void MainWindow::fillCanLines(QFile &file, int linesAmount){
 
         QStringList strList2 = strList1[2].split(u'#', Qt::SkipEmptyParts);
         if(strList2.size() < 2) break;
-        canLine.canId = strList2[0];
-        canLine.canData = strList2[1];
+        canLine.messId = strList2[0];
+        canLine.messData = strList2[1];
         canLines.push_back(canLine);
 
         percent = (canLines.size() / (float)linesAmount) * 100;
@@ -225,18 +225,26 @@ void MainWindow::fillCanLines(QFile &file, int linesAmount){
 
 void MainWindow::playCanFile(){
     while(!isCanStopped){
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
         if(isPlay){
             size_t currInd = 0;
+            if(canLines.empty()) continue;
             double diffTime = GET_CUR_TIME_MICRO - canLines.front().timeStamp;
             while (isPlay) {
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
-
                 if(GET_CUR_TIME_MICRO >= (canLines[currInd].timeStamp + diffTime)){
-                    // TODO: Do smthng (distribution)
-                    std::cout << currInd << " | "<< GET_CUR_TIME_MICRO << " | " << canLines[currInd].canId.toStdString()
-                              << " | " << canLines[currInd].canData.toStdString() << std::endl;
+                    /*std::cout << currInd << " | "<< GET_CUR_TIME_MICRO << " | " << canLines[currInd].messId.toStdString()
+                              << " | " << canLines[currInd].messData.toStdString() << std::endl;*/
+                    // --- send to display ---
+                    if (canLines[currInd].messId.size() != 3) continue;
+                    uint8_t messIdInd = canLines[currInd].messId[1].digitValue();
+                    for (int i = 0; i < RADAR_NUM; i++)
+                        if(!displays[i]->isHidden())
+                            if(displays[i]->currRadInd == messIdInd)
+                                displays[i]->receiveCanLine(&canLines[currInd]);
+                    // --- --- ---
+
                     if(currInd >= (canLines.size() - 1)){
                         isPlay = false;
                         ui->pBStopFile->setEnabled(false);
@@ -244,6 +252,8 @@ void MainWindow::playCanFile(){
                     }
                     else{
                         currInd++;
+                        int percent = ((currInd + 1) / (float)canLines.size()) * 100;
+                        ui->pBPlayFile->setText("play |> " + QString::number(percent) + "%");
                     }
                 }
             }
@@ -289,6 +299,7 @@ void MainWindow::on_pBLoadFile_clicked(){
         isFileLoaded = true;
         // --- --- ---
         ui->pBPlayFile->setEnabled(true);
+        ui->pBStopFile->setEnabled(false);
     }
 }
 
@@ -296,6 +307,9 @@ void MainWindow::on_pBPlayFile_clicked(){
     ui->pBPlayFile->setEnabled(false);
     ui->pBStopFile->setEnabled(true);
     isPlay = true;
+    if(!canLines.empty())
+        for (int i = 0; i < RADAR_NUM; i++)
+            displays[i]->statusBar()->showMessage("Source: log file (" + canLines.front().canNum + ")");
 }
 
 void MainWindow::on_pBStopFile_clicked(){
