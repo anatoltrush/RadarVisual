@@ -13,7 +13,7 @@ DisplayData::~DisplayData(){
 }
 
 void DisplayData::receiveCanLine(CanLine *canLine){
-    if(canLine->messId[0] == "6" && canLine->messId[2] == "0"){
+    if(canLine->messId[0] == '6' && canLine->messId[2] == '0'){
         canFrame.clear();
         canFrame.header = canLine;
         // --- parse ---
@@ -22,7 +22,7 @@ void DisplayData::receiveCanLine(CanLine *canLine){
         numExpect = hexNum.toInt(&ok, 16);
         // int a = 5;
     }
-    if(canLine->messId[0] == "7" && canLine->messId[2] == "1"){
+    if(canLine->messId[0] == '7' && canLine->messId[2] == '1'){
         //canFrame.generalInfo.push_back(canLine);
         // --- parse ---
         /*bool ok = false;
@@ -35,7 +35,7 @@ void DisplayData::receiveCanLine(CanLine *canLine){
 
         int a = 5;
     }
-    if(canLine->messId[0] == "7" && canLine->messId[2] == "2"){
+    if(canLine->messId[0] == '7' && canLine->messId[2] == '2'){
         //canFrame.qualityInfo.push_back(canLine);
     }
 
