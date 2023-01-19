@@ -66,6 +66,6 @@ void DisplayData::receiveCanLine(CanLine *canLine){
     // --- frame got ---
     if((int)canFrame.generalInfo.size() == numExpect){
         // --- draw canFrame ---
-        ui->displayWidget->clusters = &canFrame.generalInfo;
+        ui->displayWidget->clusters = canFrame.generalInfo;
     }
 }

@@ -11,7 +11,7 @@ class VisualGL : public QOpenGLWidget
 public:
     VisualGL(QWidget *parent = 0);
 
-    std::vector<ClusterInfo>* clusters = nullptr;
+    std::vector<ClusterInfo> clusters;
 
 protected:
     void initializeGL() override;

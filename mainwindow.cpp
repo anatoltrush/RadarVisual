@@ -233,6 +233,7 @@ void MainWindow::playCanFile(){
             double diffTime = GET_CUR_TIME_MICRO - canLines.front().timeStamp;
             while (isPlay) {
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
+                if(isCanStopped) break;
                 if(GET_CUR_TIME_MICRO >= (canLines[currInd].timeStamp + diffTime)){
                     /*std::cout << currInd << " | "<< GET_CUR_TIME_MICRO << " | " << canLines[currInd].messId.toStdString()
                               << " | " << canLines[currInd].messData.toStdString() << std::endl;*/
