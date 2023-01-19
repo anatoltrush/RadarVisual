@@ -86,5 +86,4 @@ private:
 // TODO: Display UI
 
 // TODO: ZMQ input
-// TODO: Icon
 // TODO: Time chart

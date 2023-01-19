@@ -27,3 +27,4 @@ FORMS += \
 
 RESOURCES += \
     res.qrc
+RC_FILE = myapp.rc
