@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>840</width>
-    <height>620</height>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>285</width>
+      <width>290</width>
       <height>598</height>
      </rect>
     </property>
@@ -159,31 +159,34 @@
          <layout class="QGridLayout" name="gridLayout">
           <item row="3" column="2">
            <widget class="QSpinBox" name="sBVelOnMax">
+            <property name="minimum">
+             <number>-128</number>
+            </property>
             <property name="maximum">
-             <number>128</number>
+             <number>127</number>
             </property>
             <property name="value">
-             <number>128</number>
+             <number>127</number>
             </property>
            </widget>
           </item>
           <item row="0" column="2">
            <widget class="QSpinBox" name="sBRcsMax">
             <property name="minimum">
-             <number>-50</number>
+             <number>-64</number>
             </property>
             <property name="maximum">
-             <number>52</number>
+             <number>63</number>
             </property>
             <property name="value">
-             <number>52</number>
+             <number>63</number>
             </property>
            </widget>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="lDisplayVelDep">
             <property name="text">
-             <string>Vel departing</string>
+             <string>VRel Lat</string>
             </property>
            </widget>
           </item>
@@ -197,20 +200,26 @@
           <item row="2" column="1">
            <widget class="QSpinBox" name="sBDistMin">
             <property name="minimum">
-             <number>-99999</number>
+             <number>-102</number>
             </property>
             <property name="maximum">
-             <number>409</number>
+             <number>102</number>
+            </property>
+            <property name="value">
+             <number>-102</number>
             </property>
            </widget>
           </item>
           <item row="4" column="2">
            <widget class="QSpinBox" name="sBVelDepMax">
+            <property name="minimum">
+             <number>-64</number>
+            </property>
             <property name="maximum">
-             <number>128</number>
+             <number>63</number>
             </property>
             <property name="value">
-             <number>128</number>
+             <number>63</number>
             </property>
            </widget>
           </item>
@@ -222,8 +231,14 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimum">
+             <number>-128</number>
+            </property>
             <property name="maximum">
-             <number>128</number>
+             <number>127</number>
+            </property>
+            <property name="value">
+             <number>-128</number>
             </property>
            </widget>
           </item>
@@ -236,8 +251,14 @@
           </item>
           <item row="4" column="1">
            <widget class="QSpinBox" name="sBVelDepMin">
+            <property name="minimum">
+             <number>-64</number>
+            </property>
             <property name="maximum">
-             <number>128</number>
+             <number>63</number>
+            </property>
+            <property name="value">
+             <number>-64</number>
             </property>
            </widget>
           </item>
@@ -251,7 +272,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="lDisplayVelOn">
             <property name="text">
-             <string>Vel oncoming</string>
+             <string>VRel Long</string>
             </property>
            </widget>
           </item>
@@ -287,13 +308,13 @@
           <item row="0" column="1">
            <widget class="QSpinBox" name="sBRcsMin">
             <property name="minimum">
-             <number>-50</number>
+             <number>-64</number>
             </property>
             <property name="maximum">
-             <number>52</number>
+             <number>63</number>
             </property>
             <property name="value">
-             <number>-50</number>
+             <number>-64</number>
             </property>
            </widget>
           </item>
@@ -310,13 +331,13 @@
           <item row="2" column="2">
            <widget class="QSpinBox" name="sBDistMax">
             <property name="minimum">
-             <number>-99999</number>
+             <number>-102</number>
             </property>
             <property name="maximum">
-             <number>0</number>
+             <number>102</number>
             </property>
             <property name="value">
-             <number>0</number>
+             <number>102</number>
             </property>
            </widget>
           </item>
@@ -330,17 +351,26 @@
           <item row="1" column="1">
            <widget class="QSpinBox" name="spinBox">
             <property name="minimum">
-             <number>-99999</number>
+             <number>-500</number>
             </property>
             <property name="maximum">
-             <number>99999</number>
+             <number>1138</number>
+            </property>
+            <property name="value">
+             <number>-500</number>
             </property>
            </widget>
           </item>
           <item row="1" column="2">
            <widget class="QSpinBox" name="spinBox_2">
             <property name="minimum">
-             <number>-99999</number>
+             <number>-500</number>
+            </property>
+            <property name="maximum">
+             <number>1138</number>
+            </property>
+            <property name="value">
+             <number>1138</number>
             </property>
            </widget>
           </item>

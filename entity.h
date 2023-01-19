@@ -26,7 +26,7 @@ struct CanLine{
     QString messData;
 };
 
-enum class Cluster_AmbigState{
+enum class ClusterAmbigState{
     invalid = 0,
     ambiguous = 1,
     staggered_ramp = 2,
@@ -34,7 +34,7 @@ enum class Cluster_AmbigState{
     stationary_candidates = 4,
 };
 
-enum class Cluster_DynProp{
+enum class ClusterDynProp{
     moving = 0,
     stationary = 1,
     oncoming = 2,
@@ -49,10 +49,13 @@ struct ClusterInfo{
     uint8_t id              = 0;
     float distLong          = 0.0f;
     float distLat           = 0.0f;
-    float VRelLong          = 0.0f;
-    float VRelLat           = 0.0f;
-    Cluster_DynProp type    = Cluster_DynProp::unknown;
-    char RCS                = 0x00;
+    float vRelLong          = 0.0f;
+    float vRelLat           = 0.0f;
+    float RCS               = 0.0f;
+    ClusterDynProp type     = ClusterDynProp::unknown;
+    void toOpenGLCoords(){
+        // TODO: implement
+    }
 };
 
 struct ClusterQuality{
@@ -64,7 +67,7 @@ struct ClusterQuality{
     float areaLong_rms      = 0.0f;
     float areaLat_rms       = 0.0f;
     float obj_Orientation_rms       = 0.0f;
-    Cluster_AmbigState ambigState   = Cluster_AmbigState::invalid;
+    ClusterAmbigState ambigState   = ClusterAmbigState::invalid;
     uint8_t invalidateState = 0;
     float Pdh0              = 0.0f;
 };

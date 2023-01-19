@@ -16,31 +16,56 @@ void DisplayData::receiveCanLine(CanLine *canLine){
     if(canLine->messId[0] == '6' && canLine->messId[2] == '0'){
         canFrame.clear();
         canFrame.header = canLine;
-        // --- parse ---
-        QString hexNum(canLine->messData.data(), 2);
-        bool ok = false;
-        numExpect = hexNum.toInt(&ok, 16);
-        // int a = 5;
+
+        numExpect = Converter::getDecData(canLine->messData, 0, 8);
+        //std::cout << GET_CUR_TIME_MILLI << " | " << numExpect << std::endl;
     }
     if(canLine->messId[0] == '7' && canLine->messId[2] == '1'){
-        //canFrame.generalInfo.push_back(canLine);
-        // --- parse ---
-        /*bool ok = false;
-        QString binAll = QString::number(canLine->messData.toLongLong(&ok, 16), 2);
-        while (binAll.length() < canLine->messData.length() * 4)
-            binAll.prepend("0");*/
+        ClusterInfo cluster;
 
-        /*QString binNum(binAll.data(), 8);
-        int decimal = binNum.toInt(&ok, 2);*/
+        // ID
+        cluster.id = Converter::getDecData(canLine->messData, 0, 8);
 
-        int a = 5;
+        // RCS
+        cluster.RCS = Converter::getDecData(canLine->messData, 56, 8);
+        cluster.RCS *= 0.5f;
+        cluster.RCS -= 64.0f;
+
+        // VRelLong
+        cluster.vRelLong = Converter::getDecData(canLine->messData, 32, 10);
+        cluster.vRelLong *= 0.25f;
+        cluster.vRelLong -= 128.0f;
+
+        // VRelLat
+        cluster.vRelLat = Converter::getDecData(canLine->messData, 42, 9);
+        cluster.vRelLat *= 0.25f;
+        cluster.vRelLat -= 64.0f;
+
+        // DistLong
+        cluster.distLong = Converter::getDecData(canLine->messData, 8, 13);
+        cluster.distLong *= 0.2f;
+        cluster.distLong -= 500.0f;
+
+        // DistLat
+        cluster.distLat = Converter::getDecData(canLine->messData, 22, 10);
+        cluster.distLat *= 0.2f;
+        cluster.distLat -= 102.3f;
+
+        // Type
+        uint8_t numType = Converter::getDecData(canLine->messData, 53, 3);
+        cluster.type = static_cast<ClusterDynProp>(numType);
+
+        // ---
+        cluster.toOpenGLCoords();
+        canFrame.generalInfo.push_back(cluster);
     }
     if(canLine->messId[0] == '7' && canLine->messId[2] == '2'){
-        //canFrame.qualityInfo.push_back(canLine);
+        // reserved
     }
 
     // --- frame got ---
     if((int)canFrame.generalInfo.size() == numExpect){
-        // do smthng
+        // --- draw canFrame ---
+        ui->displayWidget->clusters = &canFrame.generalInfo;
     }
 }

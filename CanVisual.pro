@@ -24,3 +24,6 @@ HEADERS += \
 FORMS += \
     displaydata.ui \
     mainwindow.ui
+
+RESOURCES += \
+    res.qrc

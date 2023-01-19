@@ -3,10 +3,12 @@
 
 #include "entity.h"
 
-class Converter
-{
+class Converter{
 public:
-    Converter();
+    static uint16_t getDecData(const QString& hexData, uint8_t indBeg, uint8_t len);
+
+private:
+    static QString hexToBin(const QString& hexData);
 };
 
 #endif // CONVERTER_H

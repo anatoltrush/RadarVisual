@@ -2,6 +2,7 @@
 #define DISPLAYDATA_H
 
 #include "entity.h"
+#include "converter.h"
 
 namespace Ui {class DisplayData;}
 

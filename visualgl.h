@@ -4,10 +4,14 @@
 #include <QtGui>
 #include <QOpenGLWidget>
 
+#include "entity.h"
+
 class VisualGL : public QOpenGLWidget
 {
 public:
     VisualGL(QWidget *parent = 0);
+
+    std::vector<ClusterInfo>* clusters = nullptr;
 
 protected:
     void initializeGL() override;

@@ -9,7 +9,6 @@
 #include <sys/ioctl.h>
 #endif
 
-#include "converter.h"
 #include "displaydata.h"
 
 QT_BEGIN_NAMESPACE
@@ -78,16 +77,14 @@ private:
 
     uint8_t* resData;
     uint8_t resDataLen = 0;
-
-    Converter converter;
 };
 #endif // MAINWINDOW_H
-// TODO: Parse clusterdata
-// TODO: Set limits
+// TODO: Show OpenGL point
+// TODO: Apply filters
 
 // TODO: Save aspect ratio OpenGL widget
 // TODO: Display UI
 
-// TODO: Show OpenGL point
-
 // TODO: ZMQ input
+// TODO: Icon
+// TODO: Time chart

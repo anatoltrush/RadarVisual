@@ -38,6 +38,7 @@ void VisualGL::paintGL(){
     glScalef(scale.x(), scale.y(), scale.z());
 
     drawAxises();
+    // for all in vec
 }
 
 void VisualGL::mousePressEvent(QMouseEvent *pe){
