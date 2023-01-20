@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>icon.ico</normaloff>icon.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="VisualGL" name="displayWidget" native="true">
     <property name="geometry">
@@ -158,7 +162,7 @@
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout">
           <item row="3" column="2">
-           <widget class="QSpinBox" name="sBVelOnMax">
+           <widget class="QSpinBox" name="sBVelLongMax">
             <property name="minimum">
              <number>-128</number>
             </property>
@@ -198,7 +202,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QSpinBox" name="sBDistMin">
+           <widget class="QSpinBox" name="sBDistLatMin">
             <property name="minimum">
              <number>-102</number>
             </property>
@@ -211,7 +215,7 @@
            </widget>
           </item>
           <item row="4" column="2">
-           <widget class="QSpinBox" name="sBVelDepMax">
+           <widget class="QSpinBox" name="sBVelLatMax">
             <property name="minimum">
              <number>-64</number>
             </property>
@@ -224,7 +228,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QSpinBox" name="sBVelOnMin">
+           <widget class="QSpinBox" name="sBVelLongMin">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -250,7 +254,7 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QSpinBox" name="sBVelDepMin">
+           <widget class="QSpinBox" name="sBVelLatMin">
             <property name="minimum">
              <number>-64</number>
             </property>
@@ -329,7 +333,7 @@
            </widget>
           </item>
           <item row="2" column="2">
-           <widget class="QSpinBox" name="sBDistMax">
+           <widget class="QSpinBox" name="sBDistLatMax">
             <property name="minimum">
              <number>-102</number>
             </property>
@@ -349,7 +353,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QSpinBox" name="spinBox">
+           <widget class="QSpinBox" name="sBDistLongMin">
             <property name="minimum">
              <number>-500</number>
             </property>
@@ -362,7 +366,7 @@
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QSpinBox" name="spinBox_2">
+           <widget class="QSpinBox" name="sBDistLongMax">
             <property name="minimum">
              <number>-500</number>
             </property>
@@ -382,7 +386,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="staBarDisp"/>
  </widget>
  <customwidgets>
   <customwidget>

@@ -79,11 +79,12 @@ private:
     uint8_t resDataLen = 0;
 };
 #endif // MAINWINDOW_H
-// TODO: Show OpenGL point
-// TODO: Apply filters
+// TODO: Draw OpenGL point
+// TODO: Draw OpenGL limits
 
 // TODO: Save aspect ratio OpenGL widget
 // TODO: Display UI
 
-// TODO: ZMQ input
+// TODO: ZMQ input + convert
+// TODO: Real CAN convert
 // TODO: Time chart

@@ -14,8 +14,7 @@ DisplayData::~DisplayData(){
 
 void DisplayData::receiveCanLine(CanLine *canLine){
     if(canLine->messId[0] == '6' && canLine->messId[2] == '0'){
-        canFrame.clear();
-        canFrame.header = canLine;
+        clustersAll.clear();
 
         numExpect = Converter::getDecData(canLine->messData, 0, 8);
         //std::cout << GET_CUR_TIME_MILLI << " | " << numExpect << std::endl;
@@ -57,15 +56,58 @@ void DisplayData::receiveCanLine(CanLine *canLine){
 
         // ---
         cluster.toOpenGLCoords();
-        canFrame.generalInfo.push_back(cluster);
+        clustersAll.push_back(cluster);
     }
     if(canLine->messId[0] == '7' && canLine->messId[2] == '2'){
         // reserved
     }
 
     // --- frame got ---
-    if((int)canFrame.generalInfo.size() == numExpect){
-        // --- draw canFrame ---
-        ui->displayWidget->clusters = canFrame.generalInfo;
+    if((int)clustersAll.size() == numExpect){
+        applyFilters();
+        // --- send to visual ---
+        ui->displayWidget->clusters = clustersFiltered;
     }
+}
+
+void DisplayData::on_cmBRadNum_activated(int index){
+    currRadInd = index;
+    clustersFiltered.clear();
+}
+
+void DisplayData::applyFilters(){
+    clustersFiltered.clear();
+    // ---
+    std::vector<bool> types{ui->cBClMov->isChecked(), ui->cBClStat->isChecked(),
+                ui->cBClOnCom->isChecked(), ui->cBClStatCond->isChecked(),
+                ui->cBClUnkn->isChecked(), ui->cBClCrossStat->isChecked(),
+                ui->cBClCrossMov->isChecked(), ui->cBClStop->isChecked()};
+    // ---
+    int minRcs = ui->sBRcsMin->value();
+    int maxRcs = ui->sBRcsMax->value();
+    int minDLong = ui->sBDistLongMin->value();
+    int maxDLong = ui->sBDistLongMax->value();
+    int minDLat = ui->sBDistLatMin->value();
+    int maxDLat = ui->sBDistLatMax->value();
+    int minVLong = ui->sBVelLongMin->value();
+    int maxVLong = ui->sBVelLongMax->value();
+    int minVLat = ui->sBVelLatMin->value();
+    int maxVLat = ui->sBVelLatMax->value();
+    /*int minPdh0 = ui->sBPdh0Min->value();
+    int maxPdh0 = ui->sBPdh0Max->value();
+    int minAzmth = ui->sBAzMin->value();
+    int maxAzmth = ui->sBAzMax->value();*/
+
+    for(const auto &cl : clustersAll){
+        if(cl.RCS >= minRcs && cl.RCS <= maxRcs)
+            if(cl.distLong >= minDLong && cl.distLong <= maxDLong)
+                if(cl.distLat >= minDLat && cl.distLat <= maxDLat)
+                    if(cl.vRelLong >= minVLong && cl.vRelLong <= maxVLong)
+                        if(cl.vRelLat >= minVLat && cl.vRelLat <= maxVLat)
+                            if(types[static_cast<uint8_t>(cl.type)])
+                                clustersFiltered.push_back(cl);
+    }
+
+    /*std::cout << "Win:" << windowTitle().toStdString() << " | Before: "
+     << clustersAll.size() << " | After: " << clustersFiltered.size() << std::endl;*/
 }

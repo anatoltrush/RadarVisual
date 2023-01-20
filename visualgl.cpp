@@ -38,7 +38,11 @@ void VisualGL::paintGL(){
     glScalef(scale.x(), scale.y(), scale.z());
 
     drawAxises();
+
+    // draw clusters
     // for all in vec
+
+    // draw limits
 }
 
 void VisualGL::mousePressEvent(QMouseEvent *pe){
