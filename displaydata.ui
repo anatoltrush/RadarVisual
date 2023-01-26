@@ -392,7 +392,7 @@
   <customwidget>
    <class>VisualGL</class>
    <extends>QWidget</extends>
-   <header location="global">visualgl.h</header>
+   <header>visualgl.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

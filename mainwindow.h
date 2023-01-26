@@ -79,6 +79,7 @@ private:
     uint8_t resDataLen = 0;
 };
 #endif // MAINWINDOW_H
+// TODO: Choose dist in UI (20, 80, 160m)
 // TODO: Draw OpenGL point
 // TODO: Draw OpenGL limits
 
@@ -88,3 +89,5 @@ private:
 // TODO: ZMQ input + convert
 // TODO: Real CAN convert
 // TODO: Time chart
+// TODO: Calc speed of vehicle
+// TODO: Log speed
