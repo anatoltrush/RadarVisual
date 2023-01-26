@@ -19,6 +19,9 @@ public:
 
 private:
     QPainter *painter;
+
+    int stepPx = 0;
+
     void paintEvent(QPaintEvent *) override;
     void resizeEvent(QResizeEvent *event) override;
 

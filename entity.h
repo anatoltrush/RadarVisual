@@ -45,9 +45,6 @@ struct ClusterInfo{
     float vRelLat           = 0.0f;
     float RCS               = 0.0f;
     ClusterDynProp type     = ClusterDynProp::unknown;
-    void toOpenGLCoords(){
-        // TODO: void toOpenGLCoords() implement
-    }
 };
 
 #endif // ENTITY_H

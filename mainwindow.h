@@ -81,9 +81,7 @@ private:
 #endif // MAINWINDOW_H
 // TODO: Draw point
 // TODO: Draw limits
-// TODO: Draw radar
 // TODO: Draw text
-// TODO: RadioButtons (showing text)
 
 // TODO: ZMQ input + convert
 // TODO: Real CAN convert

@@ -12,7 +12,6 @@ void VisImage::resizeAspect(){
 
 void VisImage::paintEvent(QPaintEvent *){
     painter = new QPainter(this);
-
     painter->eraseRect(rect());
 
     drawAxes();
@@ -23,6 +22,11 @@ void VisImage::paintEvent(QPaintEvent *){
 }
 
 void VisImage::resizeEvent(QResizeEvent *event){
+    QMainWindow* locParent = static_cast<QMainWindow*>(parent());
+    int parHei = locParent->height();
+    parHei -= 10;
+    setMaximumHeight(parHei);
+
     int wid = event->size().width();
     int hei = wid / aspect;
     QSize size(wid, hei);
@@ -37,7 +41,8 @@ void VisImage::drawAxes(){
 
     // --- grid ---
     int slices = 10;
-    int stepPx = width() / slices;
+    stepPx = width() / slices;
+    if(stepPx <= 0) return;
 
     QPen penGrid = QPen(Qt::gray, 1);
     qreal crossSize = 6;
@@ -61,7 +66,14 @@ void VisImage::drawAxes(){
 }
 
 void VisImage::drawRadar(){
+    QPen penRad = QPen(Qt::black, 1);
+    painter->setPen(penRad);
+    painter->setBrush(Qt::darkGray);
 
+    if(stepPx <= 0) return;
+    int wRad = stepPx * 0.5f;
+    int hRad = stepPx * 0.15f;
+    painter->drawRect(width()/2 - wRad/2, height() - hRad, wRad, hRad);
 }
 
 void VisImage::drawClusters(){

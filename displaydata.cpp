@@ -57,7 +57,6 @@ void DisplayData::receiveCanLine(CanLine *canLine){
         cluster.type = static_cast<ClusterDynProp>(numType);
 
         // ---
-        cluster.toOpenGLCoords();
         clustersAll.push_back(cluster);
     }
     if(canLine->messId[0] == '7' && canLine->messId[2] == '2'){
