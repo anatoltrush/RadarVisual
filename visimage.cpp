@@ -30,13 +30,34 @@ void VisImage::resizeEvent(QResizeEvent *event){
 }
 
 void VisImage::drawAxes(){
-    QPen pen = QPen(Qt::black);
-    pen.setWidth(1);
-    painter->setPen(pen);
-    int vertGap = 13;
-    painter->drawLine(QLine(0, height() - vertGap, width(), height() - vertGap));
+    QPen penAx = QPen(Qt::black, 1);
+    painter->setPen(penAx);
+    painter->drawLine(QLine(0, height() - 1, width(), height() - 1));
     painter->drawLine(QLine(width() / 2, 0, width() / 2, height()));
-    painter->drawText(QPoint(width() / 2 + 2, height()), "0m");
+
+    // --- grid ---
+    int slices = 10;
+    int stepPx = width() / slices;
+
+    QPen penGrid = QPen(Qt::gray, 1);
+    qreal crossSize = 6;
+    QVector<qreal> dashes {crossSize, static_cast<double>(stepPx - crossSize)};
+    penGrid.setDashPattern(dashes);
+    painter->setPen(penGrid);
+    // vert
+    for (int i = 0; i < slices + 1; i++) {
+        int xCoord = i * stepPx;
+        painter->drawLine(QLine(xCoord, 0+(crossSize/2), xCoord, height()));
+        // ---m---
+        painter->drawText(QPoint(xCoord, height()-2), QString::number(-50 + i * slices)+"m");
+    }
+    // horiz
+    for (int i = 0; i < height() / stepPx + 1; i++) {
+        int yCoord = height() - i * stepPx;
+        painter->drawLine(QLine(0-(crossSize/2), yCoord, width(), yCoord));
+        // ---m---
+        painter->drawText(QPoint(width()/2, yCoord), QString::number(i * slices)+"m");
+    }
 }
 
 void VisImage::drawRadar(){

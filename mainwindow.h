@@ -83,7 +83,6 @@ private:
 // TODO: Draw limits
 // TODO: Draw radar
 // TODO: Draw text
-// TODO: Draw grid
 // TODO: RadioButtons (showing text)
 
 // TODO: ZMQ input + convert
