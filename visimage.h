@@ -15,6 +15,8 @@ public:
 
     std::vector<ClusterInfo> clusters;
 
+    std::vector<QColor>* colors;
+
     void resizeAspect();
 
 private:

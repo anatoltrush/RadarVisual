@@ -15,6 +15,8 @@ public:
 
     uint8_t currRadInd = 0;
 
+    std::vector<QColor> colors;
+
     std::vector<ClusterInfo> clustersAll;
     std::vector<ClusterInfo> clustersFiltered;
 

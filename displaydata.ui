@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>700</height>
+    <height>680</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <normaloff>icon.ico</normaloff>icon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_2">
+   <layout class="QGridLayout" name="gridLayout_5">
     <item row="0" column="0" rowspan="2">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="sizeConstraint">
@@ -96,28 +96,8 @@
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <widget class="QCheckBox" name="cBClMov">
-             <property name="text">
-              <string>moving</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="cBClStat">
-             <property name="text">
-              <string>stationary</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="2" column="1">
             <widget class="QCheckBox" name="cBClOnCom">
              <property name="text">
               <string>oncoming</string>
@@ -127,7 +107,57 @@
              </property>
             </widget>
            </item>
-           <item>
+           <item row="4" column="1">
+            <widget class="QCheckBox" name="cBClUnkn">
+             <property name="text">
+              <string>unknown</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QCheckBox" name="cBClCrossMov">
+             <property name="text">
+              <string>crossing moving</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QCheckBox" name="cBClStop">
+             <property name="text">
+              <string>stopped</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QCheckBox" name="cBClStat">
+             <property name="text">
+              <string>stationary</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QCheckBox" name="cBClMov">
+             <property name="text">
+              <string>moving</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
             <widget class="QCheckBox" name="cBClStatCond">
              <property name="focusPolicy">
               <enum>Qt::StrongFocus</enum>
@@ -140,17 +170,7 @@
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QCheckBox" name="cBClUnkn">
-             <property name="text">
-              <string>unknown</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
+           <item row="5" column="1">
             <widget class="QCheckBox" name="cBClCrossStat">
              <property name="text">
               <string>crossing stationary</string>
@@ -160,23 +180,59 @@
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QCheckBox" name="cBClCrossMov">
+           <item row="0" column="0">
+            <widget class="QToolButton" name="tBMov">
              <property name="text">
-              <string>crossing moving</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
+              <string/>
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QCheckBox" name="cBClStop">
+           <item row="1" column="0">
+            <widget class="QToolButton" name="tBStat">
              <property name="text">
-              <string>stopped</string>
+              <string/>
              </property>
-             <property name="checked">
-              <bool>true</bool>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QToolButton" name="tBOnc">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QToolButton" name="tBStatCand">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QToolButton" name="tBUnkn">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QToolButton" name="tBCrStat">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QToolButton" name="tBCrMov">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QToolButton" name="tBStop">
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>
@@ -191,21 +247,18 @@
          <string>Filter:</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="0">
+         <item row="1" column="0">
           <layout class="QGridLayout" name="gridLayout">
-           <item row="5" column="2">
-            <widget class="QSpinBox" name="sBPdh0Max"/>
-           </item>
-           <item row="1" column="2">
-            <widget class="QSpinBox" name="sBDistLongMax">
+           <item row="3" column="2">
+            <widget class="QSpinBox" name="sBVelLongMax">
              <property name="minimum">
-              <number>-500</number>
+              <number>-128</number>
              </property>
              <property name="maximum">
-              <number>1138</number>
+              <number>127</number>
              </property>
              <property name="value">
-              <number>1138</number>
+              <number>127</number>
              </property>
             </widget>
            </item>
@@ -228,42 +281,16 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="1">
-            <widget class="QSpinBox" name="sBAzMin">
+           <item row="1" column="2">
+            <widget class="QSpinBox" name="sBDistLongMax">
              <property name="minimum">
-              <number>-50</number>
+              <number>-500</number>
              </property>
              <property name="maximum">
-              <number>52</number>
+              <number>1138</number>
              </property>
              <property name="value">
-              <number>-50</number>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QSpinBox" name="sBVelLatMin">
-             <property name="minimum">
-              <number>-64</number>
-             </property>
-             <property name="maximum">
-              <number>63</number>
-             </property>
-             <property name="value">
-              <number>-64</number>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QSpinBox" name="sBVelLatMax">
-             <property name="minimum">
-              <number>-64</number>
-             </property>
-             <property name="maximum">
-              <number>63</number>
-             </property>
-             <property name="value">
-              <number>63</number>
+              <number>1138</number>
              </property>
             </widget>
            </item>
@@ -280,55 +307,10 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
-            <widget class="QSpinBox" name="sBDistLatMax">
-             <property name="minimum">
-              <number>-102</number>
-             </property>
-             <property name="maximum">
-              <number>102</number>
-             </property>
-             <property name="value">
-              <number>102</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QSpinBox" name="sBDistLongMin">
-             <property name="minimum">
-              <number>-500</number>
-             </property>
-             <property name="maximum">
-              <number>1138</number>
-             </property>
-             <property name="value">
-              <number>-500</number>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QSpinBox" name="sBDistLatMin">
-             <property name="minimum">
-              <number>-102</number>
-             </property>
-             <property name="maximum">
-              <number>102</number>
-             </property>
-             <property name="value">
-              <number>-102</number>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QSpinBox" name="sBVelLongMax">
-             <property name="minimum">
-              <number>-128</number>
-             </property>
-             <property name="maximum">
-              <number>127</number>
-             </property>
-             <property name="value">
-              <number>127</number>
+           <item row="6" column="0">
+            <widget class="QRadioButton" name="rBAzimuth">
+             <property name="text">
+              <string>Azimuth, deg</string>
              </property>
             </widget>
            </item>
@@ -345,6 +327,112 @@
              </property>
             </widget>
            </item>
+           <item row="4" column="2">
+            <widget class="QSpinBox" name="sBVelLatMax">
+             <property name="minimum">
+              <number>-64</number>
+             </property>
+             <property name="maximum">
+              <number>63</number>
+             </property>
+             <property name="value">
+              <number>63</number>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QSpinBox" name="sBPdh0Max"/>
+           </item>
+           <item row="5" column="0">
+            <widget class="QRadioButton" name="rBPdh0">
+             <property name="text">
+              <string>Pdh0</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QSpinBox" name="sBDistLatMin">
+             <property name="minimum">
+              <number>-102</number>
+             </property>
+             <property name="maximum">
+              <number>102</number>
+             </property>
+             <property name="value">
+              <number>-102</number>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QRadioButton" name="rBDistLat">
+             <property name="text">
+              <string>Dist Lat, m</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QSpinBox" name="sBDistLatMax">
+             <property name="minimum">
+              <number>-102</number>
+             </property>
+             <property name="maximum">
+              <number>102</number>
+             </property>
+             <property name="value">
+              <number>102</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="rBDistLong">
+             <property name="text">
+              <string>Dist Long, m</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QRadioButton" name="rBVRelLong">
+             <property name="text">
+              <string>VRel Long, m/s</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="rBRcs">
+             <property name="text">
+              <string>RCS, dBm2</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QSpinBox" name="sBVelLatMin">
+             <property name="minimum">
+              <number>-64</number>
+             </property>
+             <property name="maximum">
+              <number>63</number>
+             </property>
+             <property name="value">
+              <number>-64</number>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QSpinBox" name="sBAzMin">
+             <property name="minimum">
+              <number>-50</number>
+             </property>
+             <property name="maximum">
+              <number>52</number>
+             </property>
+             <property name="value">
+              <number>-50</number>
+             </property>
+            </widget>
+           </item>
            <item row="6" column="2">
             <widget class="QSpinBox" name="sBAzMax">
              <property name="minimum">
@@ -358,62 +446,37 @@
              </property>
             </widget>
            </item>
+           <item row="1" column="1">
+            <widget class="QSpinBox" name="sBDistLongMin">
+             <property name="minimum">
+              <number>-500</number>
+             </property>
+             <property name="maximum">
+              <number>1138</number>
+             </property>
+             <property name="value">
+              <number>-500</number>
+             </property>
+            </widget>
+           </item>
            <item row="5" column="1">
             <widget class="QSpinBox" name="sBPdh0Min"/>
-           </item>
-           <item row="0" column="0">
-            <widget class="QRadioButton" name="rBRcs">
-             <property name="text">
-              <string>RCS</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QRadioButton" name="rBDistLong">
-             <property name="text">
-              <string>Dist Long</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QRadioButton" name="rBDistLat">
-             <property name="text">
-              <string>Dist Lat</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QRadioButton" name="rBVRelLong">
-             <property name="text">
-              <string>VRel Long</string>
-             </property>
-            </widget>
            </item>
            <item row="4" column="0">
             <widget class="QRadioButton" name="rBVRelLat">
              <property name="text">
-              <string>VRel Lat</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QRadioButton" name="rBPdh0">
-             <property name="text">
-              <string>Pdh0</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QRadioButton" name="rBAzimuth">
-             <property name="text">
-              <string>Azimuth</string>
+              <string>VRel Lat, m/s</string>
              </property>
             </widget>
            </item>
           </layout>
+         </item>
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="cBInfo">
+           <property name="text">
+            <string>Show text info</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>

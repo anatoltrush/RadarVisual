@@ -79,9 +79,9 @@ private:
     uint8_t resDataLen = 0;
 };
 #endif // MAINWINDOW_H
-// TODO: Draw point
-// TODO: Draw limits
+// TODO: Draw point (RCS)
 // TODO: Draw text
+// TODO: Measure dist when click or drag
 
 // TODO: ZMQ input + convert
 // TODO: Real CAN convert

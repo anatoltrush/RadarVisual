@@ -78,5 +78,17 @@ void VisImage::drawRadar(){
 
 void VisImage::drawClusters(){
     // draw points
+    QPen penClust = QPen(Qt::black, 1);
+    painter->setPen(penClust);
+
+    if(stepPx <= 0) return;
+    for (const auto& cl : clusters) {
+        QColor currCol = (*colors)[static_cast<uint8_t>(cl.type)];
+        painter->setBrush(currCol);
+        int wCl = width()/2 + (cl.distLat / 10.0f * stepPx);
+        int hCl = height() - cl.distLong / 10.0f * stepPx;
+        painter->drawEllipse(QPoint(wCl, hCl), 5, 5);
+    }
+
     // draw text
 }

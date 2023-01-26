@@ -8,6 +8,26 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
         ui->cmBRadNum->addItem("Radar " + QString::number(i));
 
     ui->cBChsDist->setCurrentIndex(4); // 160m
+
+    ui->wDraw->colors = &this->colors;
+    colors = std::vector<QColor>(ui->gridLayout_2->rowCount(), Qt::gray);
+    if(colors.size() >= 8){
+        colors[0] = Qt::red;
+        colors[1] = Qt::yellow;
+        colors[2] = Qt::blue;
+        colors[3] = Qt::green;
+        colors[4] = Qt::darkGray;
+        colors[5] = Qt::darkGreen;
+        colors[6] = QColor(255, 140, 0);
+        colors[7] = Qt::black;
+    }
+    int sz = 15;
+    QPixmap px(sz, sz);
+    for (int i = 0; i < ui->gridLayout_2->rowCount(); i++) {
+        px.fill(colors[i]);
+        QToolButton* tButton = static_cast<QToolButton*>(ui->gridLayout_2->itemAtPosition(i, 0)->widget());
+        tButton->setIcon(px);
+    }
 }
 
 DisplayData::~DisplayData(){
