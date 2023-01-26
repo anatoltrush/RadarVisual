@@ -21,7 +21,8 @@ public:
     void receiveCanLine(CanLine* canLine);
 
 private slots:
-    void on_cmBRadNum_activated(int index);
+    void on_cBChsDist_currentTextChanged(const QString &data);
+    void on_cmBRadNum_currentIndexChanged(int index);
 
 private:
     Ui::DisplayData *ui;

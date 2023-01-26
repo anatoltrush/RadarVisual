@@ -16,14 +16,14 @@ SOURCES += \
     displaydata.cpp \
     main.cpp \
     mainwindow.cpp \
-    visualgl.cpp
+    visimage.cpp
 
 HEADERS += \
     converter.h \
     displaydata.h \
     entity.h \
     mainwindow.h \
-    visualgl.h
+    visimage.h
 
 FORMS += \
     displaydata.ui \

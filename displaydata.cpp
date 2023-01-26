@@ -6,6 +6,8 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
 
     for(int i = 0; i < RADAR_NUM; i++)
         ui->cmBRadNum->addItem("Radar " + QString::number(i));
+
+    ui->cBChsDist->setCurrentIndex(4); // 160m
 }
 
 DisplayData::~DisplayData(){
@@ -65,14 +67,10 @@ void DisplayData::receiveCanLine(CanLine *canLine){
     // --- frame got ---
     if((int)clustersAll.size() == numExpect){
         applyFilters();
-        // --- send to visual ---
-        ui->displayWidget->clusters = clustersFiltered;
+        // NOTE: Send to visual
+        ui->wDraw->clusters = clustersFiltered;
+        ui->wDraw->update();
     }
-}
-
-void DisplayData::on_cmBRadNum_activated(int index){
-    currRadInd = index;
-    clustersFiltered.clear();
 }
 
 void DisplayData::applyFilters(){
@@ -110,4 +108,14 @@ void DisplayData::applyFilters(){
 
     /*std::cout << "Win:" << windowTitle().toStdString() << " | Before: "
      << clustersAll.size() << " | After: " << clustersFiltered.size() << std::endl;*/
+}
+
+void DisplayData::on_cBChsDist_currentTextChanged(const QString &data){
+    ui->wDraw->aspect = 100.0f / data.toFloat();
+    ui->wDraw->resizeAspect();
+}
+
+void DisplayData::on_cmBRadNum_currentIndexChanged(int index){
+    currRadInd = index;
+    clustersFiltered.clear();
 }
