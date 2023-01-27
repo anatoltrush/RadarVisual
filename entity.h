@@ -20,6 +20,18 @@
 #define GET_CUR_TIME_MILLI (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 #define GET_CUR_TIME_MICRO (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 
+const float resRCS          = 0.5f;
+const float resDistLong     = 0.2f;
+const float resDistLat      = 0.2f;
+const float resVRelLong     = 0.25f;
+const float resVRelLat      = 0.25f;
+
+const float offsetRCS       = -64.0f;
+const float offsetDistLong  = -500.0f;
+const float offsetDistLat   = -102.3f;
+const float offsetVRelLong  = -128.0f;
+const float offsetVRelLat   = -64.0f;
+
 struct CanLine{
     double timeStamp;
     QString canNum;

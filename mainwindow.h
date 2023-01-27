@@ -79,9 +79,7 @@ private:
     uint8_t resDataLen = 0;
 };
 #endif // MAINWINDOW_H
-// TODO: Show (Frame num + Calc speed + clusters num)
-// FIXME: 2 radars (add threat?)
-// TODO: Draw point (RCS)
+// TODO: Show calc speed
 // TODO: Measure dist when click or drag
 // TODO: Calc Azimuth
 
@@ -89,3 +87,6 @@ private:
 // TODO: Real CAN convert
 // TODO: Time chart
 // TODO: Calc speed of vehicle
+
+// FIXME: 2 radars (add threat?)
+// FIXME: Left/Right?

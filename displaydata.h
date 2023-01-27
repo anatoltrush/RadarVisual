@@ -1,7 +1,6 @@
 #ifndef DISPLAYDATA_H
 #define DISPLAYDATA_H
 
-#include "entity.h"
 #include "converter.h"
 
 namespace Ui {class DisplayData;}
@@ -34,7 +33,7 @@ private:
     int numExpect = -1;
 
     void applyFilters();
-    void updateProps();
+    void updateShowFlags();
 };
 
 #endif // DISPLAYDATA_H

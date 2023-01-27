@@ -49,28 +49,28 @@ void DisplayData::receiveCanLine(CanLine *canLine){
 
         // RCS
         cluster.RCS = Converter::getDecData(canLine->messData, 56, 8);
-        cluster.RCS *= 0.5f;
-        cluster.RCS -= 64.0f;
+        cluster.RCS *= resRCS;
+        cluster.RCS += offsetRCS;
 
         // VRelLong
         cluster.vRelLong = Converter::getDecData(canLine->messData, 32, 10);
-        cluster.vRelLong *= 0.25f;
-        cluster.vRelLong -= 128.0f;
+        cluster.vRelLong *= resVRelLong;
+        cluster.vRelLong += offsetVRelLong;
 
         // VRelLat
         cluster.vRelLat = Converter::getDecData(canLine->messData, 42, 9);
-        cluster.vRelLat *= 0.25f;
-        cluster.vRelLat -= 64.0f;
+        cluster.vRelLat *= resVRelLat;
+        cluster.vRelLat += offsetVRelLat;
 
         // DistLong
         cluster.distLong = Converter::getDecData(canLine->messData, 8, 13);
-        cluster.distLong *= 0.2f;
-        cluster.distLong -= 500.0f;
+        cluster.distLong *= resDistLong;
+        cluster.distLong += offsetDistLong;
 
         // DistLat
         cluster.distLat = Converter::getDecData(canLine->messData, 22, 10);
-        cluster.distLat *= 0.2f;
-        cluster.distLat -= 102.3f;
+        cluster.distLat *= resDistLat;
+        cluster.distLat += offsetDistLat;
 
         // Type
         uint8_t numType = Converter::getDecData(canLine->messData, 53, 3);
@@ -85,9 +85,9 @@ void DisplayData::receiveCanLine(CanLine *canLine){
 
     // --- frame got ---
     if((int)clustersAll.size() == numExpect){
-        applyFilters();
         // NOTE: Send to visual
-        updateProps();
+        applyFilters();        
+        updateShowFlags();
         ui->wDraw->clusters = clustersFiltered;
         ui->wDraw->update();
     }
@@ -130,7 +130,7 @@ void DisplayData::applyFilters(){
      << clustersAll.size() << " | After: " << clustersFiltered.size() << std::endl;*/
 }
 
-void DisplayData::updateProps(){
+void DisplayData::updateShowFlags(){
     int sz = ui->gridProps->rowCount();
     ui->wDraw->props.resize(sz);
     for (int i = 0; i < sz; i++) {

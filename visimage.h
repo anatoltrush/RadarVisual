@@ -32,6 +32,7 @@ private:
     void drawAxes();
     void drawRadar();
     void drawClusters();
+    int calcRad(float rcs);
 };
 
 #endif // VISIMAGE_H
