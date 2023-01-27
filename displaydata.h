@@ -26,12 +26,15 @@ private slots:
     void on_cBChsDist_currentTextChanged(const QString &data);
     void on_cmBRadNum_currentIndexChanged(int index);
 
+    void on_cBInfo_clicked(bool checked);
+
 private:
     Ui::DisplayData *ui;
 
     int numExpect = -1;
 
     void applyFilters();
+    void updateProps();
 };
 
 #endif // DISPLAYDATA_H

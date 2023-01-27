@@ -79,9 +79,11 @@ private:
     uint8_t resDataLen = 0;
 };
 #endif // MAINWINDOW_H
+// TODO: Show (Frame num + Calc speed + clusters num)
+// FIXME: 2 radars (add threat?)
 // TODO: Draw point (RCS)
-// TODO: Draw text
 // TODO: Measure dist when click or drag
+// TODO: Calc Azimuth
 
 // TODO: ZMQ input + convert
 // TODO: Real CAN convert

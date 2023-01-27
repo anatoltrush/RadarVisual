@@ -9,6 +9,7 @@
 #include <QScreen>
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <vector>
 #include <thread>
@@ -44,6 +45,8 @@ struct ClusterInfo{
     float vRelLong          = 0.0f;
     float vRelLat           = 0.0f;
     float RCS               = 0.0f;
+    float Pdh0              = 0.0f;
+    float Azimuth           = 0.0f;
     ClusterDynProp type     = ClusterDynProp::unknown;
 };
 

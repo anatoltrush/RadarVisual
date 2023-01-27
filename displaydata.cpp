@@ -10,7 +10,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     ui->cBChsDist->setCurrentIndex(4); // 160m
 
     ui->wDraw->colors = &this->colors;
-    colors = std::vector<QColor>(ui->gridLayout_2->rowCount(), Qt::gray);
+    colors = std::vector<QColor>(ui->gridTypes->rowCount(), Qt::gray);
     if(colors.size() >= 8){
         colors[0] = Qt::red;
         colors[1] = Qt::yellow;
@@ -23,9 +23,9 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     }
     int sz = 15;
     QPixmap px(sz, sz);
-    for (int i = 0; i < ui->gridLayout_2->rowCount(); i++) {
+    for (int i = 0; i < ui->gridTypes->rowCount(); i++) {
         px.fill(colors[i]);
-        QToolButton* tButton = static_cast<QToolButton*>(ui->gridLayout_2->itemAtPosition(i, 0)->widget());
+        QToolButton* tButton = static_cast<QToolButton*>(ui->gridTypes->itemAtPosition(i, 0)->widget());
         tButton->setIcon(px);
     }
 }
@@ -87,6 +87,7 @@ void DisplayData::receiveCanLine(CanLine *canLine){
     if((int)clustersAll.size() == numExpect){
         applyFilters();
         // NOTE: Send to visual
+        updateProps();
         ui->wDraw->clusters = clustersFiltered;
         ui->wDraw->update();
     }
@@ -129,6 +130,15 @@ void DisplayData::applyFilters(){
      << clustersAll.size() << " | After: " << clustersFiltered.size() << std::endl;*/
 }
 
+void DisplayData::updateProps(){
+    int sz = ui->gridProps->rowCount();
+    ui->wDraw->props.resize(sz);
+    for (int i = 0; i < sz; i++) {
+        QRadioButton* rb = static_cast<QRadioButton*>(ui->gridProps->itemAtPosition(i, 0)->widget());
+        ui->wDraw->props[i] = rb->isChecked();
+    }
+}
+
 void DisplayData::on_cBChsDist_currentTextChanged(const QString &data){
     ui->wDraw->aspect = 100.0f / data.toFloat();
     ui->wDraw->resizeAspect();
@@ -137,4 +147,8 @@ void DisplayData::on_cBChsDist_currentTextChanged(const QString &data){
 void DisplayData::on_cmBRadNum_currentIndexChanged(int index){
     currRadInd = index;
     clustersFiltered.clear();
+}
+
+void DisplayData::on_cBInfo_clicked(bool checked){
+    ui->wDraw->isShowInfo = checked;
 }

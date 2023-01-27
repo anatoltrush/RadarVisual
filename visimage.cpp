@@ -77,7 +77,6 @@ void VisImage::drawRadar(){
 }
 
 void VisImage::drawClusters(){
-    // draw points
     QPen penClust = QPen(Qt::black, 1);
     painter->setPen(penClust);
 
@@ -87,8 +86,19 @@ void VisImage::drawClusters(){
         painter->setBrush(currCol);
         int wCl = width()/2 + (cl.distLat / 10.0f * stepPx);
         int hCl = height() - cl.distLong / 10.0f * stepPx;
-        painter->drawEllipse(QPoint(wCl, hCl), 5, 5);
+        int radius = 2;
+        painter->drawEllipse(QPoint(wCl, hCl), radius, radius);
+        // --- text ---
+        if(isShowInfo){
+            QString textInfo;
+            if(props[0]) textInfo = Converter::floatCutOff(cl.RCS, 1);
+            if(props[1]) textInfo = Converter::floatCutOff(cl.distLong, 1);
+            if(props[2]) textInfo = Converter::floatCutOff(cl.distLat, 1);
+            if(props[3]) textInfo = Converter::floatCutOff(cl.vRelLong, 1);
+            if(props[4]) textInfo = Converter::floatCutOff(cl.vRelLat, 1);
+            if(props[5]) textInfo = Converter::floatCutOff(cl.Pdh0, 1);
+            if(props[6]) textInfo = Converter::floatCutOff(cl.Azimuth, 1);
+            painter->drawText(wCl+1, hCl-1, textInfo);
+        }
     }
-
-    // draw text
 }

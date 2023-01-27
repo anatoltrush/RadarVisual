@@ -11,6 +11,12 @@ uint16_t Converter::getDecData(const QString &hexData, uint8_t indBeg, uint8_t l
     return res;
 }
 
+QString Converter::floatCutOff(float value, int afterDot){
+    std::stringstream stream;
+    stream << std::fixed << std::setprecision(afterDot) << value;
+    return QString::fromStdString(stream.str());
+}
+
 QString Converter::hexToBin(const QString &hexData){
     bool ok = false;
     QString binData = QString::number(hexData.toLongLong(&ok, 16), 2);
