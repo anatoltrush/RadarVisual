@@ -87,6 +87,7 @@ private:
 // TODO: Real CAN convert
 // TODO: Time chart
 // TODO: Calc speed of vehicle
+// TODO: Check > 50m
 
 // FIXME: 2 radars (add threat?)
 // FIXME: Left/Right?

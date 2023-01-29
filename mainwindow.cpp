@@ -173,7 +173,7 @@ void MainWindow::canRcv(){
     canfd_frame pframe;
     int nbytes = 0;
     while(!isCanStopped){
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
         std::string strSource = &deviceName.back();
         if(!isCanOpened) continue;
@@ -232,7 +232,7 @@ void MainWindow::playCanFile(){
             if(canLines.empty()) continue;
             double diffTime = GET_CUR_TIME_MICRO - canLines.front().timeStamp;
             while (isPlay) {
-                std::this_thread::sleep_for(std::chrono::microseconds(1));
+                std::this_thread::sleep_for(std::chrono::microseconds(3));
                 if(isCanStopped) break;
                 if(GET_CUR_TIME_MICRO >= (canLines[currInd].timeStamp + diffTime)){
                     /*std::cout << currInd << " | "<< GET_CUR_TIME_MICRO << " | " << canLines[currInd].messId.toStdString()
