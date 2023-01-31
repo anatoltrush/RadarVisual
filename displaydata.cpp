@@ -7,7 +7,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     for(int i = 0; i < RADAR_NUM; i++)
         ui->cmBRadNum->addItem("Radar " + QString::number(i));
 
-    ui->cBChsDist->setCurrentIndex(4); // 160m
+    ui->cBChsDist->setCurrentIndex(4); // set 160m
 
     ui->wDraw->colors = &this->colors;
     colors = std::vector<QColor>(ui->gridTypes->rowCount(), Qt::gray);
@@ -21,7 +21,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
         colors[6] = QColor(255, 140, 0);
         colors[7] = Qt::black;
     }
-    int sz = 15;
+    int sz = 15; // set colors
     QPixmap px(sz, sz);
     for (int i = 0; i < ui->gridTypes->rowCount(); i++) {
         px.fill(colors[i]);
@@ -76,6 +76,9 @@ void DisplayData::receiveCanLine(CanLine *canLine){
         uint8_t numType = Converter::getDecData(canLine->messData, 53, 3);
         cluster.type = static_cast<ClusterDynProp>(numType);
 
+        // Azimuth
+        cluster.clacAzimuth();
+
         // ---
         clustersAll.push_back(cluster);
     }
@@ -85,9 +88,10 @@ void DisplayData::receiveCanLine(CanLine *canLine){
 
     // --- frame got ---
     if((int)clustersAll.size() == numExpect){
-        // NOTE: Send to visual
+        // NOTE: Send frame to visual
         applyFilters();        
         updateShowFlags();
+
         ui->wDraw->clusters = clustersFiltered;
         ui->wDraw->update();
     }

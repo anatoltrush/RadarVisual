@@ -16,6 +16,7 @@ void VisImage::paintEvent(QPaintEvent *){
 
     drawAxes();
     drawRadar();
+    drawCursor();
     drawClusters();
 
     painter->end();
@@ -40,7 +41,8 @@ void VisImage::drawAxes(){
     painter->drawLine(QLine(width() / 2, 0, width() / 2, height()));
 
     // --- grid ---
-    int slices = 10;
+    constexpr int slices = 5 * 2/*sides*/;
+    gridStepM = (minLeftM * 2 * -1) / (float)slices;
     stepPx = width() / slices;
     if(stepPx <= 0) return;
 
@@ -49,19 +51,19 @@ void VisImage::drawAxes(){
     QVector<qreal> dashes {crossSize, static_cast<double>(stepPx - crossSize)};
     penGrid.setDashPattern(dashes);
     painter->setPen(penGrid);
-    // vert
+    // vert lines
     for (int i = 0; i < slices + 1; i++) {
         int xCoord = i * stepPx;
-        painter->drawLine(QLine(xCoord, 0+(crossSize/2), xCoord, height()));
+        painter->drawLine(QLine(xCoord, 0 + (crossSize/2), xCoord, height()));
         // ---m---
-        painter->drawText(QPoint(xCoord, height()-2), QString::number(-50 + i * slices)+"m");
+        painter->drawText(QPoint(xCoord-3, height()-2), QString::number(minLeftM + i * gridStepM) + "m");
     }
-    // horiz
+    // horiz lines
     for (int i = 0; i < height() / stepPx + 1; i++) {
         int yCoord = height() - i * stepPx;
-        painter->drawLine(QLine(0-(crossSize/2), yCoord, width(), yCoord));
+        painter->drawLine(QLine(-crossSize/2, yCoord, width(), yCoord));
         // ---m---
-        painter->drawText(QPoint(width()/2, yCoord), QString::number(i * slices)+"m");
+        painter->drawText(QPoint(width()/2, yCoord), QString::number(i * gridStepM) + "m");
     }
 }
 
@@ -76,19 +78,24 @@ void VisImage::drawRadar(){
     painter->drawRect(width()/2 - wRad/2, height() - hRad, wRad, hRad);
 }
 
+void VisImage::drawCursor(){
+    QPen penCursor = QPen(Qt::darkGray, 1);
+    painter->setPen(penCursor);
+    int curX = (curs.x() - width()/2) / (float)stepPx * gridStepM;
+    int curY = (height() - curs.y()) / (float)stepPx * gridStepM;
+    painter->drawText(curs.x(), curs.y(), "x:" + QString::number(curX) + "|y:" + QString::number(curY));
+}
+
 void VisImage::drawClusters(){
     QPen penClust = QPen(Qt::black, 1);
     painter->setPen(penClust);
-
-    // num of clstrs
-    painter->drawText(0, 12, "Clusters in frame: " + QString::number(clusters.size()));
 
     if(stepPx <= 0) return;
     for (const auto& cl : clusters) {
         QColor currCol = (*colors)[static_cast<uint8_t>(cl.type)];
         painter->setBrush(currCol);
-        int wCl = width()/2 + (cl.distLat / 10.0f * stepPx);
-        int hCl = height() - cl.distLong / 10.0f * stepPx;
+        int wCl = width()/2 + (-cl.distLat / gridStepM * stepPx); // NOTE: left/right?
+        int hCl = height() - cl.distLong / gridStepM * stepPx;
         int radius = calcRad(cl.RCS);
         painter->drawEllipse(QPoint(wCl, hCl), radius, radius);
         // --- text ---
@@ -104,10 +111,15 @@ void VisImage::drawClusters(){
             painter->drawText(wCl+1, hCl-1, textInfo);
         }
     }
+
+    // num of clstrs
+    painter->drawText(0, 12, "Clusters in frame: " + QString::number(clusters.size()));
+    // num of frames
+    painter->drawText(width() - 110, 12, "Frame: number");
 }
 
 int VisImage::calcRad(float rcs){
-    int res = (int)((rcs - offsetRCS) / 10.0f);
+    int res = (int)((rcs - offsetRCS) / gridStepM);
     if(res <= 0) return 1;
     return res;
 }

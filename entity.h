@@ -60,6 +60,7 @@ struct ClusterInfo{
     float Pdh0              = 0.0f;
     float Azimuth           = 0.0f;
     ClusterDynProp type     = ClusterDynProp::unknown;
+    void clacAzimuth(){/*TODO: implement*/}
 };
 
 #endif // ENTITY_H

@@ -6,7 +6,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     for (int i = 0; i < RADAR_NUM; i++){
         displays[i] = new DisplayData(this);
-        displays[i]->setWindowTitle("Display " + QString::number(i));
+        displays[i]->selfCount = i;
+        displays[i]->setWindowTitle("Display " + QString::number(displays[i]->selfCount));
     }
 
     isCanStopped = false;
@@ -242,7 +243,7 @@ void MainWindow::playCanFile(){
                     uint8_t messIdInd = canLines[currInd].messId[1].digitValue();
                     for (int i = 0; i < RADAR_NUM; i++)
                         if(!displays[i]->isHidden())
-                            if(displays[i]->currRadInd == messIdInd)
+                            if(displays[i]->currRadInd == messIdInd) // NOTE: Send line to display
                                 displays[i]->receiveCanLine(&canLines[currInd]);
                     // --- --- ---
 

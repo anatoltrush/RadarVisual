@@ -12,6 +12,8 @@ public:
     explicit DisplayData(QWidget *parent = nullptr);
     ~DisplayData();
 
+    int selfCount = -1;
+
     uint8_t currRadInd = 0;
 
     std::vector<QColor> colors;

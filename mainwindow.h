@@ -76,18 +76,16 @@ private:
     void playCanFile();
 
     uint8_t* resData;
-    uint8_t resDataLen = 0;
+    uint8_t resDataLen = 0;   
 };
 #endif // MAINWINDOW_H
-// TODO: Show calc speed
-// TODO: Measure dist when click or drag
+// TODO: Show vehicle speed
 // TODO: Calc Azimuth
+// TODO: Frame count
 
 // TODO: ZMQ input + convert
 // TODO: Real CAN convert
 // TODO: Time chart
-// TODO: Calc speed of vehicle
-// TODO: Check > 50m
+// TODO: Calc vehicle speed
 
 // FIXME: 2 radars (add threat?)
-// FIXME: Left/Right?
