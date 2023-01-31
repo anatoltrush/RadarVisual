@@ -15,9 +15,9 @@ void VisImage::paintEvent(QPaintEvent *){
     painter->eraseRect(rect());
 
     drawAxes();
-    drawRadar();
-    drawCursor();
+    drawRadar();    
     drawClusters();
+    drawCursor();
 
     painter->end();
 }
@@ -94,7 +94,7 @@ void VisImage::drawClusters(){
     for (const auto& cl : clusters) {
         QColor currCol = (*colors)[static_cast<uint8_t>(cl.type)];
         painter->setBrush(currCol);
-        int wCl = width()/2 + (-cl.distLat / gridStepM * stepPx); // NOTE: left/right?
+        int wCl = width()/2 + (cl.distLat / gridStepM * stepPx);
         int hCl = height() - cl.distLong / gridStepM * stepPx;
         int radius = calcRad(cl.RCS);
         painter->drawEllipse(QPoint(wCl, hCl), radius, radius);

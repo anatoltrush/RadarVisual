@@ -71,6 +71,7 @@ void DisplayData::receiveCanLine(CanLine *canLine){
         cluster.distLat = Converter::getDecData(canLine->messData, 22, 10);
         cluster.distLat *= resDistLat;
         cluster.distLat += offsetDistLat;
+        cluster.distLat = -cluster.distLat;// NOTE: left/right?
 
         // Type
         uint8_t numType = Converter::getDecData(canLine->messData, 53, 3);

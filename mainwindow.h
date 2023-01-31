@@ -80,12 +80,14 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: Show vehicle speed
-// TODO: Calc Azimuth
-// TODO: Frame count
+// TODO: Azimuth Calc
+// TODO: Azimuth Filter
+// TODO: PdhO?
 
 // TODO: ZMQ input + convert
 // TODO: Real CAN convert
 // TODO: Time chart
 // TODO: Calc vehicle speed
 
+// TODO: Frame count
 // FIXME: 2 radars (add threat?)
