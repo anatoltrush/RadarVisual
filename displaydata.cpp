@@ -98,25 +98,25 @@ void DisplayData::receiveCanLine(CanLine *canLine){
                 break;
             case 1:
                 clustersAll[idCl].Pdh0 = 24.99f;
-                        break;
+                break;
             case 2:
                 clustersAll[idCl].Pdh0 = 49.99f;
-                        break;
+                break;
             case 3:
                 clustersAll[idCl].Pdh0 = 74.99f;
-                        break;
+                break;
             case 4:
                 clustersAll[idCl].Pdh0 = 89.99f;
-                        break;
+                break;
             case 5:
                 clustersAll[idCl].Pdh0 = 98.99f;
-                        break;
+                break;
             case 6:
                 clustersAll[idCl].Pdh0 = 99.89f;
-                        break;
+                break;
             case 7:
                 clustersAll[idCl].Pdh0 = 100.0f;
-                        break;
+                break;
             default:
                 break;
             }
@@ -135,6 +135,8 @@ void DisplayData::receiveCanLine(CanLine *canLine){
         ui->wDraw->numClFar = numExpectFar;
         ui->wDraw->numClSumm = numExpectSumm;
         ui->wDraw->update();
+        // ---
+        clustersAll.clear();
     }
 }
 

@@ -185,7 +185,6 @@ void MainWindow::canRcv(){
             statLocalMess = statusRadMess + " | Failed to receive CAN data";
         }
         else{
-            msgNumCan++;
             statLocalMess = statusRadMess + " | " + QString::number(nbytes) + " bytes received";
         }
         ui->statBar->showMessage(statLocalMess);

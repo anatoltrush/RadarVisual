@@ -41,10 +41,6 @@ private:
 
     QString statusRadMess;
 
-    uint64_t msgNumCan = 0;
-    uint64_t msgNumZmq = 0;
-    uint64_t msgNumFile = 0;
-
     // --- Input from CAN ---
     int handle = 0;
 #ifdef __WIN32
@@ -85,4 +81,4 @@ private:
 // TODO: Calc and show vehicle speed
 // TODO: Draw zones
 // TODO: ? Time chart
-// FIXME: ? UI add threat
+// BUG: 702 filling wrong
