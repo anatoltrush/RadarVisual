@@ -32,7 +32,10 @@ private slots:
 private:
     Ui::DisplayData *ui;
 
-    int numExpect = -1;
+    uint8_t numExpectNear = 0;
+    uint8_t numExpectFar = 0;
+    uint8_t numExpectSumm = 0;
+    uint16_t measCount = 0;
 
     void applyFilters();
     void updateShowFlags();

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>727</height>
+    <width>700</width>
+    <height>740</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -251,6 +251,12 @@
           <layout class="QGridLayout" name="gridProps">
            <item row="3" column="2">
             <widget class="QSpinBox" name="sBVelLongMax">
+             <property name="toolTip">
+              <string>+127.75</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
              <property name="minimum">
               <number>-128</number>
              </property>
@@ -270,6 +276,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="toolTip">
+              <string>-128.0</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
              <property name="minimum">
               <number>-128</number>
              </property>
@@ -283,6 +295,12 @@
            </item>
            <item row="1" column="2">
             <widget class="QSpinBox" name="sBDistLongMax">
+             <property name="toolTip">
+              <string>+1138.2</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
              <property name="minimum">
               <number>-500</number>
              </property>
@@ -296,6 +314,18 @@
            </item>
            <item row="0" column="1">
             <widget class="QSpinBox" name="sBRcsMin">
+             <property name="mouseTracking">
+              <bool>true</bool>
+             </property>
+             <property name="toolTip">
+              <string>-64.0</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
+             <property name="statusTip">
+              <string/>
+             </property>
              <property name="minimum">
               <number>-64</number>
              </property>
@@ -316,6 +346,12 @@
            </item>
            <item row="0" column="2">
             <widget class="QSpinBox" name="sBRcsMax">
+             <property name="toolTip">
+              <string>+63.5</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
              <property name="minimum">
               <number>-64</number>
              </property>
@@ -329,6 +365,12 @@
            </item>
            <item row="4" column="2">
             <widget class="QSpinBox" name="sBVelLatMax">
+             <property name="toolTip">
+              <string>+63.75</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
              <property name="minimum">
               <number>-64</number>
              </property>
@@ -341,7 +383,23 @@
             </widget>
            </item>
            <item row="5" column="2">
-            <widget class="QSpinBox" name="sBPdh0Max"/>
+            <widget class="QSpinBox" name="sBPdh0Max">
+             <property name="toolTip">
+              <string>+100</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
+             <property name="minimum">
+              <number>-1</number>
+             </property>
+             <property name="maximum">
+              <number>101</number>
+             </property>
+             <property name="value">
+              <number>101</number>
+             </property>
+            </widget>
            </item>
            <item row="5" column="0">
             <widget class="QRadioButton" name="rBPdh0">
@@ -352,6 +410,12 @@
            </item>
            <item row="2" column="1">
             <widget class="QSpinBox" name="sBDistLatMin">
+             <property name="toolTip">
+              <string>-102.3</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
              <property name="minimum">
               <number>-102</number>
              </property>
@@ -372,6 +436,12 @@
            </item>
            <item row="2" column="2">
             <widget class="QSpinBox" name="sBDistLatMax">
+             <property name="toolTip">
+              <string>+102.3</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
              <property name="minimum">
               <number>-102</number>
              </property>
@@ -399,6 +469,18 @@
            </item>
            <item row="0" column="0">
             <widget class="QRadioButton" name="rBRcs">
+             <property name="mouseTracking">
+              <bool>true</bool>
+             </property>
+             <property name="toolTip">
+              <string/>
+             </property>
+             <property name="toolTipDuration">
+              <number>-1</number>
+             </property>
+             <property name="statusTip">
+              <string/>
+             </property>
              <property name="text">
               <string>RCS, dBm2</string>
              </property>
@@ -409,6 +491,12 @@
            </item>
            <item row="4" column="1">
             <widget class="QSpinBox" name="sBVelLatMin">
+             <property name="toolTip">
+              <string>-64</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
              <property name="minimum">
               <number>-64</number>
              </property>
@@ -422,32 +510,50 @@
            </item>
            <item row="6" column="1">
             <widget class="QSpinBox" name="sBAzMin">
+             <property name="toolTip">
+              <string>-90(-50)</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
              <property name="minimum">
-              <number>-50</number>
+              <number>-90</number>
              </property>
              <property name="maximum">
-              <number>52</number>
+              <number>90</number>
              </property>
              <property name="value">
-              <number>-50</number>
+              <number>-90</number>
              </property>
             </widget>
            </item>
            <item row="6" column="2">
             <widget class="QSpinBox" name="sBAzMax">
+             <property name="toolTip">
+              <string>+90(+52.37)</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
              <property name="minimum">
-              <number>-50</number>
+              <number>-90</number>
              </property>
              <property name="maximum">
-              <number>52</number>
+              <number>90</number>
              </property>
              <property name="value">
-              <number>52</number>
+              <number>90</number>
              </property>
             </widget>
            </item>
            <item row="1" column="1">
             <widget class="QSpinBox" name="sBDistLongMin">
+             <property name="toolTip">
+              <string>-500.0</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
              <property name="minimum">
               <number>-500</number>
              </property>
@@ -460,7 +566,23 @@
             </widget>
            </item>
            <item row="5" column="1">
-            <widget class="QSpinBox" name="sBPdh0Min"/>
+            <widget class="QSpinBox" name="sBPdh0Min">
+             <property name="toolTip">
+              <string>0</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>5000</number>
+             </property>
+             <property name="minimum">
+              <number>-1</number>
+             </property>
+             <property name="maximum">
+              <number>101</number>
+             </property>
+             <property name="value">
+              <number>-1</number>
+             </property>
+            </widget>
            </item>
            <item row="4" column="0">
             <widget class="QRadioButton" name="rBVRelLat">
@@ -475,6 +597,9 @@
           <widget class="QCheckBox" name="cBInfo">
            <property name="text">
             <string>Show text info</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
            </property>
           </widget>
          </item>

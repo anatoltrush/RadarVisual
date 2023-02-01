@@ -12,9 +12,12 @@ class VisImage : public QWidget
 public:
     VisImage(QWidget *parent = nullptr);
 
-    float aspect = 0.0f;
-    bool isShowInfo = false;
-    uint16_t* numFrame = nullptr;
+    bool isShowInfo     = false;
+    uint8_t numClNear   = 0;
+    uint8_t numClFar    = 0;
+    uint8_t numClSumm   = 0;
+    uint16_t measCount  = 0;
+    float aspect        = 0.0f;
 
     std::vector<bool> props;
     std::vector<ClusterInfo> clusters;

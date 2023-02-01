@@ -65,6 +65,7 @@ private:
 #endif
 
     // --- Input from ZMQ ---
+    QString pathString;
 
     // --- Input from File ---
     bool isFileLoaded = false;
@@ -79,15 +80,9 @@ private:
     uint8_t resDataLen = 0;   
 };
 #endif // MAINWINDOW_H
-// TODO: Show vehicle speed
-// TODO: Azimuth Calc
-// TODO: Azimuth Filter
-// TODO: PdhO?
-
-// TODO: ZMQ input + convert
 // TODO: Real CAN convert
-// TODO: Time chart
-// TODO: Calc vehicle speed
-
-// TODO: Frame count
-// FIXME: 2 radars (add threat?)
+// TODO: ZMQ input + convert + show
+// TODO: Calc and show vehicle speed
+// TODO: Draw zones
+// TODO: ? Time chart
+// FIXME: ? UI add threat

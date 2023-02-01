@@ -107,15 +107,16 @@ void VisImage::drawClusters(){
             if(props[3]) textInfo = Converter::floatCutOff(cl.vRelLong, 1);
             if(props[4]) textInfo = Converter::floatCutOff(cl.vRelLat, 1);
             if(props[5]) textInfo = Converter::floatCutOff(cl.Pdh0, 1);
-            if(props[6]) textInfo = Converter::floatCutOff(cl.Azimuth, 1);
-            painter->drawText(wCl+1, hCl-1, textInfo);
+            if(props[6]) textInfo = Converter::floatCutOff(cl.azimuth, 1);
+            painter->drawText(wCl+2, hCl-2, textInfo);
         }
     }
 
-    // num of clstrs
-    painter->drawText(0, 12, "Clusters in frame: " + QString::number(clusters.size()));
-    // num of frames
-    painter->drawText(width() - 110, 12, "Frame: number");
+    painter->drawText(0, 12, "Measure count: " + QString::number(measCount));
+    painter->drawText(0, 26, "Clusters in frame (all): " + QString::number(numClSumm));
+    painter->drawText(0, 40, "Clusters in frame (filtered): " + QString::number(clusters.size()));
+    painter->drawText(0, 54, "Far zone: " + QString::number(numClFar));
+    painter->drawText(0, 68, "Near zone: " + QString::number(numClNear));
 }
 
 int VisImage::calcRad(float rcs){

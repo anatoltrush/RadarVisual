@@ -19,7 +19,7 @@ QString Converter::floatCutOff(float value, int afterDot){
 
 QString Converter::hexToBin(const QString &hexData){
     bool ok = false;
-    QString binData = QString::number(hexData.toLongLong(&ok, 16), 2);
+    QString binData = QString::number(hexData.toULongLong(&ok, 16), 2);
     while (binData.length() < hexData.length() * 4)
         binData.prepend("0");
     return binData;

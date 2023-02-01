@@ -14,6 +14,7 @@
 #include <vector>
 #include <thread>
 #include <unistd.h>
+#include <math.h>
 
 #define RADAR_NUM   8
 
@@ -43,10 +44,10 @@ enum class ClusterDynProp{
     moving = 0,
     stationary = 1,
     oncoming = 2,
-    stationary_candidate = 3,
+    stationaryCandidate = 3,
     unknown = 4,
-    crossing_stationary = 5,
-    crossing_moving = 6,
+    crossingStationary = 5,
+    crossingMoving = 6,
     stopped = 7
 };
 
@@ -58,9 +59,9 @@ struct ClusterInfo{
     float vRelLat           = 0.0f;
     float RCS               = 0.0f;
     float Pdh0              = 0.0f;
-    float Azimuth           = 0.0f;
+    float azimuth           = 0.0f;
     ClusterDynProp type     = ClusterDynProp::unknown;
-    void clacAzimuth(){/*TODO: implement*/}
+    void clacAzimuth(){azimuth = std::atan(distLat / distLong) * 180.0f / M_PI;}
 };
 
 #endif // ENTITY_H
