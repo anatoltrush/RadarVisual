@@ -53,7 +53,7 @@ private:
 #endif
 
     // ----- ----- ----- INPUT FROM ZMQ ----- ----- -----
-    QString pathString;
+    QString addressString;
 
     // ----- ----- ----- INPUT FROM FILE ----- ----- -----
     bool isFileLoaded = false;
@@ -65,9 +65,7 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: Autoscroll
 // TODO: ZMQ input + convert + show
 // TODO: Calc and show vehicle speed
-// TODO: Draw zones
-// TODO: ? Time chart
+// TODO: ? Some info from #201
 // BUG: 702 filling wrong

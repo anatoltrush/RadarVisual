@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
+    <width>742</width>
     <height>740</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_5">
     <item row="0" column="0" rowspan="2">
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <layout class="QVBoxLayout" name="vertPanel">
       <property name="sizeConstraint">
        <enum>QLayout::SetMinimumSize</enum>
       </property>

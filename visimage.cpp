@@ -1,7 +1,7 @@
 #include "visimage.h"
 
 VisImage::VisImage(QWidget *parent) : QWidget(parent){
-    this->setStyleSheet("background-color: #E6E6E6");
+    this->setStyleSheet("background-color: #F5F5F5"); // start color
 }
 
 void VisImage::resizeAspect(){
@@ -14,6 +14,7 @@ void VisImage::paintEvent(QPaintEvent *){
     painter = new QPainter(this);
     painter->eraseRect(rect());
 
+    drawZones();
     drawAxes();
     drawRadar();    
     drawClusters();
@@ -34,6 +35,34 @@ void VisImage::resizeEvent(QResizeEvent *event){
     resize(size);
 }
 
+void VisImage::drawZones(){
+    // --- red ---
+    int farRadius = (farZone / gridStepM) * gridStepPx;
+    QPainterPath farPath;
+    farPath.moveTo(width() / 2, height());
+    QRectF rectFar(width() / 2 - farRadius, height() - farRadius, farRadius * 2, farRadius * 2);
+    farPath.arcTo(rectFar, 81, 18);
+
+    QColor lightRed(255, 200, 200);
+    QPen penZoneRed = QPen(lightRed, 1);
+    painter->setPen(penZoneRed);
+    painter->setBrush(lightRed);
+    painter->drawPath(farPath);
+
+    // --- blue ---
+    int nearRadius = (nearZone / gridStepM) * gridStepPx;
+    QPainterPath nearPath;
+    nearPath.moveTo(width() / 2, height());
+    QRectF rectNear(width() / 2 - nearRadius, height() - nearRadius, nearRadius * 2, nearRadius * 2);
+    nearPath.arcTo(rectNear, 30, 120);
+
+    QColor lightBlue(160, 210, 255);
+    QPen penZoneBlue = QPen(lightBlue, 1);
+    painter->setPen(penZoneBlue);
+    painter->setBrush(lightBlue);
+    painter->drawPath(nearPath);
+}
+
 void VisImage::drawAxes(){
     QPen penAx = QPen(Qt::black, 1);
     painter->setPen(penAx);
@@ -41,38 +70,30 @@ void VisImage::drawAxes(){
     painter->drawLine(QLine(width() / 2, 0, width() / 2, height()));
 
     // --- grid ---
-    constexpr int slices = 5 * 2/*sides*/;
-    gridStepM = (minLeftM * 2 * -1) / (float)slices;
-    stepPx = width() / slices;
-    if(stepPx <= 0) return;
+    const uint8_t slicesTwoSides = slicesOneSide * 2/*sides*/;
+    gridStepM = (minLeftM * 2 * -1) / (float)slicesTwoSides;
+    gridStepPx = width() / slicesTwoSides;
+    if(gridStepPx <= 0) return;
 
     QPen penGrid = QPen(Qt::gray, 1);
     qreal crossSize = 6;
-    QVector<qreal> dashes {crossSize, static_cast<double>(stepPx - crossSize)};
+    QVector<qreal> dashes {crossSize, static_cast<double>(gridStepPx - crossSize)};
     penGrid.setDashPattern(dashes);
     painter->setPen(penGrid);
     // --- vert lines ---
-    for (int i = 0; i < slices + 1; i++) {
-        int xCoord = i * stepPx;
+    for (uint8_t i = 0; i < slicesTwoSides + 1; i++) {
+        int xCoord = i * gridStepPx;
         painter->drawLine(QLine(xCoord, 0 + (crossSize/2), xCoord, height()));
         // ---m---
         painter->drawText(QPoint(xCoord-3, height()-2), QString::number(minLeftM + i * gridStepM) + "m");
     }
     // --- horiz lines ---
-    for (int i = 0; i < height() / stepPx + 1; i++) {
-        int yCoord = height() - i * stepPx;
+    for (int i = 0; i < height() / gridStepPx + 1; i++) {
+        int yCoord = height() - i * gridStepPx;
         painter->drawLine(QLine(-crossSize/2, yCoord, width(), yCoord));
         // ---m---
         painter->drawText(QPoint(width()/2, yCoord), QString::number(i * gridStepM) + "m");
     }
-
-    // FIXME: --- draw zones ---
-    int farRad = (farZone / gridStepM) * stepPx;
-    int nearRad = (nearZone / gridStepM) * stepPx;
-    /*painter->drawEllipse(width()/2, height(), farRad, farRad);
-    painter->drawEllipse(width()/2, height(), nearRad, nearRad);*/
-
-    painter->drawEllipse(width()/2-(100 / gridStepM * stepPx), 0, 100, 100);
 }
 
 void VisImage::drawRadar(){
@@ -80,30 +101,22 @@ void VisImage::drawRadar(){
     painter->setPen(penRad);
     painter->setBrush(Qt::darkGray);
 
-    if(stepPx <= 0) return;
-    int wRad = stepPx * 0.5f;
-    int hRad = stepPx * 0.15f;
+    if(gridStepPx <= 0) return;
+    int wRad = gridStepPx * 0.5f;
+    int hRad = gridStepPx * 0.15f;
     painter->drawRect(width()/2 - wRad/2, height() - hRad, wRad, hRad);
-}
-
-void VisImage::drawCursor(){
-    QPen penCursor = QPen(Qt::darkGray, 1);
-    painter->setPen(penCursor);
-    int curX = (curs.x() - width()/2) / (float)stepPx * gridStepM;
-    int curY = (height() - curs.y()) / (float)stepPx * gridStepM;
-    painter->drawText(curs.x(), curs.y(), "x:" + QString::number(curX) + "|y:" + QString::number(curY));
 }
 
 void VisImage::drawClusters(){
     QPen penClust = QPen(Qt::black, 1);
     painter->setPen(penClust);
 
-    if(stepPx <= 0) return;
+    if(gridStepPx <= 0) return;
     for (const auto& cl : clusters) {
         QColor currCol = (*colors)[static_cast<uint8_t>(cl.type)];
         painter->setBrush(currCol);
-        int wCl = width()/2 + (cl.distLat / gridStepM * stepPx);
-        int hCl = height() - cl.distLong / gridStepM * stepPx;
+        int wCl = width()/2 + (cl.distLat / gridStepM * gridStepPx);
+        int hCl = height() - cl.distLong / gridStepM * gridStepPx;
         int radius = calcRad(cl.RCS);
         painter->drawEllipse(QPoint(wCl, hCl), radius, radius);
         // --- text ---
@@ -125,6 +138,14 @@ void VisImage::drawClusters(){
     painter->drawText(1, 40, "Clusters in frame (all): " + QString::number(numClSumm));
     painter->drawText(1, 54, "Far zone (" + QString::number(farZone) + "m): " + QString::number(numClFar));
     painter->drawText(1, 68, "Near zone (" + QString::number(nearZone) + "m): " + QString::number(numClNear));
+}
+
+void VisImage::drawCursor(){
+    QPen penCursor = QPen(Qt::darkGray, 1);
+    painter->setPen(penCursor);
+    int curX = (curs.x() - width()/2) / (float)gridStepPx * gridStepM;
+    int curY = (height() - curs.y()) / (float)gridStepPx * gridStepM;
+    painter->drawText(curs.x(), curs.y(), "x:" + QString::number(curX) + "|y:" + QString::number(curY));
 }
 
 int VisImage::calcRad(float rcs){

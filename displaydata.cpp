@@ -30,6 +30,9 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
         QToolButton* tButton = static_cast<QToolButton*>(ui->gridTypes->itemAtPosition(i, 0)->widget());
         tButton->setIcon(px);
     }
+    // --- click ---
+    on_cBInfo_clicked(true);
+    ui->cBInfo->setChecked(true);
 }
 
 DisplayData::~DisplayData(){
@@ -39,7 +42,6 @@ DisplayData::~DisplayData(){
 void DisplayData::receiveCanLine(const CanLine &canLine){
     if(canLine.messId[0] == '6' && canLine.messId[2] == '0'){
         clustersAll.clear();
-
         numExpectNear = Converter::getDecData(canLine.messData, 0, 8);
         numExpectFar = Converter::getDecData(canLine.messData, 8, 8);
         numExpectSumm = numExpectNear + numExpectFar;

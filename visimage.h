@@ -2,6 +2,7 @@
 #define VISIMAGE_H
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QResizeEvent>
 
 #include "entity.h"
@@ -31,17 +32,20 @@ private:
     QPainter *painter;
     QPoint curs;
 
-    int stepPx = 0;
-    int minLeftM = -50;
-    float gridStepM = 0.0f;
+    // NOTE: config grid
+    int slicesOneSide   = 6; // parts
+    int minLeftM        = -60; // meters
+    int gridStepPx      = 0;
+    float gridStepM     = 0.0f;
 
     void paintEvent(QPaintEvent *) override;
     void resizeEvent(QResizeEvent *event) override;
 
+    void drawZones();
     void drawAxes();
-    void drawRadar();
-    void drawCursor();
+    void drawRadar();    
     void drawClusters();
+    void drawCursor();
     int calcRad(float rcs);
 
 protected:

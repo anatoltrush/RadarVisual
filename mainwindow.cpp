@@ -33,10 +33,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     this->move(sideGap, upGap);
 
-    // ---
+    // --- click ---
     on_pBAddDisplay_clicked();
-    this->setWindowFlags(Qt::WindowCloseButtonHint);
     // ---
+    this->setWindowFlags(Qt::WindowCloseButtonHint);
     ui->pBStartApply->setShortcut(Qt::Key_Return);
 }
 

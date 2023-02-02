@@ -3,8 +3,7 @@ CONFIG  += c++14
 QT      += core gui widgets serialbus charts
 
 win32: {
-RESOURCES += \
-    res.qrc
+RESOURCES +=
 RC_FILE = myapp.rc
 }
 

@@ -17,6 +17,8 @@ QString Converter::floatCutOff(float value, int afterDot){
     return QString::fromStdString(stream.str());
 }
 
+#ifdef __WIN32
+#else
 CanLine Converter::getCanLineFromCanData(const std::string &device, const canfd_frame &frame){
     CanLine canLine;
     canLine.timeStamp = GET_CUR_TIME_MICRO;
@@ -28,6 +30,7 @@ CanLine Converter::getCanLineFromCanData(const std::string &device, const canfd_
     canLine.messData = hexData;
     return canLine;
 }
+#endif
 
 QString Converter::hexToBin(const QString &hexData){
     bool ok = false;
