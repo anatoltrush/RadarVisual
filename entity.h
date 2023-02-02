@@ -8,6 +8,14 @@
 #include <QTextStream>
 #include <QScreen>
 
+#ifdef __WIN32
+#else
+#include <net/if.h>
+#include <linux/can.h>
+#include <linux/can/raw.h>
+#include <sys/ioctl.h>
+#endif
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>

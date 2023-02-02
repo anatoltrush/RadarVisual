@@ -21,7 +21,7 @@ public:
     std::vector<ClusterInfo> clustersAll;
     std::vector<ClusterInfo> clustersFiltered;
 
-    void receiveCanLine(CanLine* canLine);
+    void receiveCanLine(const CanLine &canLine);
 
 private slots:
     void on_cBChsDist_currentTextChanged(const QString &data);

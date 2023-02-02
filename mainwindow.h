@@ -1,14 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#ifdef __WIN32
-#else
-#include <net/if.h>
-#include <linux/can.h>
-#include <linux/can/raw.h>
-#include <sys/ioctl.h>
-#endif
-
 #include "displaydata.h"
 
 QT_BEGIN_NAMESPACE
@@ -36,12 +28,12 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-
     DisplayData* displays[RADAR_NUM];
-
     QString statusRadMess;
 
-    // --- Input from CAN ---
+    void sendToDisplay(const CanLine &canLine);
+
+    // ----- ----- ----- INPUT FROM CAN ----- ----- -----
     int handle = 0;
 #ifdef __WIN32
 #else
@@ -60,23 +52,19 @@ private:
     void canRcv();
 #endif
 
-    // --- Input from ZMQ ---
+    // ----- ----- ----- INPUT FROM ZMQ ----- ----- -----
     QString pathString;
 
-    // --- Input from File ---
+    // ----- ----- ----- INPUT FROM FILE ----- ----- -----
     bool isFileLoaded = false;
     bool isPlay = false;
     QString pathFileCanLog;
     std::vector<CanLine> canLines;
 
     void fillCanLines(QFile &file, int linesAmount);
-    void playCanFile();
-
-    uint8_t* resData;
-    uint8_t resDataLen = 0;   
+    void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: Real CAN convert
 // TODO: ZMQ input + convert + show
 // TODO: Calc and show vehicle speed
 // TODO: Draw zones

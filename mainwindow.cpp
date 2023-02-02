@@ -50,7 +50,7 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::on_pBStartApply_clicked(){
-    // from CAN
+    // --- --- --- from CAN --- --- ---
     if(ui->rBInpCAN->isChecked()){
         if(ui->lEInpCAN->text().isEmpty()){
             QMessageBox::information(this, "Input from file", "Empty input data");
@@ -60,14 +60,19 @@ void MainWindow::on_pBStartApply_clicked(){
 #ifdef __WIN32
 #else
         bool isCanOpened = openCan(ui->lEInpCAN->text().toStdString());
-        if(isCanOpened)
+        if(isCanOpened){
             ui->pBStartApply->setStyleSheet("background-color: green");
-        else
+            // --- status bar ---
+            for (int i = 0; i < RADAR_NUM; i++)
+                displays[i]->statusBar()->showMessage("Source: physical CAN (" + QString::fromStdString(deviceName) + ")");
+        }
+        else{
             ui->pBStartApply->setStyleSheet("background-color: red");
+        }
 #endif
     }
 
-    // from ZMQ
+    // --- --- --- from ZMQ --- --- ---
     if(ui->rBInpZMQ->isChecked()){
         if(ui->lEInpZMQ->text().isEmpty()){
             QMessageBox::information(this, "Input from ZMQ", "Empty input data");
@@ -174,7 +179,7 @@ void MainWindow::canRcv(){
     canfd_frame pframe;
     int nbytes = 0;
     while(!isCanStopped){
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        std::this_thread::sleep_for(std::chrono::microseconds(5));
 
         std::string strSource = &deviceName.back();
         if(!isCanOpened) continue;
@@ -185,10 +190,13 @@ void MainWindow::canRcv(){
             statLocalMess = statusRadMess + " | Failed to receive CAN data";
         }
         else{
+            // NOTE: Receive real can data
             statLocalMess = statusRadMess + " | " + QString::number(nbytes) + " bytes received";
+            CanLine canLine = Converter::getCanLineFromCanData(deviceName, pframe);
+            if (canLine.messId.size() != 3) continue;
+            sendToDisplay(canLine);
         }
         ui->statBar->showMessage(statLocalMess);
-        //std::cout << deviceName << std::endl;        
     }
 }
 #endif
@@ -239,13 +247,8 @@ void MainWindow::playCanFile(){
                               << " | " << canLines[currInd].messData.toStdString() << std::endl;*/
                     // --- send to display ---
                     if (canLines[currInd].messId.size() != 3) continue;
-                    uint8_t messIdInd = canLines[currInd].messId[1].digitValue();
-                    for (int i = 0; i < RADAR_NUM; i++)
-                        if(!displays[i]->isHidden())
-                            if(displays[i]->currRadInd == messIdInd) // NOTE: Send line to display
-                                displays[i]->receiveCanLine(&canLines[currInd]);
-                    // --- --- ---
-
+                    sendToDisplay(canLines[currInd]);
+                    // --- stop ---
                     if(currInd >= (canLines.size() - 1)){
                         isPlay = false;
                         ui->pBStopFile->setEnabled(false);
@@ -317,4 +320,12 @@ void MainWindow::on_pBStopFile_clicked(){
     ui->pBStopFile->setEnabled(false);
     ui->pBPlayFile->setEnabled(true);
     isPlay = false;
+}
+
+void MainWindow::sendToDisplay(const CanLine &canLine){
+    uint8_t messIdInd = canLine.messId[1].digitValue();
+    for (int i = 0; i < RADAR_NUM; i++)
+        if(!displays[i]->isHidden())
+            if(displays[i]->currRadInd == messIdInd) // NOTE: Send line to display
+                displays[i]->receiveCanLine(canLine);
 }

@@ -36,50 +36,50 @@ DisplayData::~DisplayData(){
     delete ui;
 }
 
-void DisplayData::receiveCanLine(CanLine *canLine){
-    if(canLine->messId[0] == '6' && canLine->messId[2] == '0'){
+void DisplayData::receiveCanLine(const CanLine &canLine){
+    if(canLine.messId[0] == '6' && canLine.messId[2] == '0'){
         clustersAll.clear();
 
-        numExpectNear = Converter::getDecData(canLine->messData, 0, 8);
-        numExpectFar = Converter::getDecData(canLine->messData, 8, 8);
+        numExpectNear = Converter::getDecData(canLine.messData, 0, 8);
+        numExpectFar = Converter::getDecData(canLine.messData, 8, 8);
         numExpectSumm = numExpectNear + numExpectFar;
-        measCount = Converter::getDecData(canLine->messData, 16, 16);
+        measCount = Converter::getDecData(canLine.messData, 16, 16);
         //std::cout << GET_CUR_TIME_MILLI << " | " << (int)numExpectSumm << std::endl;
     }
-    if(canLine->messId[0] == '7' && canLine->messId[2] == '1'){
+    if(canLine.messId[0] == '7' && canLine.messId[2] == '1'){
         ClusterInfo cluster;
 
         // ID
-        cluster.id = Converter::getDecData(canLine->messData, 0, 8);
+        cluster.id = Converter::getDecData(canLine.messData, 0, 8);
 
         // RCS
-        cluster.RCS = Converter::getDecData(canLine->messData, 56, 8);
+        cluster.RCS = Converter::getDecData(canLine.messData, 56, 8);
         cluster.RCS *= resRCS;
         cluster.RCS += offsetRCS;
 
         // VRelLong
-        cluster.vRelLong = Converter::getDecData(canLine->messData, 32, 10);
+        cluster.vRelLong = Converter::getDecData(canLine.messData, 32, 10);
         cluster.vRelLong *= resVRelLong;
         cluster.vRelLong += offsetVRelLong;
 
         // VRelLat
-        cluster.vRelLat = Converter::getDecData(canLine->messData, 42, 9);
+        cluster.vRelLat = Converter::getDecData(canLine.messData, 42, 9);
         cluster.vRelLat *= resVRelLat;
         cluster.vRelLat += offsetVRelLat;
 
         // DistLong
-        cluster.distLong = Converter::getDecData(canLine->messData, 8, 13);
+        cluster.distLong = Converter::getDecData(canLine.messData, 8, 13);
         cluster.distLong *= resDistLong;
         cluster.distLong += offsetDistLong;
 
         // DistLat
-        cluster.distLat = Converter::getDecData(canLine->messData, 22, 10);
+        cluster.distLat = Converter::getDecData(canLine.messData, 22, 10);
         cluster.distLat *= resDistLat;
         cluster.distLat += offsetDistLat;
         cluster.distLat = -cluster.distLat;// NOTE: left/right?
 
         // Type
-        uint8_t numType = Converter::getDecData(canLine->messData, 53, 3);
+        uint8_t numType = Converter::getDecData(canLine.messData, 53, 3);
         cluster.type = static_cast<ClusterDynProp>(numType);
 
         // Azimuth
@@ -88,9 +88,9 @@ void DisplayData::receiveCanLine(CanLine *canLine){
         // ---
         clustersAll.push_back(cluster);
     }
-    if(canLine->messId[0] == '7' && canLine->messId[2] == '2'){
-        uint8_t idCl = Converter::getDecData(canLine->messData, 0, 8);
-        uint8_t pDh0Cl = Converter::getDecData(canLine->messData, 29, 3);
+    if(canLine.messId[0] == '7' && canLine.messId[2] == '2'){
+        uint8_t idCl = Converter::getDecData(canLine.messData, 0, 8);
+        uint8_t pDh0Cl = Converter::getDecData(canLine.messData, 29, 3);
         if(clustersAll.size() > idCl){
             switch (pDh0Cl) {
             case 0:
