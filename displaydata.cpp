@@ -122,6 +122,11 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
             }
         }
     }
+    if(canLine.messId[0] == '2' && canLine.messId[2] == '1'){
+        farZone = Converter::getDecData(canLine.messData, 8, 10);
+        farZone *= resMaxDist;
+        nearZone = farZone / 2;
+    }
 
     // --- frame got ---
     if((int)clustersAll.size() == numExpectSumm){
@@ -134,6 +139,8 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         ui->wDraw->numClNear = numExpectNear;
         ui->wDraw->numClFar = numExpectFar;
         ui->wDraw->numClSumm = numExpectSumm;
+        ui->wDraw->farZone = farZone;
+        ui->wDraw->nearZone = nearZone;
         ui->wDraw->update();
         // ---
         clustersAll.clear();

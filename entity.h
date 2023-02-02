@@ -35,6 +35,8 @@ const float resDistLat      = 0.2f;
 const float resVRelLong     = 0.25f;
 const float resVRelLat      = 0.25f;
 
+const float resMaxDist      = 2.0f;
+
 const float offsetRCS       = -64.0f;
 const float offsetDistLong  = -500.0f;
 const float offsetDistLat   = -102.3f;

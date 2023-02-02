@@ -17,6 +17,8 @@ public:
     uint8_t numClFar    = 0;
     uint8_t numClSumm   = 0;
     uint16_t measCount  = 0;
+    uint16_t farZone    = 0;
+    uint16_t nearZone   = 0;
     float aspect        = 0.0f;
 
     std::vector<bool> props;

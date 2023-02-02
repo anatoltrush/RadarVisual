@@ -65,6 +65,7 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
+// TODO: Autoscroll
 // TODO: ZMQ input + convert + show
 // TODO: Calc and show vehicle speed
 // TODO: Draw zones

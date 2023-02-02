@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 #endif
     thrPlayFile = std::thread(&MainWindow::playCanFile, this);
 
-    // Placing
+    // --- placing ---
     QScreen* screen = QApplication::primaryScreen();
     int wScrn = screen->geometry().width();
     int hScrn = screen->geometry().height();
@@ -32,10 +32,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     int upGap = (hScrn - hSec) / 2;
 
     this->move(sideGap, upGap);
-    // ---
 
+    // ---
     on_pBAddDisplay_clicked();
     this->setWindowFlags(Qt::WindowCloseButtonHint);
+    // ---
+    ui->pBStartApply->setShortcut(Qt::Key_Return);
 }
 
 MainWindow::~MainWindow(){

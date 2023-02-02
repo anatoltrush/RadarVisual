@@ -51,20 +51,28 @@ void VisImage::drawAxes(){
     QVector<qreal> dashes {crossSize, static_cast<double>(stepPx - crossSize)};
     penGrid.setDashPattern(dashes);
     painter->setPen(penGrid);
-    // vert lines
+    // --- vert lines ---
     for (int i = 0; i < slices + 1; i++) {
         int xCoord = i * stepPx;
         painter->drawLine(QLine(xCoord, 0 + (crossSize/2), xCoord, height()));
         // ---m---
         painter->drawText(QPoint(xCoord-3, height()-2), QString::number(minLeftM + i * gridStepM) + "m");
     }
-    // horiz lines
+    // --- horiz lines ---
     for (int i = 0; i < height() / stepPx + 1; i++) {
         int yCoord = height() - i * stepPx;
         painter->drawLine(QLine(-crossSize/2, yCoord, width(), yCoord));
         // ---m---
         painter->drawText(QPoint(width()/2, yCoord), QString::number(i * gridStepM) + "m");
     }
+
+    // FIXME: --- draw zones ---
+    int farRad = (farZone / gridStepM) * stepPx;
+    int nearRad = (nearZone / gridStepM) * stepPx;
+    /*painter->drawEllipse(width()/2, height(), farRad, farRad);
+    painter->drawEllipse(width()/2, height(), nearRad, nearRad);*/
+
+    painter->drawEllipse(width()/2-(100 / gridStepM * stepPx), 0, 100, 100);
 }
 
 void VisImage::drawRadar(){
@@ -115,8 +123,8 @@ void VisImage::drawClusters(){
     painter->drawText(1, 12, "Measure count: " + QString::number(measCount));
     painter->drawText(1, 26, "Clusters in frame (filtered): " + QString::number(clusters.size()));
     painter->drawText(1, 40, "Clusters in frame (all): " + QString::number(numClSumm));
-    painter->drawText(1, 54, "Far zone: " + QString::number(numClFar));
-    painter->drawText(1, 68, "Near zone: " + QString::number(numClNear));
+    painter->drawText(1, 54, "Far zone (" + QString::number(farZone) + "m): " + QString::number(numClFar));
+    painter->drawText(1, 68, "Near zone (" + QString::number(nearZone) + "m): " + QString::number(numClNear));
 }
 
 int VisImage::calcRad(float rcs){
