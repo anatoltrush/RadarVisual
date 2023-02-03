@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     on_pBAddDisplay_clicked();
     // ---
     this->setWindowFlags(Qt::WindowCloseButtonHint);
-    ui->pBStartApply->setShortcut(Qt::Key_Return);
+    ui->pBStart->setShortcut(Qt::Key_Return);
 }
 
 MainWindow::~MainWindow(){
@@ -51,7 +51,7 @@ MainWindow::~MainWindow(){
     delete ui;
 }
 
-void MainWindow::on_pBStartApply_clicked(){
+void MainWindow::on_pBStart_clicked(){
     // --- --- --- from CAN --- --- ---
     if(ui->rBInpCAN->isChecked()){
         if(ui->lEInpCAN->text().isEmpty()){
@@ -63,13 +63,15 @@ void MainWindow::on_pBStartApply_clicked(){
 #else
         bool isCanOpened = openCan(ui->lEInpCAN->text().toStdString());
         if(isCanOpened){
-            ui->pBStartApply->setStyleSheet("background-color: green");
+            ui->pBStart->setStyleSheet("background-color: green");
+            ui->rBInpZMQ->setEnabled(false);
+            ui->rBInpFile->setEnabled(false);
             // --- status bar ---
             for (int i = 0; i < RADAR_NUM; i++)
                 displays[i]->statusBar()->showMessage("Source: physical CAN (" + QString::fromStdString(deviceName) + ")");
         }
         else{
-            ui->pBStartApply->setStyleSheet("background-color: red");
+            ui->pBStart->setStyleSheet("background-color: red");
         }
 #endif
     }
@@ -81,30 +83,28 @@ void MainWindow::on_pBStartApply_clicked(){
             return;
         }
         // --- --- ---
+        addressString = ui->lEInpZMQ->text();
     }
 
-    // from file
+    // --- --- --- from FILE --- --- ---
     if(ui->rBInpFile->isChecked()){
         if(ui->lEInpFile->text().isEmpty()){
             QMessageBox::information(this, "Input from log file", "Empty input data");
             return;
         }
-        // --- --- ---
-        if(isFileLoaded) playCanFile();
-        else QMessageBox::information(this, "Input from log file", "File not loaded");
     }
 }
 
 void MainWindow::on_rBInpCAN_clicked(){
-    ui->pBStartApply->setEnabled(true);
+    ui->pBStart->setEnabled(true);
 }
 
 void MainWindow::on_rBInpZMQ_clicked(){
-    ui->pBStartApply->setEnabled(true);
+    ui->pBStart->setEnabled(true);
 }
 
 void MainWindow::on_rBInpFile_clicked(){
-    ui->pBStartApply->setEnabled(false);
+    ui->pBStart->setEnabled(false);
 
     pathFileCanLog = QFileDialog::getOpenFileName(this, tr("Open CAN log"), "", tr("Log files (*.log)"));
     if(!pathFileCanLog.isEmpty())
@@ -306,10 +306,14 @@ void MainWindow::on_pBLoadFile_clicked(){
         // --- --- ---
         ui->pBPlayFile->setEnabled(true);
         ui->pBStopFile->setEnabled(false);
+        // ---
+        ui->rBInpCAN->setEnabled(false);
+        ui->rBInpZMQ->setEnabled(false);
     }
 }
 
 void MainWindow::on_pBPlayFile_clicked(){
+    ui->pBLoadFile->setEnabled(false);
     ui->pBPlayFile->setEnabled(false);
     ui->pBStopFile->setEnabled(true);
     isPlay = true;
@@ -319,6 +323,7 @@ void MainWindow::on_pBPlayFile_clicked(){
 }
 
 void MainWindow::on_pBStopFile_clicked(){
+    ui->pBLoadFile->setEnabled(true);
     ui->pBStopFile->setEnabled(false);
     ui->pBPlayFile->setEnabled(true);
     isPlay = false;

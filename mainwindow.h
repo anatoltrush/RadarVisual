@@ -15,7 +15,7 @@ public:
     ~MainWindow();
 
 private slots:    
-    void on_pBStartApply_clicked();
+    void on_pBStart_clicked();
     void on_pBAddDisplay_clicked();
 
     void on_rBInpCAN_clicked();
