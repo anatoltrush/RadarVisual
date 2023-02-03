@@ -1,6 +1,8 @@
 #ifndef CONVERTER_H
 #define CONVERTER_H
 
+#include <zmq.hpp>
+
 #include "entity.h"
 
 class Converter{
@@ -9,8 +11,10 @@ public:
     static QString floatCutOff(float value, int afterDot);
 #ifdef __WIN32
 #else
-    static CanLine getCanLineFromCanData(const std::string &device, const canfd_frame& frame);
+    static CanLine getCanLineFromCan(const std::string &device, const canfd_frame& frame);
 #endif
+    //static CanLine getCanLineFromZmq(zmq::message_t &message);
+    static void getCanFdFromZmq(const zmq::message_t& message, canfd_frame& frame);
 
 private:
     static QString hexToBin(const QString& hexData);

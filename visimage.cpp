@@ -37,7 +37,7 @@ void VisImage::resizeEvent(QResizeEvent *event){
 
 void VisImage::drawZones(){
     // --- red ---
-    int farRadius = (farZone / gridStepM) * gridStepPx;
+    int farRadius = (configInfo->getFarZone() / gridStepM) * gridStepPx;
     QPainterPath farPath;
     farPath.moveTo(width() / 2, height());
     QRectF rectFar(width() / 2 - farRadius, height() - farRadius, farRadius * 2, farRadius * 2);
@@ -50,7 +50,7 @@ void VisImage::drawZones(){
     painter->drawPath(farPath);
 
     // --- blue ---
-    int nearRadius = (nearZone / gridStepM) * gridStepPx;
+    int nearRadius = (configInfo->nearZone / gridStepM) * gridStepPx;
     QPainterPath nearPath;
     nearPath.moveTo(width() / 2, height());
     QRectF rectNear(width() / 2 - nearRadius, height() - nearRadius, nearRadius * 2, nearRadius * 2);
@@ -136,8 +136,8 @@ void VisImage::drawClusters(){
     painter->drawText(1, 12, "Measure count: " + QString::number(measCount));
     painter->drawText(1, 26, "Clusters in frame (filtered): " + QString::number(clusters.size()));
     painter->drawText(1, 40, "Clusters in frame (all): " + QString::number(numClSumm));
-    painter->drawText(1, 54, "Far zone (" + QString::number(farZone) + "m): " + QString::number(numClFar));
-    painter->drawText(1, 68, "Near zone (" + QString::number(nearZone) + "m): " + QString::number(numClNear));
+    painter->drawText(1, 54, "Far zone (" + QString::number(configInfo->getFarZone()) + "m): " + QString::number(numClFar));
+    painter->drawText(1, 68, "Near zone (" + QString::number(configInfo->nearZone) + "m): " + QString::number(numClNear));
 }
 
 void VisImage::drawCursor(){

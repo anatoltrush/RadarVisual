@@ -36,11 +36,26 @@ private:
     uint8_t numExpectFar    = 0;
     uint8_t numExpectSumm   = 0;
     uint16_t measCount      = 0;
-    uint16_t farZone        = 0;
-    uint16_t nearZone       = 0;
+
+    ConfigInfo configInfo;
 
     void applyFilters();
     void updateShowFlags();
+
+    // --- SPPED ---
+    std::array<uint8_t, DATA_SIZE> histoVLong;
+    StatusSpeed statusSpeed = StatusSpeed::slowSpeed;
+    float averSpeedKalman   = 0.0f;
+    float averQuality       = 0.0f;
+    float speedVehicle      = 0.0f;
+    float speedQuality      = 0.0f;
+
+    float koeffKalmanSpeed = 0.5f;
+    float koeffKalmanQuality = 0.2f;
+    int16_t zonaAnalyseQuality = 10;
+
+    int calcSpeed();
+    void showSpeedUI();
 };
 
 #endif // DISPLAYDATA_H

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "displaydata.h"
+#include "zmq_subscriber_modfd.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,6 +31,7 @@ private:
     Ui::MainWindow *ui;
     DisplayData* displays[RADAR_NUM];
     QString statusRadMess;
+    bool isAppStopped = true;
 
     void sendToDisplay(const CanLine &canLine);
 
@@ -41,11 +43,8 @@ private:
     struct ifreq ifr;
 #endif
     std::string deviceName;
-    std::thread thrRcv;
-    std::thread thrPlayFile;
-    bool isCanStopped = true;
+    std::thread thrCanRcv;
     bool isCanOpened = false;
-
 #ifdef __WIN32
 #else
     bool openCan(const std::string &device);
@@ -53,9 +52,13 @@ private:
 #endif
 
     // ----- ----- ----- INPUT FROM ZMQ ----- ----- -----
+    std::thread thrZmqRcv;
+    Subscriber_modfd subscriber;
     QString addressString;
+    void zmqRcv();
 
     // ----- ----- ----- INPUT FROM FILE ----- ----- -----
+    std::thread thrPlayFile;
     bool isFileLoaded = false;
     bool isPlay = false;
     QString pathFileCanLog;
@@ -66,6 +69,7 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: ZMQ input + convert + show
-// TODO: Calc and show vehicle speed
+// TODO: Calc vehicle speed
+// TODO: CONFIG RADAR
 // TODO: ? Some info from #201
 // BUG: 702 filling wrong

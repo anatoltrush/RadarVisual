@@ -33,6 +33,9 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     // --- click ---
     on_cBInfo_clicked(true);
     ui->cBInfo->setChecked(true);
+
+    // ---
+    ui->wDraw->configInfo = &configInfo;
 }
 
 DisplayData::~DisplayData(){
@@ -125,13 +128,15 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         }
     }
     if(canLine.messId[0] == '2' && canLine.messId[2] == '1'){
-        farZone = Converter::getDecData(canLine.messData, 8, 10);
-        farZone *= resMaxDist;
-        nearZone = farZone / 2;
+        configInfo.setFarZone(Converter::getDecData(canLine.messData, 8, 10));
+        configInfo.setFarZone(configInfo.getFarZone() * resMaxDist);
     }
 
     // --- frame got ---
     if((int)clustersAll.size() == numExpectSumm){
+        //calcSpeed();
+        showSpeedUI();
+
         // NOTE: Send frame to visual
         applyFilters();        
         updateShowFlags();
@@ -141,8 +146,6 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         ui->wDraw->numClNear = numExpectNear;
         ui->wDraw->numClFar = numExpectFar;
         ui->wDraw->numClSumm = numExpectSumm;
-        ui->wDraw->farZone = farZone;
-        ui->wDraw->nearZone = nearZone;
         ui->wDraw->update();
         // ---
         clustersAll.clear();
@@ -190,6 +193,136 @@ void DisplayData::updateShowFlags(){
         QRadioButton* rb = static_cast<QRadioButton*>(ui->gridProps->itemAtPosition(i, 0)->widget());
         ui->wDraw->props[i] = rb->isChecked();
     }
+}
+
+int DisplayData::calcSpeed(){
+    uint8_t posMax = 127;
+    uint8_t valMax = 0;
+    uint8_t val = 0;
+    float koeff = 60.0f;
+    float averSpeedRes = 0.0f;
+    float qualitySpeed = 60.0f;
+    uint8_t* pHistoArray = histoVLong.data();
+    uint8_t pointMax = 0;
+    uint8_t point1LMax = 0;
+    uint8_t point2LMax = 0;
+    uint8_t point1RMax = 0;
+    uint8_t point2RMax = 0;
+
+    histoVLong.fill(0x00);
+
+    if(statusSpeed == StatusSpeed::forward){
+        for (uint8_t a = 1; a < clustersAll.size(); a++){
+            if (clustersAll[a].type == ClusterDynProp::oncoming){
+                val = static_cast<uint8_t>(127.f + clustersAll[a].vRelLong * 4.0f + 0.5f);
+                pHistoArray[val]++;
+            }
+        }
+    }
+    if(statusSpeed == StatusSpeed::slowSpeed){
+        for (uint8_t a = 1; a < clustersAll.size(); a++){
+            if (clustersAll[a].type == ClusterDynProp::oncoming ||
+                    clustersAll[a].type == ClusterDynProp::stationary ||
+                    clustersAll[a].type == ClusterDynProp::moving){
+                val = static_cast<uint8_t>(127.f + clustersAll[a].vRelLong * 4.0f + 0.5f);
+                pHistoArray[val]++;
+            }
+        }
+    }
+    if(statusSpeed == StatusSpeed::backward){
+        for (uint8_t a = 1; a < clustersAll.size(); a++){
+            if (clustersAll[a].type == ClusterDynProp::moving){
+                val = static_cast<uint8_t>(127.f + clustersAll[a].vRelLong * 4.0f + 0.5f);
+                pHistoArray[val]++;
+            }
+        }
+    }
+
+    for (uint8_t i = 4; i < clustersAll.size() - 4; i++){
+        if (pHistoArray[i] > 0){
+            if (valMax < pHistoArray[i]){
+                valMax = pHistoArray[i];
+                posMax = i;
+            }
+        }
+    }
+
+    pointMax = pHistoArray[posMax];
+    point1LMax = pHistoArray[posMax-1];
+    point2LMax = pHistoArray[posMax-2];
+    point1RMax = pHistoArray[posMax+1];
+    point2RMax = pHistoArray[posMax+2];
+
+    valMax = point1LMax + pointMax + point1RMax;
+
+    if (point1LMax + point1RMax)
+        koeff = static_cast<float>(pointMax) / static_cast<float>(point1LMax + point1RMax);
+
+    if (valMax > 8 && numExpectSumm > 8){
+        float averSpeed4 = 0.0f;
+        float valMax4 = 0.0f;
+
+        float averSpeed = (point1LMax * (posMax - 1) + pointMax * (posMax) + point1RMax * (posMax + 1))
+                / static_cast<float>(point1LMax+pointMax+point1RMax);
+
+        if (point1LMax > point1RMax){
+            valMax4 = point2LMax + point1LMax + pointMax + point1RMax;
+            averSpeed4 = (point2LMax * (posMax - 2) + point1LMax * (posMax - 1) + pointMax * (posMax) + point1RMax * (posMax + 1))
+                    / static_cast<float>(valMax4);
+        }
+        else{
+            valMax4 = point1LMax + pointMax + point1RMax + point2RMax;
+
+            averSpeed4 = (point1LMax * (posMax - 1) + pointMax * (posMax) + point1RMax * (posMax + 1) + point2RMax * (posMax + 2))
+                    / static_cast<float>(valMax4);
+        }
+
+        if (koeff > 3) averSpeedRes = averSpeed;
+        else averSpeedRes = averSpeed4;
+
+        if (fabs(averSpeedKalman - 127) > 0.01f){
+            averSpeedKalman = (averSpeedRes * koeffKalmanSpeed + averSpeedKalman * (1-koeffKalmanSpeed));
+        }
+        else{
+            averSpeedKalman = averSpeedRes;
+        }
+
+        if (posMax >= zonaAnalyseQuality && posMax < DATA_SIZE - zonaAnalyseQuality){
+            float var3 = 0.0f;
+            float summ3 = 0.0f;
+            pHistoArray[posMax - 1] += 2;
+            pHistoArray[posMax + 1] += 2;
+
+            for (int16_t i = -zonaAnalyseQuality; i <= zonaAnalyseQuality; ++i){
+                var3 += pHistoArray[posMax + i] * i*i;
+                summ3 += pHistoArray[posMax + i];
+            }
+            var3 /= summ3;
+            qualitySpeed = (5 * var3) / valMax;
+        }
+        else{
+            qualitySpeed = 60.0f;
+        }
+
+        if (averQuality < 59)
+            averQuality = (1 - koeffKalmanQuality)*averQuality + koeffKalmanQuality*(qualitySpeed);
+        else
+            averQuality = qualitySpeed;
+
+        speedVehicle = (averSpeedKalman - 127.f) * 0.25f;
+        speedQuality = averQuality;
+        // std::cout << static_cast<int32_t>(valMax) << " : " << static_cast<int32_t>(posMax)
+    }
+    else{
+        speedQuality = 60.0f;
+        speedVehicle = 0;
+        return -1;
+    }
+    return 0;
+}
+
+void DisplayData::showSpeedUI(){
+    ui->lSpeed_M_KM->setText(Converter::floatCutOff(speedVehicle, 1) + "m/s (" + Converter::floatCutOff(speedVehicle * 3.6f, 1) + "km/h)");
 }
 
 void DisplayData::on_cBChsDist_currentTextChanged(const QString &data){

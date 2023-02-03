@@ -149,7 +149,7 @@
          <item row="1" column="1">
           <widget class="QLineEdit" name="lEInpZMQ">
            <property name="text">
-            <string>tcp://10.42.0.137:7001</string>
+            <string/>
            </property>
            <property name="placeholderText">
             <string>tcp://127.0.0.1:7001</string>

@@ -29,6 +29,8 @@
 #define GET_CUR_TIME_MILLI (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 #define GET_CUR_TIME_MICRO (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 
+const size_t DATA_SIZE      = 256;
+
 const float resRCS          = 0.5f;
 const float resDistLong     = 0.2f;
 const float resDistLat      = 0.2f;
@@ -42,6 +44,12 @@ const float offsetDistLong  = -500.0f;
 const float offsetDistLat   = -102.3f;
 const float offsetVRelLong  = -128.0f;
 const float offsetVRelLat   = -64.0f;
+
+enum class StatusSpeed{
+    forward = 0,
+    slowSpeed = 1,
+    backward = 2
+};
 
 struct CanLine{
     double timeStamp;
@@ -59,6 +67,18 @@ enum class ClusterDynProp{
     crossingStationary = 5,
     crossingMoving = 6,
     stopped = 7
+};
+
+struct ConfigInfo{
+public:
+    uint16_t nearZone       = 0;
+    uint16_t getFarZone() const{return farZone;}
+    void setFarZone(const uint16_t &value){
+        farZone = value;
+        nearZone = farZone / 2;
+    }
+private:
+    uint16_t farZone        = 0;
 };
 
 struct ClusterInfo{

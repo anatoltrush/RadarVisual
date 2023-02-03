@@ -10,12 +10,13 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         displays[i]->setWindowTitle("Display " + QString::number(displays[i]->selfCount));
     }
 
-    isCanStopped = false;
+    isAppStopped = false;
 
 #ifdef __WIN32
 #else
-    thrRcv = std::thread(&MainWindow::canRcv, this);
+    thrCanRcv = std::thread(&MainWindow::canRcv, this);
 #endif
+    thrZmqRcv = std::thread(&MainWindow::zmqRcv, this);
     thrPlayFile = std::thread(&MainWindow::playCanFile, this);
 
     // --- placing ---
@@ -41,12 +42,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 }
 
 MainWindow::~MainWindow(){
-    isCanStopped = true;
-    if (thrRcv.joinable()) thrRcv.join();
+    isAppStopped = true;
+    if (thrCanRcv.joinable()) thrCanRcv.join();
     if (thrPlayFile.joinable()) thrPlayFile.join();
+    if (thrZmqRcv.joinable()) thrZmqRcv.join();
 
-        for (int i = 0; i < RADAR_NUM; i++)
-            delete displays[i];
+    for (int i = 0; i < RADAR_NUM; i++)
+        delete displays[i];
+
+    subscriber.stop();
 
     delete ui;
 }
@@ -66,6 +70,7 @@ void MainWindow::on_pBStart_clicked(){
             ui->pBStart->setStyleSheet("background-color: green");
             ui->rBInpZMQ->setEnabled(false);
             ui->rBInpFile->setEnabled(false);
+            ui->pBLoadFile->setEnabled(false);
             // --- status bar ---
             for (int i = 0; i < RADAR_NUM; i++)
                 displays[i]->statusBar()->showMessage("Source: physical CAN (" + QString::fromStdString(deviceName) + ")");
@@ -84,6 +89,23 @@ void MainWindow::on_pBStart_clicked(){
         }
         // --- --- ---
         addressString = ui->lEInpZMQ->text();
+
+        subscriber.set_block_mode(true);
+        subscriber.set_queue_size(0);
+        subscriber.set_queue_size(0);
+        subscriber.configure(addressString.toStdString());
+
+        bool isSubStart = subscriber.start();
+        if(!isSubStart){
+            ui->pBStart->setStyleSheet("background-color: red");
+            QMessageBox::information(this, "Input from ZMQ", "Can't start");
+            return;
+        }
+
+        ui->pBStart->setStyleSheet("background-color: green");
+        ui->rBInpCAN->setEnabled(false);
+        ui->rBInpFile->setEnabled(false);
+        ui->pBLoadFile->setEnabled(false);
     }
 
     // --- --- --- from FILE --- --- ---
@@ -180,7 +202,7 @@ void MainWindow::canRcv(){
     QString statLocalMess;
     canfd_frame pframe;
     int nbytes = 0;
-    while(!isCanStopped){
+    while(!isAppStopped){
         std::this_thread::sleep_for(std::chrono::microseconds(5));
 
         std::string strSource = &deviceName.back();
@@ -194,11 +216,25 @@ void MainWindow::canRcv(){
         else{
             // NOTE: Receive real can data
             statLocalMess = statusRadMess + " | " + QString::number(nbytes) + " bytes received";
-            CanLine canLine = Converter::getCanLineFromCanData(deviceName, pframe);
+            CanLine canLine = Converter::getCanLineFromCan(deviceName, pframe);
             if (canLine.messId.size() != 3) continue;
             sendToDisplay(canLine);
         }
         ui->statBar->showMessage(statLocalMess);
+    }
+}
+
+void MainWindow::zmqRcv(){
+    while (!isAppStopped) {
+        std::this_thread::sleep_for(std::chrono::microseconds(5));
+        zmq::message_t message;
+        /*if(subscriber.receive(&message)){
+            canfd_frame pframe;
+            Converter::getCanFdFromZmq(message, pframe);
+            CanLine canLine = Converter::getCanLineFromCan("test", pframe);
+            if(canLine.messData.isEmpty()) continue;
+            int a = 5;
+        }*/
     }
 }
 #endif
@@ -234,7 +270,7 @@ void MainWindow::fillCanLines(QFile &file, int linesAmount){
 }
 
 void MainWindow::playCanFile(){
-    while(!isCanStopped){
+    while(!isAppStopped){
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
         if(isPlay){
@@ -243,7 +279,7 @@ void MainWindow::playCanFile(){
             double diffTime = GET_CUR_TIME_MICRO - canLines.front().timeStamp;
             while (isPlay) {
                 std::this_thread::sleep_for(std::chrono::microseconds(3));
-                if(isCanStopped) break;
+                if(isAppStopped) break;
                 if(GET_CUR_TIME_MICRO >= (canLines[currInd].timeStamp + diffTime)){
                     /*std::cout << currInd << " | "<< GET_CUR_TIME_MICRO << " | " << canLines[currInd].messId.toStdString()
                               << " | " << canLines[currInd].messData.toStdString() << std::endl;*/
