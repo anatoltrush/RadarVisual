@@ -17,7 +17,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     visimage.cpp \
-    zmq_subscriber_modfd.cpp
+#    zmq_subscriber_modfd.cpp
 
 HEADERS += \
     converter.h \
@@ -25,7 +25,7 @@ HEADERS += \
     entity.h \
     mainwindow.h \
     visimage.h \
-    zmq_subscriber_modfd.hpp
+#    zmq_subscriber_modfd.hpp
 
 FORMS += \
     displaydata.ui \

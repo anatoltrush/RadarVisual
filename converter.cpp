@@ -32,7 +32,7 @@ CanLine Converter::getCanLineFromCan(const std::string &device, const canfd_fram
 }
 #endif
 
-void Converter::getCanFdFromZmq(const zmq::message_t &message, canfd_frame &frame){
+/*void Converter::getCanFdFromZmq(const zmq::message_t &message, canfd_frame &frame){
     frame.can_id = message.data<canfd_frame>()->can_id;
     frame.len = message.data<canfd_frame>()->len;
     frame.flags = message.data<canfd_frame>()->flags;
@@ -41,7 +41,7 @@ void Converter::getCanFdFromZmq(const zmq::message_t &message, canfd_frame &fram
 
     for( __u8 idx = 0; idx < frame.len; ++idx)
         frame.data[idx] = message.data<canfd_frame>()->data[idx];
-}
+}*/
 
 /*CanLine Converter::getCanLineFromZmq(zmq::message_t &message){
     CanLine canLine;

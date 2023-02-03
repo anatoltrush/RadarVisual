@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include "displaydata.h"
-#include "zmq_subscriber_modfd.hpp"
+//#include "zmq_subscriber_modfd.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -53,9 +53,9 @@ private:
 
     // ----- ----- ----- INPUT FROM ZMQ ----- ----- -----
     std::thread thrZmqRcv;
-    Subscriber_modfd subscriber;
+    //Subscriber_modfd subscriber;
     QString addressString;
-    void zmqRcv();
+    //void zmqRcv();
 
     // ----- ----- ----- INPUT FROM FILE ----- ----- -----
     std::thread thrPlayFile;
@@ -69,7 +69,7 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: ZMQ input + convert + show
-// TODO: Calc vehicle speed
 // TODO: CONFIG RADAR
 // TODO: ? Some info from #201
 // BUG: 702 filling wrong
+// BUG: ZMQ stuck when closing

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>742</width>
+    <width>740</width>
     <height>740</height>
    </rect>
   </property>
@@ -24,6 +24,25 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetMinimumSize</enum>
       </property>
+      <item>
+       <widget class="QLabel" name="lSpeed_M_KM">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Speed: --- m/s (--- km/h)</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QLabel" name="lRadNum">
         <property name="sizePolicy">
@@ -60,6 +79,12 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>9</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Config radar</string>
           </property>
@@ -68,107 +93,62 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <widget class="QLabel" name="lChsDist">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Distance, m:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="cBChsDist">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QLabel" name="lChsDist">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Distance, m:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="cBChsDist">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <item>
-             <property name="text">
-              <string>10</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>20</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>40</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>80</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>160</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>250</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>320</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-         </layout>
+         <property name="text">
+          <string>10</string>
+         </property>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QLabel" name="lVSpeed">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Vehicle speed:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="lSpeed_M_KM">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>14</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>- m/s (- km/h)</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <property name="text">
+          <string>20</string>
+         </property>
         </item>
-       </layout>
+        <item>
+         <property name="text">
+          <string>40</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>80</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>160</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>250</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>320</string>
+         </property>
+        </item>
+       </widget>
       </item>
       <item>
        <widget class="QGroupBox" name="gBClType">

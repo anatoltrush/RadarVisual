@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 #else
     thrCanRcv = std::thread(&MainWindow::canRcv, this);
 #endif
-    thrZmqRcv = std::thread(&MainWindow::zmqRcv, this);
+    //thrZmqRcv = std::thread(&MainWindow::zmqRcv, this);
     thrPlayFile = std::thread(&MainWindow::playCanFile, this);
 
     // --- placing ---
@@ -45,12 +45,12 @@ MainWindow::~MainWindow(){
     isAppStopped = true;
     if (thrCanRcv.joinable()) thrCanRcv.join();
     if (thrPlayFile.joinable()) thrPlayFile.join();
-    if (thrZmqRcv.joinable()) thrZmqRcv.join();
+    //if (thrZmqRcv.joinable()) thrZmqRcv.join();
 
     for (int i = 0; i < RADAR_NUM; i++)
         delete displays[i];
 
-    subscriber.stop();
+    //subscriber.stop();
 
     delete ui;
 }
@@ -90,17 +90,17 @@ void MainWindow::on_pBStart_clicked(){
         // --- --- ---
         addressString = ui->lEInpZMQ->text();
 
-        subscriber.set_block_mode(true);
+        /*subscriber.set_block_mode(true);
         subscriber.set_queue_size(0);
         subscriber.set_queue_size(0);
-        subscriber.configure(addressString.toStdString());
+        subscriber.configure(addressString.toStdString());*/
 
-        bool isSubStart = subscriber.start();
+        /*bool isSubStart = subscriber.start();
         if(!isSubStart){
             ui->pBStart->setStyleSheet("background-color: red");
             QMessageBox::information(this, "Input from ZMQ", "Can't start");
             return;
-        }
+        }*/
 
         ui->pBStart->setStyleSheet("background-color: green");
         ui->rBInpCAN->setEnabled(false);

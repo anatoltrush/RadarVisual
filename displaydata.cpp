@@ -134,7 +134,7 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
 
     // --- frame got ---
     if((int)clustersAll.size() == numExpectSumm){
-        //calcSpeed();
+        calcSpeed();
         showSpeedUI();
 
         // NOTE: Send frame to visual
@@ -211,34 +211,37 @@ int DisplayData::calcSpeed(){
 
     histoVLong.fill(0x00);
 
+    for (size_t i = 0; i < clustersAll.size(); i++)
+        m_dataInfo[i] = clustersAll[i];
+
     if(statusSpeed == StatusSpeed::forward){
-        for (uint8_t a = 1; a < clustersAll.size(); a++){
-            if (clustersAll[a].type == ClusterDynProp::oncoming){
-                val = static_cast<uint8_t>(127.f + clustersAll[a].vRelLong * 4.0f + 0.5f);
+        for (uint8_t a = 1; a < 0xFF; a++){
+            if (m_dataInfo[a].type == ClusterDynProp::oncoming){
+                val = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
                 pHistoArray[val]++;
             }
         }
     }
     if(statusSpeed == StatusSpeed::slowSpeed){
-        for (uint8_t a = 1; a < clustersAll.size(); a++){
-            if (clustersAll[a].type == ClusterDynProp::oncoming ||
-                    clustersAll[a].type == ClusterDynProp::stationary ||
-                    clustersAll[a].type == ClusterDynProp::moving){
-                val = static_cast<uint8_t>(127.f + clustersAll[a].vRelLong * 4.0f + 0.5f);
+        for (uint8_t a = 1; a < 0xFF; a++){
+            if (m_dataInfo[a].type == ClusterDynProp::oncoming ||
+                    m_dataInfo[a].type == ClusterDynProp::stationary ||
+                    m_dataInfo[a].type == ClusterDynProp::moving){
+                val = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
                 pHistoArray[val]++;
             }
         }
     }
     if(statusSpeed == StatusSpeed::backward){
-        for (uint8_t a = 1; a < clustersAll.size(); a++){
-            if (clustersAll[a].type == ClusterDynProp::moving){
-                val = static_cast<uint8_t>(127.f + clustersAll[a].vRelLong * 4.0f + 0.5f);
+        for (uint8_t a = 1; a < 0xFF; a++){
+            if (m_dataInfo[a].type == ClusterDynProp::moving){
+                val = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
                 pHistoArray[val]++;
             }
         }
     }
 
-    for (uint8_t i = 4; i < clustersAll.size() - 4; i++){
+    for (uint8_t i = 4; i < 0xFF - 4; i++){
         if (pHistoArray[i] > 0){
             if (valMax < pHistoArray[i]){
                 valMax = pHistoArray[i];
@@ -322,7 +325,8 @@ int DisplayData::calcSpeed(){
 }
 
 void DisplayData::showSpeedUI(){
-    ui->lSpeed_M_KM->setText(Converter::floatCutOff(speedVehicle, 1) + "m/s (" + Converter::floatCutOff(speedVehicle * 3.6f, 1) + "km/h)");
+    ui->lSpeed_M_KM->setText("Speed: " + Converter::floatCutOff(speedVehicle, 1) + "m/s (" +
+                             Converter::floatCutOff(speedVehicle * 3.6f, 1) + "km/h)");
 }
 
 void DisplayData::on_cBChsDist_currentTextChanged(const QString &data){

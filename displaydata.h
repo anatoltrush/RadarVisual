@@ -44,6 +44,7 @@ private:
 
     // --- SPPED ---
     std::array<uint8_t, DATA_SIZE> histoVLong;
+    std::array<ClusterInfo, DATA_SIZE> m_dataInfo;
     StatusSpeed statusSpeed = StatusSpeed::slowSpeed;
     float averSpeedKalman   = 0.0f;
     float averQuality       = 0.0f;

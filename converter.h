@@ -1,7 +1,7 @@
 #ifndef CONVERTER_H
 #define CONVERTER_H
 
-#include <zmq.hpp>
+//#include <zmq.hpp>
 
 #include "entity.h"
 
@@ -13,8 +13,7 @@ public:
 #else
     static CanLine getCanLineFromCan(const std::string &device, const canfd_frame& frame);
 #endif
-    //static CanLine getCanLineFromZmq(zmq::message_t &message);
-    static void getCanFdFromZmq(const zmq::message_t& message, canfd_frame& frame);
+    //static void getCanFdFromZmq(const zmq::message_t& message, canfd_frame& frame);
 
 private:
     static QString hexToBin(const QString& hexData);
