@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 #else
     thrCanRcv = std::thread(&MainWindow::canRcv, this);
 #endif
-    //thrZmqRcv = std::thread(&MainWindow::zmqRcv, this);
+    thrZmqRcv = std::thread(&MainWindow::zmqRcv, this);
     thrPlayFile = std::thread(&MainWindow::playCanFile, this);
 
     // --- placing ---
@@ -45,12 +45,12 @@ MainWindow::~MainWindow(){
     isAppStopped = true;
     if (thrCanRcv.joinable()) thrCanRcv.join();
     if (thrPlayFile.joinable()) thrPlayFile.join();
-    //if (thrZmqRcv.joinable()) thrZmqRcv.join();
+    if (thrZmqRcv.joinable()) thrZmqRcv.join();
 
     for (int i = 0; i < RADAR_NUM; i++)
         delete displays[i];
 
-    //subscriber.stop();
+    subscriber.stop();
 
     delete ui;
 }
@@ -88,24 +88,29 @@ void MainWindow::on_pBStart_clicked(){
             return;
         }
         // --- --- ---
+        subscriber.stop();
         addressString = ui->lEInpZMQ->text();
 
-        /*subscriber.set_block_mode(true);
+        subscriber.set_block_mode(true);
         subscriber.set_queue_size(0);
         subscriber.set_queue_size(0);
-        subscriber.configure(addressString.toStdString());*/
+        subscriber.configure(addressString.toStdString());
 
-        /*bool isSubStart = subscriber.start();
-        if(!isSubStart){
+        std::string what;
+        isZmqStarted = subscriber.start(what);
+        if(!isZmqStarted){
             ui->pBStart->setStyleSheet("background-color: red");
-            QMessageBox::information(this, "Input from ZMQ", "Can't start");
+            QMessageBox::information(this, "Input from ZMQ", "Can't start: " + QString::fromStdString(what));
             return;
-        }*/
+        }
 
         ui->pBStart->setStyleSheet("background-color: green");
         ui->rBInpCAN->setEnabled(false);
         ui->rBInpFile->setEnabled(false);
         ui->pBLoadFile->setEnabled(false);
+        // --- status bar ---
+        for (int i = 0; i < RADAR_NUM; i++)
+            displays[i]->statusBar()->showMessage("Source: ZMQ (" + addressString + "; can" + QString::number(msgId._msg_src) + ")");
     }
 
     // --- --- --- from FILE --- --- ---
@@ -216,7 +221,7 @@ void MainWindow::canRcv(){
         else{
             // NOTE: Receive real can data
             statLocalMess = statusRadMess + " | " + QString::number(nbytes) + " bytes received";
-            CanLine canLine = Converter::getCanLineFromCan(deviceName, pframe);
+            CanLine canLine = Converter::getCanLineFromCan(deviceName, pframe, false);
             if (canLine.messId.size() != 3) continue;
             sendToDisplay(canLine);
         }
@@ -226,15 +231,20 @@ void MainWindow::canRcv(){
 
 void MainWindow::zmqRcv(){
     while (!isAppStopped) {
-        std::this_thread::sleep_for(std::chrono::microseconds(5));
+        std::this_thread::sleep_for(std::chrono::microseconds(3));
+        if(!isZmqStarted) continue;
         zmq::message_t message;
-        /*if(subscriber.receive(&message)){
+        if(subscriber.receive(&message)){
             canfd_frame pframe;
-            Converter::getCanFdFromZmq(message, pframe);
-            CanLine canLine = Converter::getCanLineFromCan("test", pframe);
-            if(canLine.messData.isEmpty()) continue;
-            int a = 5;
-        }*/
+            Converter::getCanFdFromZmq(message, pframe, msgId);
+            CanLine canLine = Converter::getCanLineFromCan(std::to_string(msgId._msg_src), pframe, true);
+            sendToDisplay(canLine);
+            // --- status bar ---
+            if(msgId._msg_num % 10 == 0){
+                statusRadMess = "ZMQ connected (" + addressString + "). Msg num: " + QString::number(msgId._msg_num);
+                ui->statBar->showMessage(statusRadMess);
+            }
+        }
     }
 }
 #endif

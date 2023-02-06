@@ -45,6 +45,28 @@ const float offsetDistLat   = -102.3f;
 const float offsetVRelLong  = -128.0f;
 const float offsetVRelLat   = -64.0f;
 
+enum class MsgType : uint64_t { Undefined = 0, OpenCVImage = 1001, YoloImage = 1002, Detections = 1003, CANMsg = 1005,
+                                DetectorData = 1012, RadarData = 1200, AutoExposeData = 1203, ObjectInfo = 1300};
+
+struct MessageId{
+    uint64_t _msg_src = 0;
+    uint64_t _msg_num = 0;
+    int64_t _time = 0;
+
+    inline MessageId& operator = (const MessageId& id){
+        _msg_src = id._msg_src;
+        _msg_num = id._msg_num;
+        _time = id._time;
+        return *this;
+    }
+};
+
+struct ZmqCanMessage{
+    MsgType _msg_type = MsgType::CANMsg;
+    MessageId _id;
+    canfd_frame _frame;
+};
+
 enum class StatusSpeed{
     forward = 0,
     slowSpeed = 1,

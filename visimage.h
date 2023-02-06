@@ -32,7 +32,7 @@ private:
     QPainter *painter;
     QPoint curs;
 
-    // NOTE: config grid
+    // NOTE: Config grid
     int slicesOneSide   = 6; // parts
     int minLeftM        = -60; // meters
     int gridStepPx      = 0;

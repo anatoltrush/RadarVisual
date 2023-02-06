@@ -1,8 +1,10 @@
 #include "zmq_subscriber_modfd.hpp"
 
+#include <iostream>
+
 Subscriber_modfd::Subscriber_modfd() : _context(1), _receiver(_context, ZMQ_SUB), _filter("") {}
 
-bool Subscriber_modfd::start() noexcept{
+bool Subscriber_modfd::start(std::string &errStr) noexcept{
     _stop = false;
     try{
         if(_in_queue_size)
@@ -14,6 +16,7 @@ bool Subscriber_modfd::start() noexcept{
             _receiver.connect(it);
     }
     catch(std::exception &e){
+        errStr = std::string(e.what());
         return false;
     }
 

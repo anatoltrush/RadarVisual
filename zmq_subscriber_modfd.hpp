@@ -20,7 +20,7 @@ private:
 
     // config
     std::string _parameter_name = "receiver_points";
-    unsigned _in_queue_size = 1;
+    uint8_t _in_queue_size  = 1;
 
 public:
     Subscriber_modfd();
@@ -32,26 +32,14 @@ public:
         receiverPoints.clear();
         receiverPoints.push_back(add);
     }
-    bool start() noexcept;
+    bool start(std::string &errStr) noexcept;
     bool stop() noexcept;
     bool receive(zmq::message_t *message) noexcept;
 
     void set_parameter_name(const char *name) noexcept{_parameter_name = name;}
     void set_parameter_name(const std::string &name) noexcept{_parameter_name = name;}
     void add_receiver_point(const std::string& rp) noexcept{receiverPoints.push_back(rp);}
-
-    template<typename T> bool setopt(int option, T const& optval) noexcept{
-        bool result = true;
-        try{
-            _receiver.setsockopt(option, optval);
-        }
-        catch(const std::exception& e){
-            result = false;
-        }
-        return result;
-    }
-
-    inline void set_queue_size(unsigned size) noexcept{_in_queue_size = size;}
+    void set_queue_size(unsigned size) noexcept{_in_queue_size = size;}
 };
 
 #endif // ZMQ_SUBSCRIBER_MODFD_HPP

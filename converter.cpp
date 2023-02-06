@@ -19,10 +19,10 @@ QString Converter::floatCutOff(float value, int afterDot){
 
 #ifdef __WIN32
 #else
-CanLine Converter::getCanLineFromCan(const std::string &device, const canfd_frame &frame){
+CanLine Converter::getCanLineFromCan(const std::string &device, const canfd_frame &frame, bool isZmq){
     CanLine canLine;
     canLine.timeStamp = GET_CUR_TIME_MICRO;
-    canLine.canNum = QString::fromStdString(device);
+    isZmq ? canLine.canNum = "can" + QString::fromStdString(device) : canLine.canNum = QString::fromStdString(device);
     canLine.messId = hexToDec(frame.can_id);
     QString hexData;
     for(uint8_t i = 0; i < frame.len; i++)
@@ -32,23 +32,20 @@ CanLine Converter::getCanLineFromCan(const std::string &device, const canfd_fram
 }
 #endif
 
-/*void Converter::getCanFdFromZmq(const zmq::message_t &message, canfd_frame &frame){
-    frame.can_id = message.data<canfd_frame>()->can_id;
-    frame.len = message.data<canfd_frame>()->len;
-    frame.flags = message.data<canfd_frame>()->flags;
-    frame.__res0 = message.data<canfd_frame>()->__res0;
-    frame.__res1 = message.data<canfd_frame>()->__res1;
+void Converter::getCanFdFromZmq(const zmq::message_t &message, canfd_frame &frame, MessageId &id){
+    if(message.data<ZmqCanMessage>()->_msg_type == MsgType::CANMsg){
+        id = message.data<ZmqCanMessage>()->_id;
 
-    for( __u8 idx = 0; idx < frame.len; ++idx)
-        frame.data[idx] = message.data<canfd_frame>()->data[idx];
-}*/
+        frame.can_id = message.data<ZmqCanMessage>()->_frame.can_id;
+        frame.len = message.data<ZmqCanMessage>()->_frame.len;
+        frame.flags = message.data<ZmqCanMessage>()->_frame.flags;
+        frame.__res0 = message.data<ZmqCanMessage>()->_frame.__res0;
+        frame.__res1 = message.data<ZmqCanMessage>()->_frame.__res1;
 
-/*CanLine Converter::getCanLineFromZmq(zmq::message_t &message){
-    CanLine canLine;
-    canLine.timeStamp = GET_CUR_TIME_MICRO;
-    canLine.messId = hexToDec(message.data<canfd_frame>()->can_id);
-    return canLine;
-}*/
+        for( __u8 idx = 0; idx < frame.len; ++idx)
+            frame.data[idx] = message.data<ZmqCanMessage>()->_frame.data[idx];
+    }
+}
 
 QString Converter::hexToBin(const QString &hexData){
     bool ok = false;
