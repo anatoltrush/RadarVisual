@@ -5,6 +5,11 @@ QT      += core gui widgets serialbus
 win32: {
 RESOURCES +=
 RC_FILE = myapp.rc
+
+INCLUDEPATH += C:\ZeroMQ\include
+LIBS += C:\ZeroMQ\bin\libzmq.dll
+
+INCLUDEPATH += C:\cppzmq\include
 }
 unix:{
 LIBS += -L/usr/local/lib \

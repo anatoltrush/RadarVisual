@@ -19,19 +19,6 @@ QString Converter::floatCutOff(float value, int afterDot){
 
 #ifdef __WIN32
 #else
-CanLine Converter::getCanLineFromCan(const std::string &device, const canfd_frame &frame, bool isZmq){
-    CanLine canLine;
-    canLine.timeStamp = GET_CUR_TIME_MICRO;
-    isZmq ? canLine.canNum = "can" + QString::fromStdString(device) : canLine.canNum = QString::fromStdString(device);
-    canLine.messId = hexToDec(frame.can_id);
-    QString hexData;
-    for(uint8_t i = 0; i < frame.len; i++)
-        hexData.append(hexToDec2(frame.data[i]));
-    canLine.messData = hexData;
-    return canLine;
-}
-#endif
-
 void Converter::getCanFdFromZmq(const zmq::message_t &message, canfd_frame &frame, MessageId &id){
     if(message.data<ZmqCanMessage>()->_msg_type == MsgType::CANMsg){
         id = message.data<ZmqCanMessage>()->_id;
@@ -46,6 +33,19 @@ void Converter::getCanFdFromZmq(const zmq::message_t &message, canfd_frame &fram
             frame.data[idx] = message.data<ZmqCanMessage>()->_frame.data[idx];
     }
 }
+
+CanLine Converter::getCanLineFromCan(const std::string &device, const canfd_frame &frame, bool isZmq){
+    CanLine canLine;
+    canLine.timeStamp = GET_CUR_TIME_MICRO;
+    isZmq ? canLine.canNum = "can" + QString::fromStdString(device) : canLine.canNum = QString::fromStdString(device);
+    canLine.messId = hexToDec(frame.can_id);
+    QString hexData;
+    for(uint8_t i = 0; i < frame.len; i++)
+        hexData.append(hexToDec2(frame.data[i]));
+    canLine.messData = hexData;
+    return canLine;
+}
+#endif
 
 QString Converter::hexToBin(const QString &hexData){
     bool ok = false;

@@ -25,11 +25,10 @@
 #include <math.h>
 
 #define RADAR_NUM   8
+#define DATA_SIZE   256
 
 #define GET_CUR_TIME_MILLI (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 #define GET_CUR_TIME_MICRO (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
-
-const size_t DATA_SIZE      = 256;
 
 const float resRCS          = 0.5f;
 const float resDistLong     = 0.2f;
@@ -61,11 +60,14 @@ struct MessageId{
     }
 };
 
+#ifdef __WIN32
+#else
 struct ZmqCanMessage{
     MsgType _msg_type = MsgType::CANMsg;
     MessageId _id;
     canfd_frame _frame;
 };
+#endif
 
 enum class StatusSpeed{
     forward = 0,

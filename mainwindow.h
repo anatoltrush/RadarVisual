@@ -52,8 +52,9 @@ private:
 #endif
 
     // ----- ----- ----- INPUT FROM ZMQ ----- ----- -----
-    std::thread thrZmqRcv;
     bool isZmqStarted = false;
+    uint16_t delay_us = 3000;
+    std::thread thrZmqRcv;    
     Subscriber_modfd subscriber;
     MessageId msgId;
     QString addressString;
@@ -72,6 +73,8 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: CONFIG RADAR (#201)
-// TODO: Windows (Serial bus) + build ZMQ
-// TODO: ? Objects
+// BUG: ZMQ config timeout
+
 // BUG: 702 filling wrong
+// TODO: Windows (Serial bus)
+// TODO: ? Objects

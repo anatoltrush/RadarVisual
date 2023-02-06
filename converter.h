@@ -11,9 +11,9 @@ public:
     static QString floatCutOff(float value, int afterDot);
 #ifdef __WIN32
 #else
+    static void getCanFdFromZmq(const zmq::message_t& message, canfd_frame& frame , MessageId& id);
     static CanLine getCanLineFromCan(const std::string &device, const canfd_frame& frame, bool isZmq);
 #endif
-    static void getCanFdFromZmq(const zmq::message_t& message, canfd_frame& frame , MessageId& id);
 
 private:
     static QString hexToBin(const QString& hexData);
