@@ -8,8 +8,8 @@
 #include "entity.h"
 #include "converter.h"
 
-class VisImage : public QWidget
-{
+class VisImage : public QWidget{
+
 public:
     VisImage(QWidget *parent = nullptr);
 

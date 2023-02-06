@@ -342,3 +342,7 @@ void DisplayData::on_cmBRadNum_currentIndexChanged(int index){
 void DisplayData::on_cBInfo_clicked(bool checked){
     ui->wDraw->isShowInfo = checked;
 }
+
+void DisplayData::on_pBConfigRadar_clicked(){
+    // implement
+}

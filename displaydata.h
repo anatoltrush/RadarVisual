@@ -2,6 +2,7 @@
 #define DISPLAYDATA_H
 
 #include "converter.h"
+#include "dialogconfig.h"
 
 namespace Ui {class DisplayData;}
 
@@ -28,6 +29,8 @@ private slots:
     void on_cmBRadNum_currentIndexChanged(int index);
 
     void on_cBInfo_clicked(bool checked);
+
+    void on_pBConfigRadar_clicked();
 
 private:
     Ui::DisplayData *ui;

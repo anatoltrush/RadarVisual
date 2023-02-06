@@ -13,6 +13,7 @@ LIBS += -L/usr/local/lib \
 
 SOURCES += \
     converter.cpp \
+    dialogconfig.cpp \
     displaydata.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 
 HEADERS += \
     converter.h \
+    dialogconfig.h \
     displaydata.h \
     entity.h \
     mainwindow.h \

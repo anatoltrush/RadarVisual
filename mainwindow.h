@@ -73,4 +73,5 @@ private:
 #endif // MAINWINDOW_H
 // TODO: CONFIG RADAR (#201)
 // TODO: Windows (Serial bus) + build ZMQ
+// TODO: ? Objects
 // BUG: 702 filling wrong
