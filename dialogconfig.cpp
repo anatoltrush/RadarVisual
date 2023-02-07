@@ -11,24 +11,31 @@ DialogConfig::~DialogConfig(){
 
 void DialogConfig::updateUI(){
     // --- write ---
-    configRadar->writeStatus ? ui->rBCurrWriteS->setChecked(true) : ui->rBCurrWriteF->setChecked(true);
+    configRadar->writeStatus ? ui->rBCurrRadWriteS->setChecked(true) : ui->rBCurrRadWriteF->setChecked(true);
 
     // --- read ---
-    configRadar->readStatus ? ui->rBCurrReadS->setChecked(true) : ui->rBCurrReadF->setChecked(true);
+    configRadar->readStatus ? ui->rBCurrRadReadS->setChecked(true) : ui->rBCurrRadReadF->setChecked(true);
 
     // --- dist ---
     ui->lECurrRadDist->setText(QString::number(configRadar->getFarZone()));
 
     // --- pers error ---
-    configRadar->persistErr ? ui->rBCurrPersErrAct->setChecked(true) : ui->rBCurrPersErrNo->setChecked(true);
+    configRadar->persistErr ? ui->rBCurrRadPersErrAct->setChecked(true) : ui->rBCurrRadPersErrNo->setChecked(true);
 
-    // ---  ---
+    // --- interference ---
+    configRadar->interference ? ui->rBCurrRadInter->setChecked(true) : ui->rBCurrRadNoI->setChecked(true);
 
-    // ---  ---
+    // --- temperature ---
+    configRadar->temperatErr ? ui->rBCurrRadTemperErrAct->setChecked(true) : ui->rBCurrRadTemperErrNo->setChecked(true);
 
-    // ---  ---
+    // --- temporary ---
+    configRadar->temporarErr ? ui->rBCurrRadTemporErrAct->setChecked(true) : ui->rBCurrRadTemporErrNo->setChecked(true);
 
-    // ---  ---
-
-    // ---  ---
+    // --- voltage ---
+    configRadar->voltErr ? ui->rBCurrRadVoltErrAct->setChecked(true) : ui->rBCurrRadVoltErrNo->setChecked(true);
 }
+
+void DialogConfig::on_pBClearResStr_clicked(){
+    ui->lEResStr->clear();
+}
+

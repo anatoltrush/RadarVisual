@@ -22,6 +22,9 @@ public:
 
     void updateUI();
 
+private slots:
+    void on_pBClearResStr_clicked();
+
 private:
     Ui::DialogConfig *ui;
 };

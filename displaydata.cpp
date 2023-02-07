@@ -145,15 +145,17 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         // --- pers error ---
         configRadar.persistErr = Converter::getDecData(canLine.messData, 18, 1);
 
-        // ---  ---
+        // --- interfer ---
+        configRadar.interference = Converter::getDecData(canLine.messData, 19, 1);
 
-        // ---  ---
+        // --- temper ---
+        configRadar.temperatErr = Converter::getDecData(canLine.messData, 20, 1);
 
-        // ---  ---
+        // --- tempor ---
+        configRadar.temporarErr = Converter::getDecData(canLine.messData, 21, 1);
 
-        // ---  ---
-
-        // ---  ---
+        // --- volt ---
+        configRadar.voltErr = Converter::getDecData(canLine.messData, 22, 1);
 
         dConfig->updateUI();
     }

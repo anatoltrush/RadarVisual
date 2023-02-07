@@ -73,6 +73,7 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: Test Motion Speed
+// TODO: Test Interference
 // TODO: CONFIG RADAR read/write (#201)
 // TODO: CONFIG Clusters read/write
 

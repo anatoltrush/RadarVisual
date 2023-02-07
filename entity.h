@@ -44,8 +44,8 @@ const float offsetDistLat   = -102.3f;
 const float offsetVRelLong  = -128.0f;
 const float offsetVRelLat   = -64.0f;
 
-enum class MsgType : uint64_t { Undefined = 0, OpenCVImage = 1001, YoloImage = 1002, Detections = 1003, CANMsg = 1005,
-                                DetectorData = 1012, RadarData = 1200, AutoExposeData = 1203, ObjectInfo = 1300};
+enum class MsgType : uint64_t { Undefined = 0, OpenCVImage = 1001, Detections = 1003, CANMsg = 1005,
+                                RadarData = 1200, AutoExposeData = 1203, ObjectInfo = 1300};
 
 struct MessageId{
     uint64_t _msg_src = 0;
@@ -70,9 +70,9 @@ struct ZmqCanMessage{
 #endif
 
 enum class StatusSpeed{
-    forward = 0,
-    slowSpeed = 1,
-    backward = 2
+    forward     = 0,
+    slowSpeed   = 1,
+    backward    = 2
 };
 
 struct CanLine{
@@ -83,14 +83,14 @@ struct CanLine{
 };
 
 enum class ClusterDynProp{
-    moving = 0,
-    stationary = 1,
-    oncoming = 2,
+    moving              = 0,
+    stationary          = 1,
+    oncoming            = 2,
     stationaryCandidate = 3,
-    unknown = 4,
-    crossingStationary = 5,
-    crossingMoving = 6,
-    stopped = 7
+    unknown             = 4,
+    crossingStationary  = 5,
+    crossingMoving      = 6,
+    stopped             = 7
 };
 
 struct ConfigRadar{
@@ -117,15 +117,15 @@ private:
 struct ConfigCluster{};
 
 struct ClusterInfo{
-    uint8_t id              = 0;
-    float distLong          = 0.0f;
-    float distLat           = 0.0f;
-    float vRelLong          = 0.0f;
-    float vRelLat           = 0.0f;
-    float RCS               = 0.0f;
-    float Pdh0              = 0.0f;
-    float azimuth           = 0.0f;
-    ClusterDynProp type     = ClusterDynProp::unknown;
+    uint8_t id          = 0;
+    float distLong      = 0.0f;
+    float distLat       = 0.0f;
+    float vRelLong      = 0.0f;
+    float vRelLat       = 0.0f;
+    float RCS           = 0.0f;
+    float Pdh0          = 0.0f;
+    float azimuth       = 0.0f;
+    ClusterDynProp type = ClusterDynProp::unknown;
     void clacAzimuth(){azimuth = std::atan(distLat / distLong) * 180.0f / M_PI;}
 };
 
