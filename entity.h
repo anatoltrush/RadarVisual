@@ -93,17 +93,28 @@ enum class ClusterDynProp{
     stopped = 7
 };
 
-struct ConfigInfo{
+struct ConfigRadar{
 public:
-    uint16_t nearZone       = 0;
+    uint8_t index       = 0;
+    bool readStatus     = false;
+    bool writeStatus    = false;
+    uint16_t nearZone   = 0;
     uint16_t getFarZone() const{return farZone;}
     void setFarZone(const uint16_t &value){
         farZone = value;
         nearZone = farZone / 2;
     }
+    bool persistErr     = false;
+    bool interference   = false;
+    bool temperatErr    = false;
+    bool temporarErr    = false;
+    bool voltErr        = false;
+
 private:
     uint16_t farZone        = 0;
 };
+
+struct ConfigCluster{};
 
 struct ClusterInfo{
     uint8_t id              = 0;

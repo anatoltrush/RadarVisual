@@ -35,7 +35,11 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     ui->cBInfo->setChecked(true);
 
     // ---
-    ui->wDraw->configInfo = &configInfo;
+    ui->wDraw->configInfo = &configRadar;
+
+    // --- Config ---
+    dConfig = new DialogConfig(this);
+    dConfig->configRadar = &configRadar;
 }
 
 DisplayData::~DisplayData(){
@@ -128,8 +132,35 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         }
     }
     if(canLine.messId[0] == '2' && canLine.messId[2] == '1'){
-        configInfo.setFarZone(Converter::getDecData(canLine.messData, 8, 10));
-        configInfo.setFarZone(configInfo.getFarZone() * resMaxDist);
+        // --- write ---
+        configRadar.writeStatus = Converter::getDecData(canLine.messData, 0, 1);
+
+        // --- read ---
+        configRadar.readStatus = Converter::getDecData(canLine.messData, 1, 1);
+
+        // --- dist ---
+        configRadar.setFarZone(Converter::getDecData(canLine.messData, 8, 10));
+        configRadar.setFarZone(configRadar.getFarZone() * resMaxDist);
+
+        // --- pers error ---
+        configRadar.persistErr = Converter::getDecData(canLine.messData, 18, 1);
+
+        // ---  ---
+
+        // ---  ---
+
+        // ---  ---
+
+        // ---  ---
+
+        // ---  ---
+
+        dConfig->updateUI();
+    }
+    if(canLine.messId[0] == '3' && canLine.messId[2] == '0'){
+        float motionSpeed = Converter::getDecData(canLine.messData, 3, 13);
+        motionSpeed *= 0.02f;
+        std::cout << "Motion speed| " << Converter::floatCutOff(motionSpeed, 1).toStdString() << std::endl;
     }
 
     // --- frame got ---
@@ -335,7 +366,7 @@ void DisplayData::on_cBChsDist_currentTextChanged(const QString &data){
 }
 
 void DisplayData::on_cmBRadNum_currentIndexChanged(int index){
-    currRadInd = index;
+    configRadar.index = index;
     clustersFiltered.clear();
 }
 
@@ -344,5 +375,6 @@ void DisplayData::on_cBInfo_clicked(bool checked){
 }
 
 void DisplayData::on_pBConfigRadar_clicked(){
-    // implement
+    dConfig->setWindowTitle("Radar " + QString::number(configRadar.index));
+    dConfig->show();
 }

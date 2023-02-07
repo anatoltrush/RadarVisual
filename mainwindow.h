@@ -72,9 +72,10 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: CONFIG RADAR (#201)
-// BUG: ZMQ config timeout
+// TODO: Test Motion Speed
+// TODO: CONFIG RADAR read/write (#201)
+// TODO: CONFIG Clusters read/write
 
 // BUG: 702 filling wrong
-// TODO: Windows (Serial bus)
+// TODO: Windows (Serial bus) + ZMQ (timeout)
 // TODO: ? Objects

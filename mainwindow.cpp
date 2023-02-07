@@ -400,6 +400,6 @@ void MainWindow::sendToDisplay(const CanLine &canLine){
     uint8_t messIdInd = canLine.messId[1].digitValue();
     for (int i = 0; i < RADAR_NUM; i++)
         if(!displays[i]->isHidden())
-            if(displays[i]->currRadInd == messIdInd) // NOTE: Send line to display
+            if(displays[i]->configRadar.index == messIdInd) // NOTE: Send line to display
                 displays[i]->receiveCanLine(canLine);
 }

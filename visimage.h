@@ -20,7 +20,7 @@ public:
     uint16_t measCount  = 0;    
     float aspect        = 0.0f;
 
-    ConfigInfo *configInfo = nullptr;
+    ConfigRadar *configInfo = nullptr;
 
     std::vector<bool> props;
     std::vector<ClusterInfo> clusters;

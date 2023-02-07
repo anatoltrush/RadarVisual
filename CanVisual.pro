@@ -35,5 +35,6 @@ HEADERS += \
     zmq_subscriber_modfd.hpp
 
 FORMS += \
+    dialogconfig.ui \
     displaydata.ui \
     mainwindow.ui

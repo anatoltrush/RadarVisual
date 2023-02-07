@@ -14,8 +14,7 @@ public:
     ~DisplayData();
 
     int selfCount = -1;
-
-    uint8_t currRadInd = 0;
+    ConfigRadar configRadar;
 
     std::vector<QColor> colors;
 
@@ -30,17 +29,18 @@ private slots:
 
     void on_cBInfo_clicked(bool checked);
 
+    // --- CONFIGS ---
     void on_pBConfigRadar_clicked();
 
 private:
     Ui::DisplayData *ui;
-
+    // ---
+    DialogConfig* dConfig;
+    // ---
     uint8_t numExpectNear   = 0;
     uint8_t numExpectFar    = 0;
     uint8_t numExpectSumm   = 0;
     uint16_t measCount      = 0;
-
-    ConfigInfo configInfo;
 
     void applyFilters();
     void updateShowFlags();
