@@ -25,6 +25,8 @@ public:
 private slots:
     void on_pBClearResStr_clicked();
 
+    void on_pBRadGenerate_clicked();
+
 private:
     Ui::DialogConfig *ui;
 };

@@ -397,6 +397,7 @@ void MainWindow::on_pBStopFile_clicked(){
 }
 
 void MainWindow::sendToDisplay(const CanLine &canLine){
+    if(canLine.messId.length() < 2 || canLine.messData.isEmpty()) return;
     uint8_t messIdInd = canLine.messId[1].digitValue();
     for (int i = 0; i < RADAR_NUM; i++)
         if(!displays[i]->isHidden())

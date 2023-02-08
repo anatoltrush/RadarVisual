@@ -74,9 +74,9 @@ private:
 #endif // MAINWINDOW_H
 // TODO: Test Motion Speed
 // TODO: Test Interference
-// TODO: Test ZMQ on WIN10
-// TODO: CONFIG RADAR write (#201)
-// TODO: CONFIG Clusters read/write (#)
+// TODO: Change resolution when near?
+// TODO: CONFIG RADAR write (#200)
+// TODO: CONFIG Clusters read/write (#202)
 
 // BUG: 702 filling wrong
 // TODO: Windows (Serial bus) + ZMQ (timeout)

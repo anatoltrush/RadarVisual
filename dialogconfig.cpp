@@ -117,3 +117,8 @@ void DialogConfig::on_pBClearResStr_clicked(){
     ui->lEResStr->clear();
 }
 
+
+void DialogConfig::on_pBRadGenerate_clicked(){
+    QString binStr(64, '0');
+    // implement...
+}

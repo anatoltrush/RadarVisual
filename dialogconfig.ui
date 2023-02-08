@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1076</width>
-    <height>637</height>
+    <width>1085</width>
+    <height>606</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,29 +36,47 @@
           <string>Current radar configuration</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="2" column="0">
-           <widget class="QGroupBox" name="gBCurrRadQual">
+          <item row="2" column="3">
+           <widget class="QGroupBox" name="gBCurrRadDist">
             <property name="title">
-             <string>Send quality</string>
+             <string>Distance (max)</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_30">
+            <layout class="QGridLayout" name="gridLayout_20">
              <item row="0" column="0">
-              <widget class="QRadioButton" name="rBCurrRadQualIn">
+              <widget class="QLineEdit" name="lECurrRadDist">
                <property name="enabled">
                 <bool>false</bool>
                </property>
-               <property name="text">
-                <string>Inactive</string>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
-              <widget class="QRadioButton" name="rBCurrRadQualAct">
+             <item row="0" column="1">
+              <widget class="QLabel" name="lCurrRadDistM">
                <property name="enabled">
                 <bool>false</bool>
                </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
-                <string>Active</string>
+                <string>m</string>
                </property>
               </widget>
              </item>
@@ -83,93 +101,6 @@
              </item>
              <item row="1" column="0">
               <widget class="QRadioButton" name="rBCurrRadTemperErrAct">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Error active</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QGroupBox" name="gBCurrRadRead">
-            <property name="title">
-             <string>Read status</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_18">
-             <item row="0" column="2">
-              <widget class="QRadioButton" name="rBCurrRadReadF">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Failed</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QRadioButton" name="rBCurrRadReadS">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Successful</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QGroupBox" name="gBCurrRadWrite">
-            <property name="title">
-             <string>Write status</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_19">
-             <item row="0" column="2">
-              <widget class="QRadioButton" name="rBCurrRadWriteF">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Failed</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QRadioButton" name="rBCurrRadWriteS">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Successful</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QGroupBox" name="gBCurrRadVolt">
-            <property name="title">
-             <string>Voltage error</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_25">
-             <item row="0" column="0">
-              <widget class="QRadioButton" name="rBCurrRadVoltErrNo">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>No error</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QRadioButton" name="rBCurrRadVoltErrAct">
                <property name="enabled">
                 <bool>false</bool>
                </property>
@@ -210,52 +141,107 @@
             </layout>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="lECurrRadId">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="readOnly">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="lCurrRadId">
-            <property name="text">
-             <string>Sensor ID:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QGroupBox" name="gBCurrRadRelay">
+          <item row="0" column="1">
+           <widget class="QGroupBox" name="gBCurrRadWrite">
             <property name="title">
-             <string>Relay</string>
+             <string>Write status</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_28">
-             <item row="0" column="0">
-              <widget class="QRadioButton" name="rBCurrRadRelIn">
+            <layout class="QGridLayout" name="gridLayout_19">
+             <item row="0" column="2">
+              <widget class="QRadioButton" name="rBCurrRadWriteF">
                <property name="enabled">
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>Inactive</string>
+                <string>Failed</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QRadioButton" name="rBCurrRadWriteS">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Successful</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QGroupBox" name="gBCurrRadInterfer">
+            <property name="title">
+             <string>Interference</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_22">
+             <item row="0" column="0">
+              <widget class="QRadioButton" name="rBCurrRadNoInter">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>No interfer</string>
                </property>
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QRadioButton" name="rBCurrRadRelAct">
+              <widget class="QRadioButton" name="rBCurrRadInter">
                <property name="enabled">
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>Active</string>
+                <string>Interfer det</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QGroupBox" name="gBCurrRadPower">
+            <property name="title">
+             <string>Power</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_27">
+             <item row="0" column="0">
+              <widget class="QRadioButton" name="rBCurrRadPowStand">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Standard</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="rBCurrRadPow_3dB">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>-3dB</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="rBCurrRadPow_6dB">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>-6dB</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QRadioButton" name="rBCurrRadPow_9dB">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>-9dB</string>
                </property>
               </widget>
              </item>
@@ -320,47 +306,58 @@
             </layout>
            </widget>
           </item>
-          <item row="2" column="3">
-           <widget class="QGroupBox" name="gBCurrRadDist">
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="gBCurrRadRead">
             <property name="title">
-             <string>Distance (max)</string>
+             <string>Read status</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_20">
-             <item row="0" column="0">
-              <widget class="QLineEdit" name="lECurrRadDist">
+            <layout class="QGridLayout" name="gridLayout_18">
+             <item row="0" column="2">
+              <widget class="QRadioButton" name="rBCurrRadReadF">
                <property name="enabled">
                 <bool>false</bool>
                </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>10</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
+               <property name="text">
+                <string>Failed</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="lCurrRadDistM">
+             <item row="1" column="2">
+              <widget class="QRadioButton" name="rBCurrRadReadS">
                <property name="enabled">
                 <bool>false</bool>
                </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
+               <property name="text">
+                <string>Successful</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QGroupBox" name="gBCurrRadQual">
+            <property name="title">
+             <string>Send quality</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_30">
+             <item row="0" column="0">
+              <widget class="QRadioButton" name="rBCurrRadQualIn">
+               <property name="enabled">
+                <bool>false</bool>
                </property>
                <property name="text">
-                <string>m</string>
+                <string>Inactive</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="rBCurrRadQualAct">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Active</string>
                </property>
               </widget>
              </item>
@@ -406,29 +403,58 @@
             </layout>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QGroupBox" name="gBCurrRadInterfer">
+          <item row="1" column="3">
+           <widget class="QGroupBox" name="gBCurrRadVolt">
             <property name="title">
-             <string>Interference</string>
+             <string>Voltage error</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_22">
+            <layout class="QGridLayout" name="gridLayout_25">
              <item row="0" column="0">
-              <widget class="QRadioButton" name="rBCurrRadNoInter">
+              <widget class="QRadioButton" name="rBCurrRadVoltErrNo">
                <property name="enabled">
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>No interfer</string>
+                <string>No error</string>
                </property>
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QRadioButton" name="rBCurrRadInter">
+              <widget class="QRadioButton" name="rBCurrRadVoltErrAct">
                <property name="enabled">
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>Interfer det</string>
+                <string>Error active</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QGroupBox" name="gBCurrRadRelay">
+            <property name="title">
+             <string>Relay</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_28">
+             <item row="0" column="0">
+              <widget class="QRadioButton" name="rBCurrRadRelIn">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Inactive</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="rBCurrRadRelAct">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Active</string>
                </property>
               </widget>
              </item>
@@ -503,55 +529,6 @@
             </layout>
            </widget>
           </item>
-          <item row="3" column="2">
-           <widget class="QGroupBox" name="gBCurrRadPower">
-            <property name="title">
-             <string>Power</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_27">
-             <item row="0" column="0">
-              <widget class="QRadioButton" name="rBCurrRadPowStand">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Standard</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QRadioButton" name="rBCurrRadPow_3dB">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>-3dB</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QRadioButton" name="rBCurrRadPow_6dB">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>-6dB</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QRadioButton" name="rBCurrRadPow_9dB">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>-9dB</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
           <item row="3" column="3">
            <widget class="QGroupBox" name="gBCurrRadMot">
             <property name="title">
@@ -617,6 +594,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="text">
+             <string>0</string>
             </property>
            </widget>
           </item>
@@ -765,9 +745,15 @@
            </widget>
           </item>
           <item row="3" column="2">
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="pBRadGenerate">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
-             <string>PushButton</string>
+             <string>Generate</string>
             </property>
            </widget>
           </item>
