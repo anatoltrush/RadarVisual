@@ -157,6 +157,31 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         // --- volt ---
         configRadar.voltErr = Converter::getDecData(canLine.messData, 22, 1);
 
+        // --- sort ---
+        configRadar.sortInd = Converter::getDecData(canLine.messData, 33, 3);
+
+        // --- power ---
+        configRadar.power = Converter::getDecData(canLine.messData, 30, 3);
+
+        // --- relay ---
+        configRadar.relay = Converter::getDecData(canLine.messData, 46, 1);
+
+        // --- output type ---
+        configRadar.outputType = Converter::getDecData(canLine.messData, 44, 2);
+
+        // --- send qual ---
+        configRadar.sendQual = Converter::getDecData(canLine.messData, 43, 1);
+
+        // --- send ext ---
+        configRadar.sendExt = Converter::getDecData(canLine.messData, 42, 1);
+
+        // --- motion ---
+        configRadar.motionRxState = Converter::getDecData(canLine.messData, 40, 2);
+
+        // --- threshold ---
+        configRadar.thrRcs = Converter::getDecData(canLine.messData, 59, 3);
+
+        // --- --- ---
         dConfig->updateUI();
     }
     if(canLine.messId[0] == '3' && canLine.messId[2] == '0'){
