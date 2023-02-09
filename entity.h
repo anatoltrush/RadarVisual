@@ -107,6 +107,7 @@ public:
     bool sendExt        = false;
     bool thrRcs         = false;
 
+    uint8_t canNum      = 0;
     uint8_t index       = 0;
     uint8_t power       = 0;
     uint8_t sortInd     = 0;

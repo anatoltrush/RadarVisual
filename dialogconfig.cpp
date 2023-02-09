@@ -3,6 +3,17 @@
 
 DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogConfig){
     ui->setupUi(this);
+
+    on_cBSetRadQual_clicked(false);
+    on_cBSetRadExt_clicked(false);
+    on_cBSetRadThr_clicked(false);
+    on_cBSetRadStore_clicked(false);
+    on_cBSetRadRelay_clicked(false);
+    on_cBSetRadDist_clicked(false);
+    on_cBSetRadSort_clicked(false);
+    on_cBSetRadOut_clicked(false);
+    on_checkBoxPow_clicked(false);
+    on_cBSetRadId_clicked(false);
 }
 
 DialogConfig::~DialogConfig(){
@@ -16,7 +27,7 @@ void DialogConfig::updateUI(){
     // --- read ---
     configRadar->readStatus ? ui->rBCurrRadReadS->setChecked(true) : ui->rBCurrRadReadF->setChecked(true);
 
-    // --- dist ---
+    // --- distance ---
     ui->lECurrRadDist->setText(QString::number(configRadar->getFarZone()));
 
     // --- pers error ---
@@ -79,7 +90,7 @@ void DialogConfig::updateUI(){
         ui->rBCurrRadOutObj->setChecked(true);
         break;
     case 2:
-        ui->rBCurrRadOutClus->setChecked(true);
+        ui->rBCurrRadOutClust->setChecked(true);
         break;
     default:
         break;
@@ -120,5 +131,112 @@ void DialogConfig::on_pBClearResStr_clicked(){
 
 void DialogConfig::on_pBRadGenerate_clicked(){
     QString binStr(64, '0');
-    // implement...
+
+    // --- send qual ---
+    if(ui->cBSetRadQual->isChecked()){
+        if(ui->rBSetRadQualIn->isChecked()){
+            binStr.replace(3, 1, "1");
+            binStr.replace(45, 1, "0");
+        }
+        else{
+            binStr.replace(3, 1, "1");
+            binStr.replace(45, 1, "1");
+        }
+    }
+
+    // --- send ext ---
+    if(ui->cBSetRadExt->isChecked()){
+        if(ui->rBSetRadExtIn->isChecked()){
+            binStr.replace(2, 1, "1");
+            binStr.replace(44, 1, "0");
+        }
+        else {
+            binStr.replace(2, 1, "1");
+            binStr.replace(44, 1, "1");
+        }
+    }
+
+    // --- threshold ---
+    if(ui->cBSetRadThr->isChecked()){
+        if(ui->rBSetRadThrIn->isChecked()){
+            binStr.replace(55, 1, "1");
+            binStr.replace(54, 1, "0");
+        }
+        else{
+            binStr.replace(55, 1, "1");
+            binStr.replace(54, 1, "1");
+        }
+    }
+
+    // --- distance ---
+    if(ui->cBSetRadDist->isChecked()){
+        QString dist = QString::number((uint16_t)(ui->sBSetRadDist->value() / resMaxDist));
+        uint8_t bitLen = 10;
+        QString binDist = Converter::decToBin(dist, bitLen);
+        binStr.replace(7, 1, "1");
+        binStr.replace(8, bitLen, binDist);
+    }
+
+    QString resStr("cansend can" + QString::number(configRadar->canNum) + " 2" + QString::number(configRadar->index) + "0#");
+    resStr += Converter::binToHex(binStr);
+
+    ui->lEResStr->setText(resStr);
+}
+
+void DialogConfig::on_pBSend_clicked(){
+    int res = system(ui->lEResStr->text().toStdString().c_str());
+    if(res == 0) ui->pBSend->setStyleSheet("background-color: green");
+    else ui->pBSend->setStyleSheet("background-color: red");
+}
+
+void DialogConfig::on_cBSetRadQual_clicked(bool checked){
+    ui->rBSetRadQualIn->setEnabled(checked);
+    ui->rBSetRadQualAct->setEnabled(checked);
+}
+
+void DialogConfig::on_cBSetRadExt_clicked(bool checked){
+    ui->rBSetRadExtIn->setEnabled(checked);
+    ui->rBSetRadExtAct->setEnabled(checked);
+}
+
+void DialogConfig::on_cBSetRadThr_clicked(bool checked){
+    ui->rBSetRadThrIn->setEnabled(checked);
+    ui->rBSetRadThrAct->setEnabled(checked);
+}
+
+void DialogConfig::on_cBSetRadStore_clicked(bool checked){
+    ui->rBSetRadStoreIn->setEnabled(checked);
+    ui->rBSetRadStoreAct->setEnabled(checked);
+}
+
+void DialogConfig::on_cBSetRadRelay_clicked(bool checked){
+    ui->rBSetRadRelayIn->setEnabled(checked);
+    ui->rBSetRadRelayAct->setEnabled(checked);
+}
+
+void DialogConfig::on_cBSetRadDist_clicked(bool checked){
+    ui->sBSetRadDist->setEnabled(checked);
+}
+
+void DialogConfig::on_cBSetRadSort_clicked(bool checked){
+    ui->rBSetRadSortNo->setEnabled(checked);
+    ui->rBSetRadSortRange->setEnabled(checked);
+    ui->rBSetRadSortRcs->setEnabled(checked);
+}
+
+void DialogConfig::on_cBSetRadOut_clicked(bool checked){
+    ui->rBSetRadOutNone->setEnabled(checked);
+    ui->rBSetRadOutClust->setEnabled(checked);
+    ui->rBSetRadOutObj->setEnabled(checked);
+}
+
+void DialogConfig::on_checkBoxPow_clicked(bool checked){
+    ui->rBSetRadPowStand->setEnabled(checked);
+    ui->rBSetRadPow_3dB->setEnabled(checked);
+    ui->rBSetRadPow_6dB->setEnabled(checked);
+    ui->rBSetRadPow_9dB->setEnabled(checked);
+}
+
+void DialogConfig::on_cBSetRadId_clicked(bool checked){
+    ui->lESetRadId->setEnabled(checked);
 }

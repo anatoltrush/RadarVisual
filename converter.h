@@ -14,9 +14,11 @@ public:
     static void getCanFdFromZmq(const zmq::message_t& message, canfd_frame& frame , MessageId& id);
     static CanLine getCanLineFromCan(const std::string &device, const canfd_frame& frame, bool isZmq);
 #endif
+    static QString binToHex(const QString &binStr);
+    static QString decToBin(const QString &decStr, uint8_t binLen);
 
 private:
-    static QString hexToBin(const QString& hexData);
+    static QString hexToBin(const QString& hexStr);
     static QString hexToDec(uint data){return QString::number(data, 16);}
     static QString hexToDec2(uint8_t data);
 };

@@ -1,7 +1,6 @@
 #ifndef DISPLAYDATA_H
 #define DISPLAYDATA_H
 
-#include "converter.h"
 #include "dialogconfig.h"
 
 namespace Ui {class DisplayData;}

@@ -248,12 +248,9 @@ void MainWindow::canRcv(){
     int nbytes = 0;
     while(!isAppStopped){
         std::this_thread::sleep_for(std::chrono::microseconds(5));
-
-        std::string strSource = &deviceName.back();
         if(!isCanOpened) continue;
 
         nbytes = read(handle, &pframe, sizeof(pframe));
-
         if(nbytes <= 0){
             statLocalMess = statusRadMess + " | Failed to receive CAN data";
         }
@@ -322,6 +319,7 @@ void MainWindow::playCanFile(){
                         isPlay = false;
                         ui->pBStopFile->setEnabled(false);
                         ui->pBPlayFile->setEnabled(true);
+                        ui->pBLoadFile->setEnabled(true);
                     }
                     else{
                         currInd++;

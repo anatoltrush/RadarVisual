@@ -132,6 +132,9 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         }
     }
     if(canLine.messId[0] == '2' && canLine.messId[2] == '1'){
+        // --- can num ---
+        configRadar.canNum = std::atoi(&canLine.canNum.toStdString().back());
+
         // --- write ---
         configRadar.writeStatus = Converter::getDecData(canLine.messData, 0, 1);
 

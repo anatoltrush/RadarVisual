@@ -47,10 +47,32 @@ CanLine Converter::getCanLineFromCan(const std::string &device, const canfd_fram
 }
 #endif
 
-QString Converter::hexToBin(const QString &hexData){
+QString Converter::binToHex(const QString &binStr){
+    QString hexStr;
     bool ok = false;
-    QString binData = QString::number(hexData.toULongLong(&ok, 16), 2);
-    while (binData.length() < hexData.length() * 4)
+    hexStr = QString::number(binStr.toULongLong(&ok, 2), 16);
+    while (hexStr.length() < binStr.length() / 4)
+        hexStr.prepend("0");
+    hexStr = hexStr.toUpper();
+    for (size_t i = 0; i < 7; i++){
+        uint8_t ind = i * 3 + 2;
+        hexStr.insert(ind, '.');
+    }
+    return hexStr;
+}
+
+QString Converter::decToBin(const QString &decStr, uint8_t binLen){
+    bool ok = false;
+    QString binData = QString::number(decStr.toULongLong(&ok, 10), 2);
+    while (binData.length() < binLen)
+        binData.prepend("0");
+    return binData;
+}
+
+QString Converter::hexToBin(const QString &hexStr){
+    bool ok = false;
+    QString binData = QString::number(hexStr.toULongLong(&ok, 16), 2);
+    while (binData.length() < hexStr.length() * 4)
         binData.prepend("0");
     return binData;
 }

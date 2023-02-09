@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1085</width>
-    <height>606</height>
+    <width>1065</width>
+    <height>622</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,7 +39,7 @@
           <item row="2" column="3">
            <widget class="QGroupBox" name="gBCurrRadDist">
             <property name="title">
-             <string>Distance (max)</string>
+             <string>Dist (max, m)</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_20">
              <item row="0" column="0">
@@ -64,29 +64,13 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="lCurrRadDistM">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>m</string>
-               </property>
-              </widget>
-             </item>
             </layout>
            </widget>
           </item>
           <item row="1" column="1">
            <widget class="QGroupBox" name="gBCurrRadTemper">
             <property name="title">
-             <string>Temperature error</string>
+             <string>Temperature err</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_23">
              <item row="0" column="0">
@@ -115,7 +99,7 @@
           <item row="1" column="2">
            <widget class="QGroupBox" name="gBCurrRadTempor">
             <property name="title">
-             <string>Temporary error</string>
+             <string>Temporary err</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_24">
              <item row="0" column="0">
@@ -367,7 +351,7 @@
           <item row="3" column="0">
            <widget class="QGroupBox" name="gBCurrRadSortInd">
             <property name="title">
-             <string>Sort index</string>
+             <string>Sorting</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_26">
              <item row="0" column="0">
@@ -386,7 +370,7 @@
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>Sorted by range</string>
+                <string>Sort by range</string>
                </property>
               </widget>
              </item>
@@ -396,7 +380,7 @@
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>Sorted by RCS</string>
+                <string>Sort by RCS</string>
                </property>
               </widget>
              </item>
@@ -406,7 +390,7 @@
           <item row="1" column="3">
            <widget class="QGroupBox" name="gBCurrRadVolt">
             <property name="title">
-             <string>Voltage error</string>
+             <string>Voltage err</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_25">
              <item row="0" column="0">
@@ -464,7 +448,7 @@
           <item row="1" column="0">
            <widget class="QGroupBox" name="gBCurrRadPersErr">
             <property name="title">
-             <string>Persistent error</string>
+             <string>Persistent err</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_21">
              <item row="0" column="0">
@@ -517,7 +501,7 @@
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QRadioButton" name="rBCurrRadOutClus">
+              <widget class="QRadioButton" name="rBCurrRadOutClust">
                <property name="enabled">
                 <bool>false</bool>
                </property>
@@ -587,6 +571,72 @@
           <string>Set radar configuration</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
+          <item row="1" column="1">
+           <widget class="QGroupBox" name="gBSetRadRelay">
+            <property name="title">
+             <string>Relay</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_13">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="cBSetRadRelay">
+               <property name="text">
+                <string>Valid</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="rBSetRadRelayIn">
+               <property name="text">
+                <string>Inactive</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="rBSetRadRelayAct">
+               <property name="text">
+                <string>Active</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QGroupBox" name="gBSetRadStore">
+            <property name="title">
+             <string>Store in NVM</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_12">
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="rBSetRadStoreIn">
+               <property name="text">
+                <string>Inactive</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="cBSetRadStore">
+               <property name="text">
+                <string>Valid</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="rBSetRadStoreAct">
+               <property name="text">
+                <string>Active</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
           <item row="3" column="1">
            <widget class="QLineEdit" name="lESetRadId">
             <property name="sizePolicy">
@@ -600,80 +650,40 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QGroupBox" name="gBSet_4">
-            <property name="title">
-             <string>GroupBox</string>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="cBSetRadId">
+            <property name="text">
+             <string>Sensor ID:</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_12">
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBox_4">
-               <property name="text">
-                <string>CheckBox</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QGroupBox" name="gBSet_8">
-            <property name="title">
-             <string>GroupBox</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_17">
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBox_9">
-               <property name="text">
-                <string>CheckBox</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QGroupBox" name="gBSet_3">
-            <property name="title">
-             <string>GroupBox</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_14">
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBox_6">
-               <property name="text">
-                <string>CheckBox</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QGroupBox" name="gBSet_5">
-            <property name="title">
-             <string>GroupBox</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_13">
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBox_5">
-               <property name="text">
-                <string>CheckBox</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QGroupBox" name="gBSetRadWrite">
+           <widget class="QGroupBox" name="gBSetRadExt">
             <property name="title">
-             <string>GroupBox</string>
+             <string>Send ext info</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_11">
              <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBox_2">
+              <widget class="QCheckBox" name="cBSetRadExt">
                <property name="text">
-                <string>CheckBox</string>
+                <string>Valid</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="rBSetRadExtIn">
+               <property name="text">
+                <string>Inactive</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="rBSetRadExtAct">
+               <property name="text">
+                <string>Active</string>
                </property>
               </widget>
              </item>
@@ -681,63 +691,32 @@
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QGroupBox" name="gBSetRadDist">
+           <widget class="QGroupBox" name="gBSetRadThr">
             <property name="title">
-             <string>Distance (max)</string>
+             <string>Threshold RCS</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_10">
              <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBox_3">
+              <widget class="QCheckBox" name="cBSetRadThr">
                <property name="text">
-                <string>CheckBox</string>
+                <string>Valid</string>
                </property>
               </widget>
              </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QGroupBox" name="gBSetRadRead">
-            <property name="title">
-             <string>Distance</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_9">
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBox">
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="rBSetRadThrIn">
                <property name="text">
-                <string>CheckBox</string>
+                <string>Inactive</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QGroupBox" name="gBSet_7">
-            <property name="title">
-             <string>GroupBox</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_16">
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBox_8">
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="rBSetRadThrAct">
                <property name="text">
-                <string>CheckBox</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QGroupBox" name="gBSet_6">
-            <property name="title">
-             <string>GroupBox</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_15">
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBox_7">
-               <property name="text">
-                <string>CheckBox</string>
+                <string>Active</string>
                </property>
               </widget>
              </item>
@@ -757,11 +736,205 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="lSetRadId">
-            <property name="text">
-             <string>Sensor ID:</string>
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="gBSetRadQual">
+            <property name="title">
+             <string>Send quality</string>
             </property>
+            <layout class="QGridLayout" name="gridLayout_9">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="cBSetRadQual">
+               <property name="text">
+                <string>Valid</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="rBSetRadQualIn">
+               <property name="text">
+                <string>Inactive</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="rBSetRadQualAct">
+               <property name="text">
+                <string>Active</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QGroupBox" name="gBSetRadOut">
+            <property name="title">
+             <string>Output type</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_16">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="cBSetRadOut">
+               <property name="text">
+                <string>Valid</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="rBSetRadOutNone">
+               <property name="text">
+                <string>None</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="rBSetRadOutObj">
+               <property name="text">
+                <string>Objects</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QRadioButton" name="rBSetRadOutClust">
+               <property name="text">
+                <string>Clusters</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QGroupBox" name="cBSetRadPow">
+            <property name="title">
+             <string>Power</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_17">
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="rBSetRadPow_3dB">
+               <property name="text">
+                <string>-3dB</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="rBSetRadPowStand">
+               <property name="text">
+                <string>Standard</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="checkBoxPow">
+               <property name="text">
+                <string>Valid</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QRadioButton" name="rBSetRadPow_6dB">
+               <property name="text">
+                <string>-6dB</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QRadioButton" name="rBSetRadPow_9dB">
+               <property name="text">
+                <string>-9dB</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QGroupBox" name="gBSetRadDist">
+            <property name="title">
+             <string>Dist (max, m)</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_14">
+             <item row="1" column="0">
+              <widget class="QSpinBox" name="sBSetRadDist">
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>196...260m</string>
+               </property>
+               <property name="toolTipDuration">
+                <number>5000</number>
+               </property>
+               <property name="maximum">
+                <number>2046</number>
+               </property>
+               <property name="singleStep">
+                <number>2</number>
+               </property>
+               <property name="value">
+                <number>250</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="cBSetRadDist">
+               <property name="text">
+                <string>Valid</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QGroupBox" name="gBSetRadSort">
+            <property name="title">
+             <string>Sorting</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_15">
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="rBSetRadSortNo">
+               <property name="text">
+                <string>No sorting</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="cBSetRadSort">
+               <property name="text">
+                <string>Valid</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="rBSetRadSortRange">
+               <property name="text">
+                <string>Sort by range</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QRadioButton" name="rBSetRadSortRcs">
+               <property name="text">
+                <string>Sort by RCS</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
@@ -775,70 +948,18 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_8">
        <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_22">
+        <widget class="QGroupBox" name="gBCurrClust">
          <property name="title">
-          <string>GroupBox</string>
+          <string>Current configuration</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QGroupBox" name="groupBox_23">
+        <widget class="QGroupBox" name="gBSetClust">
          <property name="title">
-          <string>GroupBox</string>
+          <string>Set configuration</string>
          </property>
         </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tbGrid">
-      <attribute name="title">
-       <string>Bits grid</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_7">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_21">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_6">
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="radioButton">
-            <property name="text">
-             <string>RadioButton</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="radioButton_2">
-            <property name="text">
-             <string>RadioButton</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>615</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <layout class="QGridLayout" name="gridLayout_5"/>
        </item>
       </layout>
      </widget>
@@ -873,6 +994,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

@@ -4,6 +4,7 @@
 #include <QDialog>
 
 #include "entity.h"
+#include "converter.h"
 
 namespace Ui {
 class DialogConfig;
@@ -24,8 +25,19 @@ public:
 
 private slots:
     void on_pBClearResStr_clicked();
-
     void on_pBRadGenerate_clicked();
+    void on_pBSend_clicked();
+
+    void on_cBSetRadQual_clicked(bool checked);
+    void on_cBSetRadExt_clicked(bool checked);
+    void on_cBSetRadThr_clicked(bool checked);
+    void on_cBSetRadStore_clicked(bool checked);
+    void on_cBSetRadRelay_clicked(bool checked);
+    void on_cBSetRadDist_clicked(bool checked);
+    void on_cBSetRadSort_clicked(bool checked);
+    void on_cBSetRadOut_clicked(bool checked);
+    void on_checkBoxPow_clicked(bool checked);
+    void on_cBSetRadId_clicked(bool checked);
 
 private:
     Ui::DialogConfig *ui;
