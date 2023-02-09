@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1065</width>
+    <width>848</width>
     <height>622</height>
    </rect>
   </property>
@@ -637,19 +637,6 @@
             </layout>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lESetRadId">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="0">
            <widget class="QCheckBox" name="cBSetRadId">
             <property name="text">
@@ -727,7 +714,6 @@
            <widget class="QPushButton" name="pBRadGenerate">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -810,7 +796,7 @@
            </widget>
           </item>
           <item row="2" column="2">
-           <widget class="QGroupBox" name="cBSetRadPow">
+           <widget class="QGroupBox" name="gBSetRadPow">
             <property name="title">
              <string>Power</string>
             </property>
@@ -833,7 +819,7 @@
               </widget>
              </item>
              <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBoxPow">
+              <widget class="QCheckBox" name="cBSetRadPow">
                <property name="text">
                 <string>Valid</string>
                </property>
@@ -937,6 +923,9 @@
             </layout>
            </widget>
           </item>
+          <item row="3" column="1">
+           <widget class="QComboBox" name="cBoxSetRadId"/>
+          </item>
          </layout>
         </widget>
        </item>
@@ -971,7 +960,6 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -1004,7 +992,6 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>

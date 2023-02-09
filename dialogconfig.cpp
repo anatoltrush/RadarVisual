@@ -4,6 +4,9 @@
 DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogConfig){
     ui->setupUi(this);
 
+    for(int i = 0; i < RADAR_NUM; i++)
+        ui->cBoxSetRadId->addItem("ID " + QString::number(i));
+
     on_cBSetRadQual_clicked(false);
     on_cBSetRadExt_clicked(false);
     on_cBSetRadThr_clicked(false);
@@ -12,7 +15,7 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     on_cBSetRadDist_clicked(false);
     on_cBSetRadSort_clicked(false);
     on_cBSetRadOut_clicked(false);
-    on_checkBoxPow_clicked(false);
+    on_cBSetRadPow_clicked(false);
     on_cBSetRadId_clicked(false);
 }
 
@@ -132,40 +135,52 @@ void DialogConfig::on_pBClearResStr_clicked(){
 void DialogConfig::on_pBRadGenerate_clicked(){
     QString binStr(64, '0');
 
+    // --- ID ---
+    if(ui->cBSetRadId->isChecked()){
+        binStr.replace(6, 1, "1");
+        int cBInd = ui->cBoxSetRadId->currentIndex();
+        QString binId = Converter::decToBin(QString::number(cBInd), 3);
+        binStr.replace(37, 3, binId);
+    }
+
     // --- send qual ---
     if(ui->cBSetRadQual->isChecked()){
-        if(ui->rBSetRadQualIn->isChecked()){
-            binStr.replace(3, 1, "1");
+        binStr.replace(3, 1, "1");
+        if(ui->rBSetRadQualIn->isChecked())
             binStr.replace(45, 1, "0");
-        }
-        else{
-            binStr.replace(3, 1, "1");
-            binStr.replace(45, 1, "1");
-        }
+        else binStr.replace(45, 1, "1");
     }
 
     // --- send ext ---
     if(ui->cBSetRadExt->isChecked()){
-        if(ui->rBSetRadExtIn->isChecked()){
-            binStr.replace(2, 1, "1");
+        binStr.replace(2, 1, "1");
+        if(ui->rBSetRadExtIn->isChecked())
             binStr.replace(44, 1, "0");
-        }
-        else {
-            binStr.replace(2, 1, "1");
-            binStr.replace(44, 1, "1");
-        }
+        else binStr.replace(44, 1, "1");
     }
 
     // --- threshold ---
     if(ui->cBSetRadThr->isChecked()){
-        if(ui->rBSetRadThrIn->isChecked()){
-            binStr.replace(55, 1, "1");
+        binStr.replace(55, 1, "1");
+        if(ui->rBSetRadThrIn->isChecked())
             binStr.replace(54, 1, "0");
-        }
-        else{
-            binStr.replace(55, 1, "1");
-            binStr.replace(54, 1, "1");
-        }
+        else binStr.replace(54, 1, "1");
+    }
+
+    // --- store ---
+    if(ui->cBSetRadStore->isChecked()){
+        binStr.replace(0, 1, "1");
+        if(ui->rBSetRadStoreIn->isChecked())
+            binStr.replace(40, 1, "0");
+        else binStr.replace(40, 1, "1");
+    }
+
+    // --- relay ---
+    if(ui->cBSetRadRelay->isChecked()){
+        binStr.replace(47, 1, "1");
+        if(ui->rBSetRadRelayIn->isChecked())
+            binStr.replace(46, 1, "0");
+        else binStr.replace(46, 1, "1");
     }
 
     // --- distance ---
@@ -177,6 +192,41 @@ void DialogConfig::on_pBRadGenerate_clicked(){
         binStr.replace(8, bitLen, binDist);
     }
 
+    // --- sort ---
+    if(ui->cBSetRadSort->isChecked()){
+        binStr.replace(1, 1, "1");
+        if(ui->rBSetRadSortNo->isChecked())
+            binStr.replace(41, 3, "000");
+        if(ui->rBSetRadSortRange->isChecked())
+            binStr.replace(41, 3, "001");
+        if(ui->rBSetRadSortRcs->isChecked())
+            binStr.replace(41, 3, "010");
+    }
+
+    // --- output type ---
+    if(ui->cBSetRadOut->isChecked()){
+        binStr.replace(4, 1, "1");
+        if(ui->rBSetRadOutNone->isChecked())
+            binStr.replace(35, 2, "00");
+        if(ui->rBSetRadOutObj->isChecked())
+            binStr.replace(35, 2, "01");
+        if(ui->rBSetRadOutClust->isChecked())
+            binStr.replace(35, 2, "10");
+    }
+
+    // --- power ---
+    if(ui->cBSetRadPow->isChecked()){
+        binStr.replace(5, 1, "1");
+        if(ui->rBSetRadPowStand->isChecked())
+            binStr.replace(32, 3, "000");
+        if(ui->rBSetRadPow_3dB->isChecked())
+            binStr.replace(32, 3, "001");
+        if(ui->rBSetRadPow_6dB->isChecked())
+            binStr.replace(32, 3, "010");
+        if(ui->rBSetRadPow_9dB->isChecked())
+            binStr.replace(32, 3, "011");
+    }
+
     QString resStr("cansend can" + QString::number(configRadar->canNum) + " 2" + QString::number(configRadar->index) + "0#");
     resStr += Converter::binToHex(binStr);
 
@@ -184,9 +234,16 @@ void DialogConfig::on_pBRadGenerate_clicked(){
 }
 
 void DialogConfig::on_pBSend_clicked(){
+    if(ui->lEResStr->text().isEmpty()){
+        QMessageBox::information(this, "Send...", "Empty can string");
+        return;
+    }
     int res = system(ui->lEResStr->text().toStdString().c_str());
     if(res == 0) ui->pBSend->setStyleSheet("background-color: green");
-    else ui->pBSend->setStyleSheet("background-color: red");
+    else{
+        ui->pBSend->setStyleSheet("background-color: red");
+        QMessageBox::information(this, "Send...", "Smthng wrong: " + QString::number(res));
+    }
 }
 
 void DialogConfig::on_cBSetRadQual_clicked(bool checked){
@@ -230,7 +287,7 @@ void DialogConfig::on_cBSetRadOut_clicked(bool checked){
     ui->rBSetRadOutObj->setEnabled(checked);
 }
 
-void DialogConfig::on_checkBoxPow_clicked(bool checked){
+void DialogConfig::on_cBSetRadPow_clicked(bool checked){
     ui->rBSetRadPowStand->setEnabled(checked);
     ui->rBSetRadPow_3dB->setEnabled(checked);
     ui->rBSetRadPow_6dB->setEnabled(checked);
@@ -238,5 +295,5 @@ void DialogConfig::on_checkBoxPow_clicked(bool checked){
 }
 
 void DialogConfig::on_cBSetRadId_clicked(bool checked){
-    ui->lESetRadId->setEnabled(checked);
+    ui->cBoxSetRadId->setEnabled(checked);
 }

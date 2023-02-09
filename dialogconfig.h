@@ -36,7 +36,7 @@ private slots:
     void on_cBSetRadDist_clicked(bool checked);
     void on_cBSetRadSort_clicked(bool checked);
     void on_cBSetRadOut_clicked(bool checked);
-    void on_checkBoxPow_clicked(bool checked);
+    void on_cBSetRadPow_clicked(bool checked);
     void on_cBSetRadId_clicked(bool checked);
 
 private:
