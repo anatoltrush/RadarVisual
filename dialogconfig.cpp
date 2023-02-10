@@ -238,11 +238,17 @@ void DialogConfig::on_pBSend_clicked(){
         QMessageBox::information(this, "Send...", "Empty can string");
         return;
     }
-    int res = system(ui->lEResStr->text().toStdString().c_str());
-    if(res == 0) ui->pBSend->setStyleSheet("background-color: green");
+    // --- --- ---
+    if(isCanUsing){
+        int res = system(ui->lEResStr->text().toStdString().c_str());
+        if(res == 0) ui->pBSend->setStyleSheet("background-color: green");
+        else{
+            ui->pBSend->setStyleSheet("background-color: red");
+            QMessageBox::information(this, "Send via CAN...", "Smthng wrong: " + QString::number(res));
+        }
+    }
     else{
-        ui->pBSend->setStyleSheet("background-color: red");
-        QMessageBox::information(this, "Send...", "Smthng wrong: " + QString::number(res));
+        // ...ZMQ...
     }
 }
 

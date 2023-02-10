@@ -21,6 +21,8 @@ public:
     ConfigRadar* configRadar;
     ConfigCluster* configCluster;
 
+    bool isCanUsing = false;
+
     void updateUI();
 
 private slots:

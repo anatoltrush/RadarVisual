@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>848</width>
+    <width>1062</width>
     <height>622</height>
    </rect>
   </property>
@@ -545,7 +545,7 @@
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>S, Y, R miss</string>
+                <string>S, Yr miss</string>
                </property>
               </widget>
              </item>
@@ -555,7 +555,7 @@
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>Yaw, rate miss</string>
+                <string>Yaw rate miss</string>
                </property>
               </widget>
              </item>
@@ -714,6 +714,7 @@
            <widget class="QPushButton" name="pBRadGenerate">
             <property name="font">
              <font>
+              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -960,6 +961,7 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -992,6 +994,7 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>

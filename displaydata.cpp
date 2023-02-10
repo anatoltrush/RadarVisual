@@ -187,10 +187,8 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         // --- --- ---
         dConfig->updateUI();
     }
-    if(canLine.messId[0] == '3' && canLine.messId[2] == '0'){
-        float motionSpeed = Converter::getDecData(canLine.messData, 3, 13);
-        motionSpeed *= 0.02f;
-        std::cout << "Motion speed| " << Converter::floatCutOff(motionSpeed, 1).toStdString() << std::endl;
+    if(canLine.messId[0] == '7' && canLine.messId[2] == '0'){
+
     }
 
     // --- frame got ---

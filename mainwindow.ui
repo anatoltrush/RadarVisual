@@ -225,6 +225,13 @@
            </item>
           </layout>
          </item>
+         <item row="4" column="0">
+          <widget class="QPushButton" name="pBVersionID">
+           <property name="text">
+            <string>Version ID</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>

@@ -14,6 +14,8 @@ public:
 
     int selfCount = -1;
     ConfigRadar configRadar;
+    // ---
+    DialogConfig* dConfig;
 
     std::vector<QColor> colors;
 
@@ -33,8 +35,6 @@ private slots:
 
 private:
     Ui::DisplayData *ui;
-    // ---
-    DialogConfig* dConfig;
     // ---
     uint8_t numExpectNear   = 0;
     uint8_t numExpectFar    = 0;

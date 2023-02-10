@@ -27,6 +27,8 @@ private slots:
     void on_pBPlayFile_clicked();
     void on_pBStopFile_clicked();
 
+    void on_pBVersionID_clicked();
+
 private:
     Ui::MainWindow *ui;
     DisplayData* displays[RADAR_NUM];
@@ -72,8 +74,9 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: Test write config (NVM & all) + Test Motion Speed
+// TODO: Send config through ZMQ
 // TODO: Test Interference
+// TODO: firmware Version
 
 // TODO: CONFIG Clusters read/write (#202)
 // BUG: 702 filling wrong

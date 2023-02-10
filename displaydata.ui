@@ -712,7 +712,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="staBarDisp"/>
+  <widget class="QStatusBar" name="statBarDisp"/>
  </widget>
  <customwidgets>
   <customwidget>
