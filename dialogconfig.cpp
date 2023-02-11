@@ -7,16 +7,32 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     for(int i = 0; i < RADAR_NUM; i++)
         ui->cBoxSetRadId->addItem("ID " + QString::number(i));
 
-    on_cBSetRadQual_clicked(false);
-    on_cBSetRadExt_clicked(false);
-    on_cBSetRadThr_clicked(false);
-    on_cBSetRadStore_clicked(false);
-    on_cBSetRadRelay_clicked(false);
-    on_cBSetRadDist_clicked(false);
-    on_cBSetRadSort_clicked(false);
-    on_cBSetRadOut_clicked(false);
-    on_cBSetRadPow_clicked(false);
-    on_cBSetRadId_clicked(false);
+    // --- connections ---
+    connect(ui->pBClearResStr, SIGNAL(clicked()), this, SLOT(clearResStr()));
+    connect(ui->pBRadGenerate, SIGNAL(clicked()), this, SLOT(radGenerate()));
+    connect(ui->pBSend, SIGNAL(clicked()), this, SLOT(send()));
+
+    connect(ui->cBSetRadQual, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadQual(bool)));
+    connect(ui->cBSetRadExt, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadExt(bool)));
+    connect(ui->cBSetRadThr, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadThr(bool)));
+    connect(ui->cBSetRadStore, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadStore(bool)));
+    connect(ui->cBSetRadRelay, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadRelay(bool)));
+    connect(ui->cBSetRadDist, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadDist(bool)));
+    connect(ui->cBSetRadSort, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadSort(bool)));
+    connect(ui->cBSetRadOut, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadOut(bool)));
+    connect(ui->cBSetRadPow, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadPow(bool)));
+    connect(ui->cBSetRadId, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadId(bool)));
+
+    emit ui->cBSetRadQual->clicked(false);
+    emit ui->cBSetRadExt->clicked(false);
+    emit ui->cBSetRadThr->clicked(false);
+    emit ui->cBSetRadStore->clicked(false);
+    emit ui->cBSetRadRelay->clicked(false);
+    emit ui->cBSetRadDist->clicked(false);
+    emit ui->cBSetRadSort->clicked(false);
+    emit ui->cBSetRadOut->clicked(false);
+    emit ui->cBSetRadPow->clicked(false);
+    emit ui->cBSetRadId->clicked(false);
 }
 
 DialogConfig::~DialogConfig(){
@@ -127,12 +143,12 @@ void DialogConfig::updateUI(){
     configRadar->thrRcs ? ui->rBCurrRadThrHigh->setChecked(true) : ui->rBCurrRadThrStand->setChecked(true);
 }
 
-void DialogConfig::on_pBClearResStr_clicked(){
+void DialogConfig::clearResStr(){
     ui->lEResStr->clear();
 }
 
 
-void DialogConfig::on_pBRadGenerate_clicked(){
+void DialogConfig::radGenerate(){
     QString binStr(64, '0');
 
     // --- ID ---
@@ -233,13 +249,17 @@ void DialogConfig::on_pBRadGenerate_clicked(){
     ui->lEResStr->setText(resStr);
 }
 
-void DialogConfig::on_pBSend_clicked(){
+void DialogConfig::send(){
     if(ui->lEResStr->text().isEmpty()){
         QMessageBox::information(this, "Send...", "Empty can string");
         return;
     }
     // --- --- ---
-    if(isCanUsing){
+    switch (*inUse) {
+    case InUse::nothing:
+        QMessageBox::information(this, "Send...", "Nothing started");
+        break;
+    case InUse::can:{
         int res = system(ui->lEResStr->text().toStdString().c_str());
         if(res == 0) ui->pBSend->setStyleSheet("background-color: green");
         else{
@@ -247,59 +267,67 @@ void DialogConfig::on_pBSend_clicked(){
             QMessageBox::information(this, "Send via CAN...", "Smthng wrong: " + QString::number(res));
         }
     }
-    else{
-        // ...ZMQ...
+        break;
+    case InUse::zmq:{
+        QMessageBox::information(this, "Send...", "Not implemented");
+    }
+        break;
+    case InUse::file:
+        QMessageBox::information(this, "Send...", "What are you going to send to the file? :)");
+        break;
+    default:
+        break;
     }
 }
 
-void DialogConfig::on_cBSetRadQual_clicked(bool checked){
+void DialogConfig::showHideSetRadQual(bool checked){
     ui->rBSetRadQualIn->setEnabled(checked);
     ui->rBSetRadQualAct->setEnabled(checked);
 }
 
-void DialogConfig::on_cBSetRadExt_clicked(bool checked){
+void DialogConfig::showHideSetRadExt(bool checked){
     ui->rBSetRadExtIn->setEnabled(checked);
     ui->rBSetRadExtAct->setEnabled(checked);
 }
 
-void DialogConfig::on_cBSetRadThr_clicked(bool checked){
+void DialogConfig::showHideSetRadThr(bool checked){
     ui->rBSetRadThrIn->setEnabled(checked);
     ui->rBSetRadThrAct->setEnabled(checked);
 }
 
-void DialogConfig::on_cBSetRadStore_clicked(bool checked){
+void DialogConfig::showHideSetRadStore(bool checked){
     ui->rBSetRadStoreIn->setEnabled(checked);
     ui->rBSetRadStoreAct->setEnabled(checked);
 }
 
-void DialogConfig::on_cBSetRadRelay_clicked(bool checked){
+void DialogConfig::showHideSetRadRelay(bool checked){
     ui->rBSetRadRelayIn->setEnabled(checked);
     ui->rBSetRadRelayAct->setEnabled(checked);
 }
 
-void DialogConfig::on_cBSetRadDist_clicked(bool checked){
+void DialogConfig::showHideSetRadDist(bool checked){
     ui->sBSetRadDist->setEnabled(checked);
 }
 
-void DialogConfig::on_cBSetRadSort_clicked(bool checked){
+void DialogConfig::showHideSetRadSort(bool checked){
     ui->rBSetRadSortNo->setEnabled(checked);
     ui->rBSetRadSortRange->setEnabled(checked);
     ui->rBSetRadSortRcs->setEnabled(checked);
 }
 
-void DialogConfig::on_cBSetRadOut_clicked(bool checked){
+void DialogConfig::showHideSetRadOut(bool checked){
     ui->rBSetRadOutNone->setEnabled(checked);
     ui->rBSetRadOutClust->setEnabled(checked);
     ui->rBSetRadOutObj->setEnabled(checked);
 }
 
-void DialogConfig::on_cBSetRadPow_clicked(bool checked){
+void DialogConfig::showHideSetRadPow(bool checked){
     ui->rBSetRadPowStand->setEnabled(checked);
     ui->rBSetRadPow_3dB->setEnabled(checked);
     ui->rBSetRadPow_6dB->setEnabled(checked);
     ui->rBSetRadPow_9dB->setEnabled(checked);
 }
 
-void DialogConfig::on_cBSetRadId_clicked(bool checked){
+void DialogConfig::showHideSetRadId(bool checked){
     ui->cBoxSetRadId->setEnabled(checked);
 }

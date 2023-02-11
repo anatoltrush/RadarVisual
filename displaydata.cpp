@@ -5,9 +5,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     ui->setupUi(this);
 
     for(int i = 0; i < RADAR_NUM; i++)
-        ui->cmBRadNum->addItem("Radar " + QString::number(i));
-
-    ui->cBChsDist->setCurrentIndex(5); // set 250m
+        ui->cBRadNum->addItem("Radar " + QString::number(i));
 
     ui->wDraw->colors = &this->colors;
     colors = std::vector<QColor>(ui->gridTypes->rowCount(), Qt::gray);
@@ -30,16 +28,22 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
         QToolButton* tButton = static_cast<QToolButton*>(ui->gridTypes->itemAtPosition(i, 0)->widget());
         tButton->setIcon(px);
     }
-    // --- click ---
-    on_cBInfo_clicked(true);
-    ui->cBInfo->setChecked(true);
-
     // ---
     ui->wDraw->configInfo = &configRadar;
 
     // --- Config ---
     dConfig = new DialogConfig(this);
     dConfig->configRadar = &configRadar;
+
+    // --- connections ---
+    connect(ui->pBConfigRadar, SIGNAL(clicked()), this, SLOT(configRadarCall()));
+    connect(ui->cBInfo, SIGNAL(clicked(bool)), this, SLOT(info(bool)));
+    connect(ui->cBRadNum, SIGNAL(currentIndexChanged(int)), this, SLOT(radNum(int)));
+    connect(ui->cBChsDist, SIGNAL(currentTextChanged(QString)), this, SLOT(chooseDist(QString)));
+
+    // --- click ---
+    ui->cBInfo->click();
+    ui->cBChsDist->setCurrentIndex(5); // set 250m
 }
 
 DisplayData::~DisplayData(){
@@ -392,21 +396,21 @@ void DisplayData::showSpeedUI(){
                              Converter::floatCutOff(speedVehicle * 3.6f, 1) + "km/h)");
 }
 
-void DisplayData::on_cBChsDist_currentTextChanged(const QString &data){
+void DisplayData::chooseDist(const QString &data){
     ui->wDraw->aspect = 100.0f / data.toFloat();
     ui->wDraw->resizeAspect();
 }
 
-void DisplayData::on_cmBRadNum_currentIndexChanged(int index){
+void DisplayData::radNum(int index){
     configRadar.index = index;
     clustersFiltered.clear();
 }
 
-void DisplayData::on_cBInfo_clicked(bool checked){
+void DisplayData::info(bool checked){
     ui->wDraw->isShowInfo = checked;
 }
 
-void DisplayData::on_pBConfigRadar_clicked(){
+void DisplayData::configRadarCall(){
     dConfig->setWindowTitle("Radar " + QString::number(configRadar.index));
     dConfig->show();
 }

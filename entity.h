@@ -55,6 +55,13 @@ struct VersionID{
     uint8_t country = 0;
 };
 
+enum class InUse{
+    nothing = 0,
+    can     = 1,
+    zmq     = 2,
+    file    = 3
+};
+
 struct MessageId{
     uint64_t _msg_src = 0;
     uint64_t _msg_num = 0;

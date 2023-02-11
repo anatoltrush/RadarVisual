@@ -17,23 +17,24 @@ public:
     ~MainWindow();
 
 private slots:    
-    void on_pBStart_clicked();
-    void on_pBAddDisplay_clicked();
+    void start();
+    void addDisplay();
 
-    void on_rBInpCAN_clicked();
-    void on_rBInpZMQ_clicked();
-    void on_rBInpFile_clicked();   
+    void inpCAN();
+    void inpZMQ();
+    void inpFile();
 
-    void on_pBLoadFile_clicked();
-    void on_pBPlayFile_clicked();
-    void on_pBStopFile_clicked();
+    void loadFile();
+    void playFile();
+    void stopFile();
 
 private:
     Ui::MainWindow *ui;
-    SoftVersion* sVersion;
+    SoftVersion* sVersion = nullptr;
     DisplayData* displays[RADAR_NUM];
     QString statusRadMess;
     bool isAppStopped = true;
+    InUse inUse = InUse::nothing;
 
     void sendToDisplay(const CanLine &canLine);    
 
@@ -50,8 +51,8 @@ private:
 #ifdef __WIN32
 #else
     bool openCan(const std::string &device);
-    void canRcv();
 #endif
+    void canRcv();
 
     // ----- ----- ----- INPUT FROM ZMQ ----- ----- -----
     bool isZmqStarted = false;
@@ -76,8 +77,6 @@ private:
 #endif // MAINWINDOW_H
 // TODO: Send config through ZMQ
 // TODO: Test Interference
-// TODO: firmware Version
-// TODO: connections
 
 // TODO: CONFIG Clusters read/write (#202)
 // BUG: 702 filling wrong

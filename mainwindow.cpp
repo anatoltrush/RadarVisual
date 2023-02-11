@@ -4,25 +4,21 @@
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
+    // --- version ---
+    sVersion = new SoftVersion(this);
+
     // --- displays ---
     for (uint8_t i = 0; i < RADAR_NUM; i++){
         displays[i] = new DisplayData(this);
         displays[i]->selfCount = i;
         displays[i]->setWindowTitle("Display " + QString::number(displays[i]->selfCount));
-    }
-
-    // --- version ---
-    sVersion = new SoftVersion(this);
-    for (uint8_t i = 0; i < RADAR_NUM; i++)
         displays[i]->versID = &sVersion->versID;
-
+        displays[i]->dConfig->inUse = &inUse;
+    }
 
     // --- threads ---
     isAppStopped = false;
-#ifdef __WIN32
-#else
     thrCanRcv = std::thread(&MainWindow::canRcv, this);
-#endif
     thrZmqRcv = std::thread(&MainWindow::zmqRcv, this);
     thrPlayFile = std::thread(&MainWindow::playCanFile, this);
 
@@ -41,8 +37,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     this->move(sideGap, upGap);
 
-    // --- click ---
-    on_pBAddDisplay_clicked();
     // ---
     this->setWindowFlags(Qt::WindowCloseButtonHint);
     this->setWindowTitle(this->windowTitle() + " v" +
@@ -52,6 +46,20 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     // --- connections ---
     connect(ui->pBSoftVersID, SIGNAL(clicked()), sVersion, SLOT(updVersion()));
     connect(ui->pBSoftVersID, SIGNAL(clicked()), sVersion, SLOT(show()));
+
+    connect(ui->pBStart, SIGNAL(clicked()), this, SLOT(start()));
+    connect(ui->pBAddDisplay, SIGNAL(clicked()), this, SLOT(addDisplay()));
+
+    connect(ui->rBInpCAN, SIGNAL(clicked()), this, SLOT(inpCAN()));
+    connect(ui->rBInpZMQ, SIGNAL(clicked()), this, SLOT(inpZMQ()));
+    connect(ui->rBInpFile, SIGNAL(clicked()), this, SLOT(inpFile()));
+
+    connect(ui->pBLoadFile, SIGNAL(clicked()), this, SLOT(loadFile()));
+    connect(ui->pBPlayFile, SIGNAL(clicked()), this, SLOT(playFile()));
+    connect(ui->pBStopFile, SIGNAL(clicked()), this, SLOT(stopFile()));
+
+    // --- click ---
+    ui->pBAddDisplay->click();
 }
 
 MainWindow::~MainWindow(){
@@ -68,7 +76,7 @@ MainWindow::~MainWindow(){
     delete ui;
 }
 
-void MainWindow::on_pBStart_clicked(){
+void MainWindow::start(){
     // --- --- --- from CAN --- --- ---
     if(ui->rBInpCAN->isChecked()){
         if(ui->lEInpCAN->text().isEmpty()){
@@ -87,9 +95,8 @@ void MainWindow::on_pBStart_clicked(){
             // --- status bar ---
             for (uint8_t i = 0; i < RADAR_NUM; i++)
                 displays[i]->statusBar()->showMessage("Source: physical CAN (" + QString::fromStdString(deviceName) + ")");
-            // --- to config ---
-            for (uint8_t i = 0; i < RADAR_NUM; i++)
-                displays[i]->dConfig->isCanUsing = true;
+            // --- in use ---
+            inUse = InUse::can;
         }
         else{
             ui->pBStart->setStyleSheet("background-color: red");
@@ -127,9 +134,8 @@ void MainWindow::on_pBStart_clicked(){
         // --- status bar ---
         for (uint8_t i = 0; i < RADAR_NUM; i++)
             displays[i]->statusBar()->showMessage("Source: ZMQ (" + addressString + "; can" + QString::number(msgId._msg_src) + ")");
-        // --- to config ---
-        for (uint8_t i = 0; i < RADAR_NUM; i++)
-            displays[i]->dConfig->isCanUsing = false;
+        // --- in use ---
+        inUse = InUse::zmq;
     }
 
     // --- --- --- from FILE --- --- ---
@@ -141,15 +147,15 @@ void MainWindow::on_pBStart_clicked(){
     }
 }
 
-void MainWindow::on_rBInpCAN_clicked(){
+void MainWindow::inpCAN(){
     ui->pBStart->setEnabled(true);
 }
 
-void MainWindow::on_rBInpZMQ_clicked(){
+void MainWindow::inpZMQ(){
     ui->pBStart->setEnabled(true);
 }
 
-void MainWindow::on_rBInpFile_clicked(){
+void MainWindow::inpFile(){
     ui->pBStart->setEnabled(false);
 
     pathFileCanLog = QFileDialog::getOpenFileName(this, tr("Open CAN log"), "", tr("Log files (*.log)"));
@@ -260,8 +266,11 @@ void MainWindow::zmqRcv(){
         }
     }
 }
+#endif
 
 void MainWindow::canRcv(){
+#ifdef __WIN32
+#else
     QString statLocalMess;
     canfd_frame pframe;
     int nbytes = 0;
@@ -282,9 +291,8 @@ void MainWindow::canRcv(){
         }
         ui->statBar->showMessage(statLocalMess);
     }
-}
-
 #endif
+}
 
 void MainWindow::fillCanLines(QFile &file, int linesAmount){
     canLines.clear();
@@ -351,7 +359,7 @@ void MainWindow::playCanFile(){
     }
 }
 
-void MainWindow::on_pBAddDisplay_clicked(){
+void MainWindow::addDisplay(){
     for (uint8_t i = 0; i < RADAR_NUM; i++){
         if(displays[i]->isHidden()){
             displays[i]->move(this->geometry().topRight().x(), this->pos().y());
@@ -362,7 +370,7 @@ void MainWindow::on_pBAddDisplay_clicked(){
     QMessageBox::information(this, "Info", "All displays shown");
 }
 
-void MainWindow::on_pBLoadFile_clicked(){
+void MainWindow::loadFile(){
     if(ui->lEInpFile->text().isEmpty()){
         QMessageBox::information(this, "Input from log file","Empty input data");
         return;
@@ -393,10 +401,12 @@ void MainWindow::on_pBLoadFile_clicked(){
         // ---
         ui->rBInpCAN->setEnabled(false);
         ui->rBInpZMQ->setEnabled(false);
+        // --- in use ---
+        inUse = InUse::file;
     }
 }
 
-void MainWindow::on_pBPlayFile_clicked(){
+void MainWindow::playFile(){
     ui->pBLoadFile->setEnabled(false);
     ui->pBPlayFile->setEnabled(false);
     ui->pBStopFile->setEnabled(true);
@@ -406,7 +416,7 @@ void MainWindow::on_pBPlayFile_clicked(){
             displays[i]->statusBar()->showMessage("Source: log file (" + canLines.front().canNum + ")");
 }
 
-void MainWindow::on_pBStopFile_clicked(){
+void MainWindow::stopFile(){
     ui->pBLoadFile->setEnabled(true);
     ui->pBStopFile->setEnabled(false);
     ui->pBPlayFile->setEnabled(true);

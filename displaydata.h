@@ -14,9 +14,9 @@ public:
 
     int selfCount = -1;
     ConfigRadar configRadar;
-    VersionID* versID;
+    VersionID* versID = nullptr;
     // ---
-    DialogConfig* dConfig;
+    DialogConfig* dConfig = nullptr;
 
     std::vector<QColor> colors;
 
@@ -26,13 +26,13 @@ public:
     void receiveCanLine(const CanLine &canLine);
 
 private slots:
-    void on_cBChsDist_currentTextChanged(const QString &data);
-    void on_cmBRadNum_currentIndexChanged(int index);
+    void chooseDist(const QString &data);
+    void radNum(int index);
 
-    void on_cBInfo_clicked(bool checked);
+    void info(bool checked);
 
     // --- CONFIGS ---
-    void on_pBConfigRadar_clicked();
+    void configRadarCall();
 
 private:
     Ui::DisplayData *ui;
