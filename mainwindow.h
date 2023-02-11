@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "softversion.h"
 #include "displaydata.h"
 #include "zmq_subscriber_modfd.hpp"
 
@@ -27,15 +28,14 @@ private slots:
     void on_pBPlayFile_clicked();
     void on_pBStopFile_clicked();
 
-    void on_pBVersionID_clicked();
-
 private:
     Ui::MainWindow *ui;
+    SoftVersion* sVersion;
     DisplayData* displays[RADAR_NUM];
     QString statusRadMess;
     bool isAppStopped = true;
 
-    void sendToDisplay(const CanLine &canLine);
+    void sendToDisplay(const CanLine &canLine);    
 
     // ----- ----- ----- INPUT FROM CAN ----- ----- -----
     int handle = 0;
@@ -77,6 +77,7 @@ private:
 // TODO: Send config through ZMQ
 // TODO: Test Interference
 // TODO: firmware Version
+// TODO: connections
 
 // TODO: CONFIG Clusters read/write (#202)
 // BUG: 702 filling wrong

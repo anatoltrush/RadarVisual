@@ -5,7 +5,7 @@ QT      += core gui widgets serialbus
 QMAKE_TARGET_COPYRIGHT = Anatol Trush
 QMAKE_TARGET_DESCRIPTION = For work with ARS 408-21
 
-VERSION_MAJOR = 2
+VERSION_MAJOR = 3
 VERSION_MINOR = 0
 VERSION_BUILD = 0
 
@@ -35,6 +35,7 @@ SOURCES += \
     displaydata.cpp \
     main.cpp \
     mainwindow.cpp \
+    softversion.cpp \
     visimage.cpp \
     zmq_subscriber_modfd.cpp
 
@@ -44,10 +45,12 @@ HEADERS += \
     displaydata.h \
     entity.h \
     mainwindow.h \
+    softversion.h \
     visimage.h \
     zmq_subscriber_modfd.hpp
 
 FORMS += \
     dialogconfig.ui \
     displaydata.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    softversion.ui

@@ -47,6 +47,14 @@ const float offsetVRelLat   = -64.0f;
 enum class MsgType : uint64_t { Undefined = 0, OpenCVImage = 1001, Detections = 1003, CANMsg = 1005,
                                 RadarData = 1200, AutoExposeData = 1203, ObjectInfo = 1300};
 
+struct VersionID{
+    uint8_t major   = 255;
+    uint8_t minor   = 0;
+    uint8_t patch   = 0;
+    uint8_t extended = 0;
+    uint8_t country = 0;
+};
+
 struct MessageId{
     uint64_t _msg_src = 0;
     uint64_t _msg_num = 0;

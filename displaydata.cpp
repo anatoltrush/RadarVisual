@@ -188,7 +188,11 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         dConfig->updateUI();
     }
     if(canLine.messId[0] == '7' && canLine.messId[2] == '0'){
-
+        versID->major = Converter::getDecData(canLine.messData, 0, 8);
+        versID->minor = Converter::getDecData(canLine.messData, 8, 8);
+        versID->patch = Converter::getDecData(canLine.messData, 16, 8);
+        versID->extended = Converter::getDecData(canLine.messData, 30, 1);
+        versID->country = Converter::getDecData(canLine.messData, 31, 1);
     }
 
     // --- frame got ---

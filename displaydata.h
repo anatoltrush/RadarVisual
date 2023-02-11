@@ -14,6 +14,7 @@ public:
 
     int selfCount = -1;
     ConfigRadar configRadar;
+    VersionID* versID;
     // ---
     DialogConfig* dConfig;
 

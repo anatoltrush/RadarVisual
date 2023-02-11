@@ -4,14 +4,21 @@
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
-    for (int i = 0; i < RADAR_NUM; i++){
+    // --- displays ---
+    for (uint8_t i = 0; i < RADAR_NUM; i++){
         displays[i] = new DisplayData(this);
         displays[i]->selfCount = i;
         displays[i]->setWindowTitle("Display " + QString::number(displays[i]->selfCount));
     }
 
-    isAppStopped = false;
+    // --- version ---
+    sVersion = new SoftVersion(this);
+    for (uint8_t i = 0; i < RADAR_NUM; i++)
+        displays[i]->versID = &sVersion->versID;
 
+
+    // --- threads ---
+    isAppStopped = false;
 #ifdef __WIN32
 #else
     thrCanRcv = std::thread(&MainWindow::canRcv, this);
@@ -41,6 +48,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     this->setWindowTitle(this->windowTitle() + " v" +
                          QString::number(VERSION_MAJOR) + "." + QString::number(VERSION_MINOR));
     ui->pBStart->setShortcut(Qt::Key_Return);
+
+    // --- connections ---
+    connect(ui->pBSoftVersID, SIGNAL(clicked()), sVersion, SLOT(updVersion()));
+    connect(ui->pBSoftVersID, SIGNAL(clicked()), sVersion, SLOT(show()));
 }
 
 MainWindow::~MainWindow(){
@@ -49,7 +60,7 @@ MainWindow::~MainWindow(){
     if (thrPlayFile.joinable()) thrPlayFile.join();
     if (thrZmqRcv.joinable()) thrZmqRcv.join();
 
-    for (int i = 0; i < RADAR_NUM; i++)
+    for (uint8_t i = 0; i < RADAR_NUM; i++)
         delete displays[i];
 
     subscriber.stop();
@@ -74,10 +85,10 @@ void MainWindow::on_pBStart_clicked(){
             ui->rBInpFile->setEnabled(false);
             ui->pBLoadFile->setEnabled(false);
             // --- status bar ---
-            for (int i = 0; i < RADAR_NUM; i++)
+            for (uint8_t i = 0; i < RADAR_NUM; i++)
                 displays[i]->statusBar()->showMessage("Source: physical CAN (" + QString::fromStdString(deviceName) + ")");
             // --- to config ---
-            for (int i = 0; i < RADAR_NUM; i++)
+            for (uint8_t i = 0; i < RADAR_NUM; i++)
                 displays[i]->dConfig->isCanUsing = true;
         }
         else{
@@ -114,10 +125,10 @@ void MainWindow::on_pBStart_clicked(){
         ui->rBInpFile->setEnabled(false);
         ui->pBLoadFile->setEnabled(false);
         // --- status bar ---
-        for (int i = 0; i < RADAR_NUM; i++)
+        for (uint8_t i = 0; i < RADAR_NUM; i++)
             displays[i]->statusBar()->showMessage("Source: ZMQ (" + addressString + "; can" + QString::number(msgId._msg_src) + ")");
         // --- to config ---
-        for (int i = 0; i < RADAR_NUM; i++)
+        for (uint8_t i = 0; i < RADAR_NUM; i++)
             displays[i]->dConfig->isCanUsing = false;
     }
 
@@ -341,7 +352,7 @@ void MainWindow::playCanFile(){
 }
 
 void MainWindow::on_pBAddDisplay_clicked(){
-    for (int i = 0; i < RADAR_NUM; i++){
+    for (uint8_t i = 0; i < RADAR_NUM; i++){
         if(displays[i]->isHidden()){
             displays[i]->move(this->geometry().topRight().x(), this->pos().y());
             displays[i]->show();
@@ -391,7 +402,7 @@ void MainWindow::on_pBPlayFile_clicked(){
     ui->pBStopFile->setEnabled(true);
     isPlay = true;
     if(!canLines.empty())
-        for (int i = 0; i < RADAR_NUM; i++)
+        for (uint8_t i = 0; i < RADAR_NUM; i++)
             displays[i]->statusBar()->showMessage("Source: log file (" + canLines.front().canNum + ")");
 }
 
@@ -405,12 +416,8 @@ void MainWindow::on_pBStopFile_clicked(){
 void MainWindow::sendToDisplay(const CanLine &canLine){
     if(canLine.messId.length() < 2 || canLine.messData.isEmpty()) return;
     uint8_t messIdInd = canLine.messId[1].digitValue();
-    for (int i = 0; i < RADAR_NUM; i++)
+    for (uint8_t i = 0; i < RADAR_NUM; i++)
         if(!displays[i]->isHidden())
             if(displays[i]->configRadar.index == messIdInd) // NOTE: Send line to display
                 displays[i]->receiveCanLine(canLine);
-}
-
-void MainWindow::on_pBVersionID_clicked(){
-
 }

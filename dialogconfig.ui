@@ -714,7 +714,6 @@
            <widget class="QPushButton" name="pBRadGenerate">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -961,7 +960,6 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -985,6 +983,11 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -994,7 +997,6 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
