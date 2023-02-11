@@ -266,12 +266,12 @@ void DialogConfig::send(){
             ui->pBSend->setStyleSheet("background-color: red");
             QMessageBox::information(this, "Send via CAN...", "Smthng wrong: " + QString::number(res));
         }
-    }
         break;
+    }
     case InUse::zmq:{
         QMessageBox::information(this, "Send...", "Not implemented");
-    }
         break;
+    }
     case InUse::file:
         QMessageBox::information(this, "Send...", "What are you going to send to the file? :)");
         break;
