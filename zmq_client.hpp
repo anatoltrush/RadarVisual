@@ -36,6 +36,8 @@ private:
     bool _block = false;
     unsigned _in_queue_size = 1;
     unsigned _out_queue_size = 1;
+    int timRcvMsec = 3000;
+    int timSnsMsec = 3000;
 };
 
 #endif // ZMQ_CLIENT_HPP

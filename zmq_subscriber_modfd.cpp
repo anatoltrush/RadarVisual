@@ -5,6 +5,8 @@
 Subscriber_modfd::Subscriber_modfd() : _context(1), receiver(_context, ZMQ_SUB), _filter("") {}
 
 bool Subscriber_modfd::start(std::string &errStr){
+    receiver.setsockopt(ZMQ_RCVTIMEO, timRcvMsec);
+
     _stop = false;
     try{
         if(_in_queue_size)

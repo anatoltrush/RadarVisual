@@ -13,7 +13,7 @@ public:
 
     zmq::context_t _context;
 
-    inline void set_block_mode( bool mode = false){_block = mode;}
+    inline void set_block_mode(bool mode = false){_block = mode;}
 
     void configure (const std::string &addr){
         receiverPoints.clear();
@@ -34,6 +34,7 @@ private:
     bool _stopped = true;
     bool _block = false;
     uint8_t _in_queue_size  = 1;
+    int timRcvMsec = 3000;
 };
 
 #endif // ZMQ_SUBSCRIBER_MODFD_HPP

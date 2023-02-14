@@ -4,19 +4,20 @@ Client::Client(): _context(1), client(_context, ZMQ_REQ){}
 
 bool Client::start(std::string &errStr){
     bool result = true;
+
+    client.setsockopt(ZMQ_RCVTIMEO, timRcvMsec);
+    client.setsockopt(ZMQ_SNDTIMEO, timSnsMsec);
+
     _stop = false;
     try{
-        if(_in_queue_size){
+        if(_in_queue_size)
             client.setsockopt(ZMQ_RCVHWM, _in_queue_size);
-        }
 
-        if(_out_queue_size){
+        if(_out_queue_size)
             client.setsockopt(ZMQ_SNDHWM, _out_queue_size);
-        }
 
-        for(const auto &its: senderPoints){
+        for(const auto &its: senderPoints)
             client.connect(its);
-        }
     }
     catch(std::exception &e){
         errStr = std::string(e.what());

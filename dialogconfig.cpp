@@ -317,8 +317,16 @@ void DialogConfig::send(){
                 // ---
                 std::string whatSend;
                 bool isSent = zmqClient.send(messToCan, whatSend);
-                if(!isSent)
-                    QMessageBox::information(this, "Send via ZMQ", "Can't send ZMQ:\n" + QString::fromStdString(whatSend));
+                if(isSent){
+                    zmq::message_t rcv;
+                    std::string whatRcv;
+                    bool isRcvd = zmqClient.receive(&rcv, whatRcv);
+                    if(!isRcvd)
+                        QMessageBox::information(this, "Send via ZMQ", "Can't send ZMQ:\n" + QString::fromStdString(whatRcv));
+                }
+                else{
+                    QMessageBox::information(this, "Send via ZMQ", "No response received:\n" + QString::fromStdString(whatSend));
+                }
             }
             else{
                 ui->lSendZmq->setStyleSheet("background-color: red");
@@ -328,7 +336,7 @@ void DialogConfig::send(){
         break;
     }
     case InUse::file:       // --- FILE ---
-        QMessageBox::information(this, "Send...", "What are you going to send to the file? :)");
+        QMessageBox::information(this, "Send...", "What are you going to send to the file? :-)");
         break;
     default:
         break;

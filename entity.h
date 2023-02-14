@@ -76,13 +76,26 @@ struct MessageId{
 };
 
 #ifdef __WIN32
+typedef unsigned char __u8;
+typedef unsigned int __u32;
+typedef __u32 canid_t;
+#define CANFD_MAX_DLEN 64
+struct canfd_frame{
+    canid_t can_id;  /* 32 bit CAN_ID + EFF/RTR/ERR flags */
+    __u8    len;     /* frame payload length in byte */
+    __u8    flags;   /* additional flags for CAN FD */
+    __u8    __res0;  /* reserved / padding */
+    __u8    __res1;  /* reserved / padding */
+    __u8    data[CANFD_MAX_DLEN] __attribute__((aligned(8)));
+};
 #else
+#endif
+
 struct ZmqCanMessage{
     MsgType     _msg_type = MsgType::CANMsg;
     MessageId   _id;
     canfd_frame _frame;
 };
-#endif
 
 enum class StatusSpeed{
     forward     = 0,

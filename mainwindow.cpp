@@ -227,32 +227,12 @@ bool MainWindow::openCan(const std::string &device){
 }
 #endif
 
-#ifdef __WIN32
 void MainWindow::zmqRcv(){
     while (!isAppStopped) {
-        std::this_thread::sleep_for(std::chrono::microseconds(delay_us));
-        if(!isZmqStarted) continue;
-        else delay_us = 3;
-
-        zmq::message_t message;
-        if(subscriber.receive(&message)){
-            //canfd_frame pframe;
-            //Converter::getCanFdFromZmq(message, pframe, msgId);
-            //CanLine canLine = Converter::getCanLineFromCan(std::to_string(msgId._msg_src), pframe, true);
-            //sendToDisplay(canLine);
-            // --- status bar ---
-            if(msgId._msg_num % 10 == 0){
-                statusRadMess = "ZMQ connected (" + addressString + "). Msg num: " + QString::number(msgId._msg_num);
-                ui->statBar->showMessage(statusRadMess);
-            }
-        }
-    }
-}
-#else
-void MainWindow::zmqRcv(){
-    while (!isAppStopped) {
-        std::this_thread::sleep_for(std::chrono::microseconds(3));
+        std::this_thread::sleep_for(std::chrono::microseconds(delayZmqUs));
         if(!isSubscrStarted) continue;
+        delayZmqUs = 3;
+
         zmq::message_t message;
         if(zmqSubscriber.receive(&message)){
             canfd_frame pframe;
@@ -267,17 +247,15 @@ void MainWindow::zmqRcv(){
         }
     }
 }
-#endif
 
 void MainWindow::canRcv(){
-#ifdef __WIN32
-#else
     QString statLocalMess;
     canfd_frame pframe;
     int nbytes = 0;
-    while(!isAppStopped){
-        std::this_thread::sleep_for(std::chrono::microseconds(5));
+    while(!isAppStopped){        
+        std::this_thread::sleep_for(std::chrono::microseconds(delayCanUs));
         if(!isCanOpened) continue;
+        delayCanUs = 5;
 
         nbytes = read(handle, &pframe, sizeof(pframe));
         if(nbytes <= 0){
@@ -292,7 +270,6 @@ void MainWindow::canRcv(){
         }
         ui->statBar->showMessage(statLocalMess);
     }
-#endif
 }
 
 void MainWindow::fillCanLines(QFile &file, int linesAmount){
@@ -327,8 +304,7 @@ void MainWindow::fillCanLines(QFile &file, int linesAmount){
 
 void MainWindow::playCanFile(){
     while(!isAppStopped){
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
-
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         if(isPlay){
             size_t currInd = 0;
             if(canLines.empty()) continue;

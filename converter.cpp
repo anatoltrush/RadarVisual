@@ -17,23 +17,6 @@ QString Converter::floatCutOff(float value, int afterDot){
     return QString::fromStdString(stream.str());
 }
 
-#ifdef __WIN32
-#else
-void Converter::getCanFdFromZmq(const zmq::message_t &message, canfd_frame &frame, MessageId &id){
-    if(message.data<ZmqCanMessage>()->_msg_type == MsgType::CANMsg){
-        id = message.data<ZmqCanMessage>()->_id;
-
-        frame.can_id = message.data<ZmqCanMessage>()->_frame.can_id;
-        frame.len = message.data<ZmqCanMessage>()->_frame.len;
-        frame.flags = message.data<ZmqCanMessage>()->_frame.flags;
-        frame.__res0 = message.data<ZmqCanMessage>()->_frame.__res0;
-        frame.__res1 = message.data<ZmqCanMessage>()->_frame.__res1;
-
-        for( __u8 idx = 0; idx < frame.len; ++idx)
-            frame.data[idx] = message.data<ZmqCanMessage>()->_frame.data[idx];
-    }
-}
-
 void Converter::getZmqFromCanFd(zmq::message_t &message, const canfd_frame &frame, const MessageId &id){
     message.rebuild(sizeof(ZmqCanMessage));
 
@@ -59,22 +42,28 @@ void Converter::getCanFdFromCanLine(canfd_frame &frame, const CanLine &canLine){
     frame.__res0 = 0;
     frame.__res1 = 0;
 
-    /*if(frame.len == 8){
-        uint8_t dataStr[8] = {255, 255, 255, 255, 255, 255, 255, 255};
-        for( uint8_t idx = 0; idx < 8; ++idx){
-            QString hexFragment = canLine.messData.mid(idx * fragmSz, fragmSz);
-            bool ok = false;
-            uint vvv = hexFragment.toUInt(&ok, 16);
-            dataStr[idx] = vvv;
-            int c = 5;
-        }
-        int b = 5;
-    }*/
-
-    for( __u8 idx = 0; idx < frame.len; ++idx){
+    __u8 massChar[frame.len];
+    for(__u8 idx = 0; idx < frame.len; ++idx){
         QString hexFragment = canLine.messData.mid(idx * fragmSz, fragmSz);
         bool ok = false;
-        frame.data[idx] = hexFragment.toUInt(&ok, 16);
+        uint value = hexFragment.toUInt(&ok, 16);
+        massChar[idx] = value;
+    }
+    std::memcpy(&frame.data, &massChar, frame.len);
+}
+
+void Converter::getCanFdFromZmq(const zmq::message_t &message, canfd_frame &frame, MessageId &id){
+    if(message.data<ZmqCanMessage>()->_msg_type == MsgType::CANMsg){
+        id = message.data<ZmqCanMessage>()->_id;
+
+        frame.can_id = message.data<ZmqCanMessage>()->_frame.can_id;
+        frame.len = message.data<ZmqCanMessage>()->_frame.len;
+        frame.flags = message.data<ZmqCanMessage>()->_frame.flags;
+        frame.__res0 = message.data<ZmqCanMessage>()->_frame.__res0;
+        frame.__res1 = message.data<ZmqCanMessage>()->_frame.__res1;
+
+        for(__u8 idx = 0; idx < frame.len; ++idx)
+            frame.data[idx] = message.data<ZmqCanMessage>()->_frame.data[idx];
     }
 }
 
@@ -89,7 +78,6 @@ CanLine Converter::getCanLineFromCanFd(const std::string &device, const canfd_fr
     canLine.messData = hexData;
     return canLine;
 }
-#endif
 
 QString Converter::binToHex(const QString &binStr){
     QString hexStr;

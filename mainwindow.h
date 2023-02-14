@@ -46,6 +46,7 @@ private:
     struct ifreq ifr;
 #endif
     std::string deviceName;
+    uint16_t delayCanUs = 5000;
     std::thread thrCanRcv;
     bool isCanOpened = false;
 #ifdef __WIN32
@@ -56,7 +57,7 @@ private:
 
     // ----- ----- ----- INPUT FROM ZMQ ----- ----- -----
     bool isSubscrStarted = false;
-    uint16_t delay_us = 3000;
+    uint16_t delayZmqUs = 3000;
     std::thread thrZmqRcv;    
     Subscriber_modfd zmqSubscriber;
     MessageId msgId;
@@ -80,5 +81,5 @@ private:
 
 // TODO: CONFIG Clusters read/write (#202)
 // BUG: 702 filling wrong
-// TODO: Windows (Serial bus) + ZMQ (timeout)
+// TODO: Windows (Serial bus) + ZMQ (client block)
 // TODO: ? Objects
