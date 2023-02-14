@@ -78,8 +78,8 @@ struct MessageId{
 #ifdef __WIN32
 #else
 struct ZmqCanMessage{
-    MsgType _msg_type = MsgType::CANMsg;
-    MessageId _id;
+    MsgType     _msg_type = MsgType::CANMsg;
+    MessageId   _id;
     canfd_frame _frame;
 };
 #endif
@@ -123,7 +123,7 @@ public:
     bool thrRcs         = false;
 
     uint8_t canNum      = 0;
-    uint8_t index       = 0;
+    uint8_t id       = 0;
     uint8_t power       = 0;
     uint8_t sortInd     = 0;
     uint8_t outputType  = 0;

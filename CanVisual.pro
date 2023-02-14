@@ -37,6 +37,7 @@ SOURCES += \
     mainwindow.cpp \
     softversion.cpp \
     visimage.cpp \
+    zmq_client.cpp \
     zmq_subscriber_modfd.cpp
 
 HEADERS += \
@@ -47,6 +48,7 @@ HEADERS += \
     mainwindow.h \
     softversion.h \
     visimage.h \
+    zmq_client.hpp \
     zmq_subscriber_modfd.hpp
 
 FORMS += \

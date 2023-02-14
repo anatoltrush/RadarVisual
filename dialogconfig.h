@@ -5,6 +5,7 @@
 
 #include "entity.h"
 #include "converter.h"
+#include "zmq_client.hpp"
 
 namespace Ui {
 class DialogConfig;
@@ -27,7 +28,7 @@ public:
 
 private slots:
     void clearResStr();
-    void radGenerate();
+    void generateCommand();
     void send();
 
     void showHideSetRadQual(bool checked);
@@ -43,6 +44,12 @@ private slots:
 
 private:
     Ui::DialogConfig *ui;
+
+    // --- ZMQ ---
+    uint64_t msg_num = 0;
+    Client zmqClient;
+    QString zmqAddrSend;
+    CanLine sendLine;
 };
 
 #endif // DIALOGCONFIG_H

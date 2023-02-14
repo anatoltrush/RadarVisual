@@ -402,7 +402,7 @@ void DisplayData::chooseDist(const QString &data){
 }
 
 void DisplayData::radNum(int index){
-    configRadar.index = index;
+    configRadar.id = index;
     clustersFiltered.clear();
 }
 
@@ -411,6 +411,6 @@ void DisplayData::info(bool checked){
 }
 
 void DisplayData::configRadarCall(){
-    dConfig->setWindowTitle("Radar " + QString::number(configRadar.index));
+    dConfig->setWindowTitle("Radar " + QString::number(configRadar.id));
     dConfig->show();
 }

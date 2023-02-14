@@ -55,12 +55,12 @@ private:
     void canRcv();
 
     // ----- ----- ----- INPUT FROM ZMQ ----- ----- -----
-    bool isZmqStarted = false;
+    bool isSubscrStarted = false;
     uint16_t delay_us = 3000;
     std::thread thrZmqRcv;    
-    Subscriber_modfd subscriber;
+    Subscriber_modfd zmqSubscriber;
     MessageId msgId;
-    QString addressString;
+    QString zmqAddrRcv;
 
     void zmqRcv();
 

@@ -34,7 +34,51 @@ void Converter::getCanFdFromZmq(const zmq::message_t &message, canfd_frame &fram
     }
 }
 
-CanLine Converter::getCanLineFromCan(const std::string &device, const canfd_frame &frame, bool isZmq){
+void Converter::getZmqFromCanFd(zmq::message_t &message, const canfd_frame &frame, const MessageId &id){
+    message.rebuild(sizeof(ZmqCanMessage));
+
+    message.data<ZmqCanMessage>()->_msg_type = MsgType::CANMsg;
+    message.data<ZmqCanMessage>()->_id = id;
+
+    message.data<ZmqCanMessage>()->_frame.can_id = frame.can_id;
+    message.data<ZmqCanMessage>()->_frame.len = frame.len;
+    message.data<ZmqCanMessage>()->_frame.flags = frame.flags;
+    message.data<ZmqCanMessage>()->_frame.__res0 = frame.__res0;
+    message.data<ZmqCanMessage>()->_frame.__res1 = frame.__res1;
+
+    for( __u8 idx = 0; idx < frame.len; ++idx)
+        message.data<ZmqCanMessage>()->_frame.data[idx] = frame.data[idx];
+}
+
+void Converter::getCanFdFromCanLine(canfd_frame &frame, const CanLine &canLine){
+    const uint8_t fragmSz = 2;
+
+    frame.can_id = canLine.messId.toULong();
+    frame.len = canLine.messData.length() / fragmSz;
+    frame.flags = 0;
+    frame.__res0 = 0;
+    frame.__res1 = 0;
+
+    /*if(frame.len == 8){
+        uint8_t dataStr[8] = {255, 255, 255, 255, 255, 255, 255, 255};
+        for( uint8_t idx = 0; idx < 8; ++idx){
+            QString hexFragment = canLine.messData.mid(idx * fragmSz, fragmSz);
+            bool ok = false;
+            uint vvv = hexFragment.toUInt(&ok, 16);
+            dataStr[idx] = vvv;
+            int c = 5;
+        }
+        int b = 5;
+    }*/
+
+    for( __u8 idx = 0; idx < frame.len; ++idx){
+        QString hexFragment = canLine.messData.mid(idx * fragmSz, fragmSz);
+        bool ok = false;
+        frame.data[idx] = hexFragment.toUInt(&ok, 16);
+    }
+}
+
+CanLine Converter::getCanLineFromCanFd(const std::string &device, const canfd_frame &frame, bool isZmq){
     CanLine canLine;
     canLine.timeStamp = GET_CUR_TIME_MICRO;
     isZmq ? canLine.canNum = "can" + QString::fromStdString(device) : canLine.canNum = QString::fromStdString(device);

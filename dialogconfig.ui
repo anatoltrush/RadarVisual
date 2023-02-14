@@ -714,6 +714,7 @@
            <widget class="QPushButton" name="pBRadGenerate">
             <property name="font">
              <font>
+              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -960,6 +961,7 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -985,6 +987,7 @@
        </property>
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -994,9 +997,24 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="lSendZmq">
+       <property name="text">
+        <string>send to ZMQ:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lESendZmq">
+       <property name="placeholderText">
+        <string>tcp://127.0.0.1:7000</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>

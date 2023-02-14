@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         displays[i] = new DisplayData(this);
         displays[i]->selfCount = i;
         displays[i]->setWindowTitle("Display " + QString::number(displays[i]->selfCount));
+        // bind
         displays[i]->versID = &sVersion->versID;
         displays[i]->dConfig->inUse = &inUse;
     }
@@ -71,7 +72,7 @@ MainWindow::~MainWindow(){
     for (uint8_t i = 0; i < RADAR_NUM; i++)
         delete displays[i];
 
-    subscriber.stop();
+    zmqSubscriber.stop();
 
     delete ui;
 }
@@ -106,24 +107,24 @@ void MainWindow::start(){
 
     // --- --- --- from ZMQ --- --- ---
     if(ui->rBInpZMQ->isChecked()){
-        if(ui->lEInpZMQ->text().isEmpty()){
+        if(ui->lEInpZmq->text().isEmpty()){
             QMessageBox::information(this, "Input from ZMQ", "Empty input data");
             return;
         }
         // --- --- ---
-        subscriber.stop();
-        addressString = ui->lEInpZMQ->text();
+        zmqSubscriber.stop();
+        zmqAddrRcv = ui->lEInpZmq->text();
 
-        subscriber.set_block_mode(true);
-        subscriber.set_queue_size(0);
-        subscriber.set_queue_size(0);
-        subscriber.configure(addressString.toStdString());
+        zmqSubscriber.set_block_mode(true);
+        zmqSubscriber.set_queue_size(0);
+        zmqSubscriber.set_queue_size(0);
+        zmqSubscriber.configure(zmqAddrRcv.toStdString());
 
         std::string what;
-        isZmqStarted = subscriber.start(what);
-        if(!isZmqStarted){
+        isSubscrStarted = zmqSubscriber.start(what);
+        if(!isSubscrStarted){
             ui->pBStart->setStyleSheet("background-color: red");
-            QMessageBox::information(this, "Input from ZMQ", "Can't start: " + QString::fromStdString(what));
+            QMessageBox::information(this, "Input from ZMQ", "Can't start ZMQ:\n" + QString::fromStdString(what));
             return;
         }
 
@@ -133,7 +134,7 @@ void MainWindow::start(){
         ui->pBLoadFile->setEnabled(false);
         // --- status bar ---
         for (uint8_t i = 0; i < RADAR_NUM; i++)
-            displays[i]->statusBar()->showMessage("Source: ZMQ (" + addressString + "; can" + QString::number(msgId._msg_src) + ")");
+            displays[i]->statusBar()->showMessage("Source: ZMQ (" + zmqAddrRcv + "; can" + QString::number(msgId._msg_src) + ")");
         // --- in use ---
         inUse = InUse::zmq;
     }
@@ -251,16 +252,16 @@ void MainWindow::zmqRcv(){
 void MainWindow::zmqRcv(){
     while (!isAppStopped) {
         std::this_thread::sleep_for(std::chrono::microseconds(3));
-        if(!isZmqStarted) continue;
+        if(!isSubscrStarted) continue;
         zmq::message_t message;
-        if(subscriber.receive(&message)){
+        if(zmqSubscriber.receive(&message)){
             canfd_frame pframe;
             Converter::getCanFdFromZmq(message, pframe, msgId);
-            CanLine canLine = Converter::getCanLineFromCan(std::to_string(msgId._msg_src), pframe, true);
+            CanLine canLine = Converter::getCanLineFromCanFd(std::to_string(msgId._msg_src), pframe, true);
             sendToDisplay(canLine);
             // --- status bar ---
             if(msgId._msg_num % 10 == 0){
-                statusRadMess = "ZMQ connected (" + addressString + "). Msg num: " + QString::number(msgId._msg_num);
+                statusRadMess = "ZMQ connected (" + zmqAddrRcv + "). Msg num: " + QString::number(msgId._msg_num);
                 ui->statBar->showMessage(statusRadMess);
             }
         }
@@ -285,7 +286,7 @@ void MainWindow::canRcv(){
         else{
             // NOTE: Receive real can data
             statLocalMess = statusRadMess + " | " + QString::number(nbytes) + " bytes received";
-            CanLine canLine = Converter::getCanLineFromCan(deviceName, pframe, false);
+            CanLine canLine = Converter::getCanLineFromCanFd(deviceName, pframe, false);
             if (canLine.messId.size() != 3) continue;
             sendToDisplay(canLine);
         }
@@ -428,6 +429,6 @@ void MainWindow::sendToDisplay(const CanLine &canLine){
     uint8_t messIdInd = canLine.messId[1].digitValue();
     for (uint8_t i = 0; i < RADAR_NUM; i++)
         if(!displays[i]->isHidden())
-            if(displays[i]->configRadar.index == messIdInd) // NOTE: Send line to display
+            if(displays[i]->configRadar.id == messIdInd) // NOTE: Send line to display
                 displays[i]->receiveCanLine(canLine);
 }

@@ -9,7 +9,7 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
 
     // --- connections ---
     connect(ui->pBClearResStr, SIGNAL(clicked()), this, SLOT(clearResStr()));
-    connect(ui->pBRadGenerate, SIGNAL(clicked()), this, SLOT(radGenerate()));
+    connect(ui->pBRadGenerate, SIGNAL(clicked()), this, SLOT(generateCommand()));
     connect(ui->pBSend, SIGNAL(clicked()), this, SLOT(send()));
 
     connect(ui->cBSetRadQual, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadQual(bool)));
@@ -36,10 +36,22 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
 }
 
 DialogConfig::~DialogConfig(){
+    zmqClient.stop();
+
     delete ui;
 }
 
 void DialogConfig::updateUI(){
+    // --- ZMQ ---
+    if(*inUse == InUse::zmq){
+        ui->lSendZmq->show();
+        ui->lESendZmq->show();
+    }
+    else{
+        ui->lSendZmq->hide();
+        ui->lESendZmq->hide();
+    }
+
     // --- write ---
     configRadar->writeStatus ? ui->rBCurrRadWriteS->setChecked(true) : ui->rBCurrRadWriteF->setChecked(true);
 
@@ -148,7 +160,7 @@ void DialogConfig::clearResStr(){
 }
 
 
-void DialogConfig::radGenerate(){
+void DialogConfig::generateCommand(){
     QString binStr(64, '0');
 
     // --- ID ---
@@ -243,8 +255,19 @@ void DialogConfig::radGenerate(){
             binStr.replace(32, 3, "011");
     }
 
-    QString resStr("cansend can" + QString::number(configRadar->canNum) + " 2" + QString::number(configRadar->index) + "0#");
+    QString resStr("cansend can" + QString::number(configRadar->canNum) + " 2" + QString::number(configRadar->id) + "0#");
     resStr += Converter::binToHex(binStr);
+
+    // --- send line ---
+    if(resStr.length() == 40){
+        QStringList listData = resStr.split(' ');
+        sendLine.timeStamp = GET_CUR_TIME_MICRO;
+        sendLine.canNum = listData[1];
+        sendLine.messId = listData[2].mid(0, 3);
+        sendLine.messData = listData[2].mid(4, 23);
+        sendLine.messData.remove('.');
+    }
+    // ---
 
     ui->lEResStr->setText(resStr);
 }
@@ -256,10 +279,10 @@ void DialogConfig::send(){
     }
     // --- --- ---
     switch (*inUse) {
-    case InUse::nothing:
+    case InUse::nothing:    // --- NTHNG ---
         QMessageBox::information(this, "Send...", "Nothing started");
         break;
-    case InUse::can:{
+    case InUse::can:{       // --- CAN ---
         int res = system(ui->lEResStr->text().toStdString().c_str());
         if(res == 0) ui->pBSend->setStyleSheet("background-color: green");
         else{
@@ -268,11 +291,43 @@ void DialogConfig::send(){
         }
         break;
     }
-    case InUse::zmq:{
-        QMessageBox::information(this, "Send...", "Not implemented");
+    case InUse::zmq:{       // --- ZMQ ---
+        if(ui->lESendZmq->text().isEmpty()){
+            QMessageBox::information(this, "Send via ZMQ", "Empty ZMQ address");
+            return;
+        }
+        else{
+            zmqClient.stop();
+            zmqAddrSend = ui->lESendZmq->text();
+            zmqClient.configure(zmqAddrSend.toStdString());
+            std::string whatStart;
+            bool isCliStarted = zmqClient.start(whatStart);
+            if(isCliStarted){
+                ui->lSendZmq->setStyleSheet("background-color: green");
+                // --- --- ---
+                zmq::message_t messToCan;
+                MessageId idToCan;
+                idToCan._time = GET_CUR_TIME_MICRO;
+                idToCan._msg_num = msg_num++;
+                idToCan._msg_src = configRadar->id;
+                canfd_frame canFrame;
+
+                Converter::getCanFdFromCanLine(canFrame, sendLine);
+                Converter::getZmqFromCanFd(messToCan, canFrame, idToCan);
+                // ---
+                std::string whatSend;
+                bool isSent = zmqClient.send(messToCan, whatSend);
+                if(!isSent)
+                    QMessageBox::information(this, "Send via ZMQ", "Can't send ZMQ:\n" + QString::fromStdString(whatSend));
+            }
+            else{
+                ui->lSendZmq->setStyleSheet("background-color: red");
+                QMessageBox::information(this, "Send via ZMQ", "Can't start ZMQ:\n" + QString::fromStdString(whatStart));
+            }
+        }
         break;
     }
-    case InUse::file:
+    case InUse::file:       // --- FILE ---
         QMessageBox::information(this, "Send...", "What are you going to send to the file? :)");
         break;
     default:
