@@ -17,7 +17,7 @@
    <enum>Qt::LeftToRight</enum>
   </property>
   <property name="modal">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -1006,7 +1006,7 @@
      <item>
       <widget class="QLineEdit" name="lESendZmq">
        <property name="placeholderText">
-        <string>tcp://127.0.0.1:7000</string>
+        <string>tcp://127.0.0.1:7002</string>
        </property>
       </widget>
      </item>

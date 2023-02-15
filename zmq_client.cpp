@@ -42,12 +42,18 @@ bool Client::stop(){
     return result;
 }
 
-bool Client::receive(zmq::message_t *message, std::string &errStr){
+bool Client::receive(zmq::message_t *message, std::string &errStr, uint8_t efforts){
     try{
+        uint8_t count = 0;
         do{
             if(!_stopped && client.recv(message, _block ? 0 : ZMQ_DONTWAIT))
                 return true;
             std::this_thread::sleep_for(std::chrono::milliseconds(3));
+            if(efforts > 0){
+                count++;
+                if(count >= efforts)
+                    break;
+            }
         }
         while(!_stop);
     }

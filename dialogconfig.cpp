@@ -322,14 +322,15 @@ void DialogConfig::send(){
                 if(isSent){
                     zmq::message_t rcv;
                     std::string whatRcv;
-                    bool isRcvd = zmqClient.receive(&rcv, whatRcv);
+                    bool isRcvd = zmqClient.receive(&rcv, whatRcv, 10);
                     if(isRcvd)
                         ui->lSendZmq->setStyleSheet("background-color: green");
                     else
                         QMessageBox::information(this, "Send via ZMQ", "Can't send ZMQ:\n" + QString::fromStdString(whatRcv));
                 }
                 else{
-                    QMessageBox::information(this, "Send via ZMQ", "No response received:\n" + QString::fromStdString(whatSend));
+                    QMessageBox::information(this, "Send via ZMQ", "No response received:\n"
++ QString::fromStdString(whatSend) + "\n(Check ip & port and restart application)");
                 }
             }
             else{

@@ -20,7 +20,7 @@ public:
     }
     bool start(std::string &errStr);
     bool stop();
-    bool receive(zmq::message_t *message, std::string &errStr);
+    bool receive(zmq::message_t *message, std::string &errStr, uint8_t efforts = 0);
     bool send(zmq::message_t &message, std::string &errStr);
 
     void set_parameter_name(const char *name);

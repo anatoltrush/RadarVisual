@@ -36,20 +36,18 @@ void Converter::getZmqFromCanFd(zmq::message_t &message, const canfd_frame &fram
 void Converter::getCanFdFromCanLine(canfd_frame &frame, const CanLine &canLine){
     const uint8_t fragmSz = 2;
 
-    frame.can_id = canLine.messId.toULong();
+    bool ok1 = false;
+    frame.can_id = canLine.messId.toUInt(&ok1, 16);
     frame.len = canLine.messData.length() / fragmSz;
     frame.flags = 0;
     frame.__res0 = 0;
     frame.__res1 = 0;
 
-    __u8 massChar[frame.len];
     for(__u8 idx = 0; idx < frame.len; ++idx){
         QString hexFragment = canLine.messData.mid(idx * fragmSz, fragmSz);
-        bool ok = false;
-        uint value = hexFragment.toUInt(&ok, 16);
-        massChar[idx] = value;
+        bool ok2 = false;
+        frame.data[idx] = hexFragment.toUInt(&ok2, 16);
     }
-    std::memcpy(&frame.data, &massChar, frame.len);
 }
 
 void Converter::getCanFdFromZmq(const zmq::message_t &message, canfd_frame &frame, MessageId &id){
