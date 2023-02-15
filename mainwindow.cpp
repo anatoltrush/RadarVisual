@@ -94,8 +94,10 @@ void MainWindow::start(){
             ui->rBInpFile->setEnabled(false);
             ui->pBLoadFile->setEnabled(false);
             // --- status bar ---
-            for (uint8_t i = 0; i < RADAR_NUM; i++)
+            for (uint8_t i = 0; i < RADAR_NUM; i++){
                 displays[i]->statusBar()->showMessage("Source: physical CAN (" + QString::fromStdString(deviceName) + ")");
+                displays[i]->dConfig->deviceName = deviceName;
+            }
             // --- in use ---
             inUse = InUse::can;
         }

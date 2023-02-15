@@ -23,6 +23,7 @@ public:
     ConfigCluster* configCluster = nullptr;
 
     InUse* inUse = nullptr;
+    std::string deviceName;
 
     void updateUI();
 

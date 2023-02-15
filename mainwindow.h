@@ -77,9 +77,8 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: Send config through ZMQ
-// TODO: Test Interference
 
 // TODO: CONFIG Clusters read/write (#202)
 // BUG: 702 filling wrong
-// TODO: Windows (Serial bus) + ZMQ (client block)
+// TODO: Windows (Serial bus) + ZMQ(client block)
 // TODO: ? Objects

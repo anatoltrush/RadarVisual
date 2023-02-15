@@ -255,7 +255,11 @@ void DialogConfig::generateCommand(){
             binStr.replace(32, 3, "011");
     }
 
-    QString resStr("cansend can" + QString::number(configRadar->canNum) + " 2" + QString::number(configRadar->id) + "0#");
+    QString resStr;
+    if(*inUse == InUse::can)
+        resStr = ("cansend " + QString::fromStdString(deviceName) + " 2" + QString::number(configRadar->id) + "0#");
+    else
+        resStr = ("cansend can" + QString::number(configRadar->canNum) + " 2" + QString::number(configRadar->id) + "0#");
     resStr += Converter::binToHex(binStr);
 
     // --- send line ---
@@ -303,8 +307,6 @@ void DialogConfig::send(){
             std::string whatStart;
             bool isCliStarted = zmqClient.start(whatStart);
             if(isCliStarted){
-                ui->lSendZmq->setStyleSheet("background-color: green");
-                // --- --- ---
                 zmq::message_t messToCan;
                 MessageId idToCan;
                 idToCan._time = GET_CUR_TIME_MICRO;
@@ -321,7 +323,9 @@ void DialogConfig::send(){
                     zmq::message_t rcv;
                     std::string whatRcv;
                     bool isRcvd = zmqClient.receive(&rcv, whatRcv);
-                    if(!isRcvd)
+                    if(isRcvd)
+                        ui->lSendZmq->setStyleSheet("background-color: green");
+                    else
                         QMessageBox::information(this, "Send via ZMQ", "Can't send ZMQ:\n" + QString::fromStdString(whatRcv));
                 }
                 else{
