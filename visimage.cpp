@@ -133,13 +133,14 @@ void VisImage::drawClusters(){
             painter->drawText(wCl+2, hCl-2, textInfo);
         }
     }
-
-    painter->drawText(1, 12, "Measure count: " + QString::number(clustList.measCount));
-    painter->drawText(1, 26, "Clusters in frame (filtered): " + QString::number(clusters.size()));
-    painter->drawText(1, 40, "Clusters in frame (all): " + QString::number(clustList.numExpectSumm));
-    painter->drawText(1, 54, "Far zone (" + QString::number(configInfo->getFarZone()) + "m): " + QString::number(clustList.numExpectFar));
-    painter->drawText(1, 68, "Near zone (" + QString::number(configInfo->nearZone) + "m): " + QString::number(clustList.numExpectNear));
+    painter->drawText(1, 12, "<---Clusters--->");
+    painter->drawText(1, 26, "Measure count: " + QString::number(clustList.measCount));
+    painter->drawText(1, 40, "Clusters in frame (filtered): " + QString::number(clusters.size()));
+    painter->drawText(1, 54, "Clusters in frame (all): " + QString::number(clustList.numExpectSumm));
+    painter->drawText(1, 68, "Far zone (" + QString::number(configInfo->getFarZone()) + "m): " + QString::number(clustList.numExpectFar));
+    painter->drawText(1, 82, "Near zone (" + QString::number(configInfo->nearZone) + "m): " + QString::number(clustList.numExpectNear));
     // ---
+    clustList = ClusterList();
     clusters.clear();
 }
 
@@ -168,7 +169,14 @@ void VisImage::drawObjects(){
             painter->drawText(wObj+2, hObj-2, textInfo);
         }
     }
+    painter->drawText(width()/2+1, 12, "<---Objects--->");
+    painter->drawText(width()/2+1, 26, "Measure count: " + QString::number(objList.measCount));
+    painter->drawText(width()/2+1, 40, "Objects in frame (filtered): " + QString::number(objects.size()));
+    painter->drawText(width()/2+1, 54, "Objects in frame (all): " + QString::number(objList.numExpect));
+    painter->drawText(width()/2+1, 68, "Far zone (" + QString::number(configInfo->getFarZone()) + "m): " + QString::number(objList.numExpect));
+    painter->drawText(width()/2+1, 82, "Near zone (" + QString::number(configInfo->nearZone) + "m): " + QString::number(objList.numExpect));
     // ---
+    objList = ObjectList();
     objects.clear();
 }
 
