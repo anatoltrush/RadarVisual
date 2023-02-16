@@ -13,10 +13,10 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
         colors[0] = Qt::red;
         colors[1] = Qt::yellow;
         colors[2] = Qt::blue;
-        colors[3] = Qt::green;
+        colors[3] = QColor(50, 205, 50); // green
         colors[4] = Qt::darkGray;
         colors[5] = Qt::darkGreen;
-        colors[6] = QColor(255, 140, 0);
+        colors[6] = QColor(255, 140, 0); // orange
         colors[7] = Qt::black;
     }
 
@@ -31,7 +31,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     // ---
     ui->wDraw->configInfo = &configRadar;
 
-    // --- Config ---
+    // --- config ---
     dConfig = new DialogConfig(this);
     dConfig->configRadar = &configRadar;
 

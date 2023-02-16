@@ -173,8 +173,6 @@ void VisImage::drawObjects(){
     painter->drawText(width()/2+1, 26, "Measure count: " + QString::number(objList.measCount));
     painter->drawText(width()/2+1, 40, "Objects in frame (filtered): " + QString::number(objects.size()));
     painter->drawText(width()/2+1, 54, "Objects in frame (all): " + QString::number(objList.numExpect));
-    painter->drawText(width()/2+1, 68, "Far zone (" + QString::number(configInfo->getFarZone()) + "m): " + QString::number(objList.numExpect));
-    painter->drawText(width()/2+1, 82, "Near zone (" + QString::number(configInfo->nearZone) + "m): " + QString::number(objList.numExpect));
     // ---
     objList = ObjectList();
     objects.clear();
