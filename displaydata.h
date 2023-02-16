@@ -18,17 +18,11 @@ public:
     // ---
     DialogConfig* dConfig = nullptr;
 
-    std::vector<QColor> colors;
-
-    std::vector<ClusterInfo> clustersAll;
-    std::vector<ClusterInfo> clustersFiltered;
-
     void receiveCanLine(const CanLine &canLine);
 
 private slots:
     void chooseDist(const QString &data);
     void radNum(int index);
-
     void info(bool checked);
 
     // --- CONFIGS ---
@@ -37,10 +31,17 @@ private slots:
 private:
     Ui::DisplayData *ui;
     // ---
-    uint8_t numExpectNear   = 0;
-    uint8_t numExpectFar    = 0;
-    uint8_t numExpectSumm   = 0;
-    uint16_t measCount      = 0;
+    std::vector<QColor> colors;
+
+    // --- clusters ---
+    ClusterList clustList;
+    std::vector<ClusterInfo> clustersAll;
+    std::vector<ClusterInfo> clustersFiltered;
+
+    // --- objects ---
+    ObjectList objList;
+    std::vector<ObjectInfo> objectsAll;
+    std::vector<ObjectInfo> objectsFiltered;
 
     void applyFilters();
     void updateShowFlags();

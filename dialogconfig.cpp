@@ -213,7 +213,7 @@ void DialogConfig::generateCommand(){
 
     // --- distance ---
     if(ui->cBSetRadDist->isChecked()){
-        QString dist = QString::number((uint16_t)(ui->sBSetRadDist->value() / resMaxDist));
+        QString dist = QString::number((uint16_t)(ui->sBSetRadDist->value() / resClustMaxDist));
         uint8_t bitLen = 10;
         QString binDist = Converter::decToBin(dist, bitLen);
         binStr.replace(7, 1, "1");

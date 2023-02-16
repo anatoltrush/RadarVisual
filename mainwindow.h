@@ -76,7 +76,6 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// BUG: 702 filling wrong
-// TODO: CONFIG Clusters read/write (#202)
-// TODO: ?Objects draw & config
+// TODO: ?#402, #408
+// TODO: ?Objects draw & config & qual
 // TODO: ?Windows (Serial bus)

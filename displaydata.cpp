@@ -51,57 +51,68 @@ DisplayData::~DisplayData(){
 }
 
 void DisplayData::receiveCanLine(const CanLine &canLine){
-    if(canLine.messId[0] == '6' && canLine.messId[2] == '0'){
-        clustersAll.clear();
-        numExpectNear = Converter::getDecData(canLine.messData, 0, 8);
-        numExpectFar = Converter::getDecData(canLine.messData, 8, 8);
-        numExpectSumm = numExpectNear + numExpectFar;
-        measCount = Converter::getDecData(canLine.messData, 16, 16);
-        //std::cout << GET_CUR_TIME_MILLI << " | " << (int)numExpectSumm << std::endl;
-    }
-    if(canLine.messId[0] == '7' && canLine.messId[2] == '1'){
-        ClusterInfo cluster;
+    // --- ------ CLUSTERS --- --- ---
+    if(canLine.messId[0] == '6' && canLine.messId[2] == '0'){ // CLUST LIST
+        calcSpeed();
+        showSpeedUI();
 
+        // NOTE: Send cluster frame to visual
+        updateShowFlags();
+        applyFilters();
+
+        ui->wDraw->clusters = clustersFiltered;
+        ui->wDraw->clustList = clustList;
+        ui->wDraw->update();
+        // ---
+        clustersAll.clear();
+        // ---
+        clustList.numExpectNear = Converter::getDecData(canLine.messData, 0, 8);
+        clustList.numExpectFar = Converter::getDecData(canLine.messData, 8, 8);
+        clustList.numExpectSumm = clustList.numExpectNear + clustList.numExpectFar;
+        clustList.measCount = Converter::getDecData(canLine.messData, 16, 16);
+        clustList.interfVers = Converter::getDecData(canLine.messData, 32, 4);
+    }
+    if(canLine.messId[0] == '7' && canLine.messId[2] == '0'){ // SOFT VERSION
+        versID->major = Converter::getDecData(canLine.messData, 0, 8);
+        versID->minor = Converter::getDecData(canLine.messData, 8, 8);
+        versID->patch = Converter::getDecData(canLine.messData, 16, 8);
+        versID->extended = Converter::getDecData(canLine.messData, 30, 1);
+        versID->country = Converter::getDecData(canLine.messData, 31, 1);
+    }
+    if(canLine.messId[0] == '7' && canLine.messId[2] == '1'){ // GENERAL INFO
+        ClusterInfo cluster;
         // ID
         cluster.id = Converter::getDecData(canLine.messData, 0, 8);
-
         // RCS
         cluster.RCS = Converter::getDecData(canLine.messData, 56, 8);
-        cluster.RCS *= resRCS;
-        cluster.RCS += offsetRCS;
-
+        cluster.RCS *= resClustRCS;
+        cluster.RCS += offsetClustRCS;
         // VRelLong
         cluster.vRelLong = Converter::getDecData(canLine.messData, 32, 10);
-        cluster.vRelLong *= resVRelLong;
-        cluster.vRelLong += offsetVRelLong;
-
+        cluster.vRelLong *= resClustVRelLong;
+        cluster.vRelLong += offsetClustVRelLong;
         // VRelLat
         cluster.vRelLat = Converter::getDecData(canLine.messData, 42, 9);
-        cluster.vRelLat *= resVRelLat;
-        cluster.vRelLat += offsetVRelLat;
-
+        cluster.vRelLat *= resClustVRelLat;
+        cluster.vRelLat += offsetClustVRelLat;
         // DistLong
         cluster.distLong = Converter::getDecData(canLine.messData, 8, 13);
-        cluster.distLong *= resDistLong;
-        cluster.distLong += offsetDistLong;
-
+        cluster.distLong *= resClustDistLong;
+        cluster.distLong += offsetClustDistLong;
         // DistLat
         cluster.distLat = Converter::getDecData(canLine.messData, 22, 10);
-        cluster.distLat *= resDistLat;
-        cluster.distLat += offsetDistLat;
-        cluster.distLat = -cluster.distLat;// NOTE: left/right?
-
+        cluster.distLat *= resClustDistLat;
+        cluster.distLat += offsetClustDistLat;
+        cluster.distLat = -cluster.distLat;// NOTE: clusters left/right?
         // Type
         uint8_t numType = Converter::getDecData(canLine.messData, 53, 3);
-        cluster.type = static_cast<ClusterDynProp>(numType);
-
+        cluster.type = static_cast<DynProp>(numType);
         // Azimuth
         cluster.clacAzimuth();
-
         // ---
         clustersAll.push_back(cluster);
     }
-    if(canLine.messId[0] == '7' && canLine.messId[2] == '2'){
+    if(canLine.messId[0] == '7' && canLine.messId[2] == '2'){ // QUALITY
         uint8_t idCl = Converter::getDecData(canLine.messData, 0, 8);
         uint8_t pDh0Cl = Converter::getDecData(canLine.messData, 29, 3);
         if(clustersAll.size() > idCl){
@@ -135,7 +146,9 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
             }
         }
     }
-    if(canLine.messId[0] == '2' && canLine.messId[2] == '1'){
+
+    // --- RADAR STATE ---
+    if(canLine.messId[0] == '2' && canLine.messId[2] == '1'){ // RADAR STATE
         // --- can num ---
         configRadar.canNum = std::atoi(&canLine.canNum.toStdString().back());
 
@@ -147,7 +160,7 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
 
         // --- dist ---
         configRadar.setFarZone(Converter::getDecData(canLine.messData, 8, 10));
-        configRadar.setFarZone(configRadar.getFarZone() * resMaxDist);
+        configRadar.setFarZone(configRadar.getFarZone() * resClustMaxDist);
 
         // --- pers error ---
         configRadar.persistErr = Converter::getDecData(canLine.messData, 18, 1);
@@ -191,36 +204,101 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         // --- --- ---
         dConfig->updateUI();
     }
-    if(canLine.messId[0] == '7' && canLine.messId[2] == '0'){
-        versID->major = Converter::getDecData(canLine.messData, 0, 8);
-        versID->minor = Converter::getDecData(canLine.messData, 8, 8);
-        versID->patch = Converter::getDecData(canLine.messData, 16, 8);
-        versID->extended = Converter::getDecData(canLine.messData, 30, 1);
-        versID->country = Converter::getDecData(canLine.messData, 31, 1);
-    }
 
-    // --- frame got ---
-    if((int)clustersAll.size() == numExpectSumm){
-        calcSpeed();
-        showSpeedUI();
-
-        // NOTE: Send frame to visual
-        applyFilters();        
+    // --- ------ OBJECTS --- --- ---
+    if(canLine.messId[0] == '6' && (canLine.messId[2] == 'a' || canLine.messId[2] == 'A')){ // OBJS LIST
+        // NOTE: Send object frame to visual
         updateShowFlags();
+        applyFilters();
 
-        ui->wDraw->clusters = clustersFiltered;
-        ui->wDraw->measCount = measCount;
-        ui->wDraw->numClNear = numExpectNear;
-        ui->wDraw->numClFar = numExpectFar;
-        ui->wDraw->numClSumm = numExpectSumm;
+        ui->wDraw->objects = objectsFiltered;
+        ui->wDraw->objList = objList;
         ui->wDraw->update();
         // ---
-        clustersAll.clear();
+        objectsAll.clear();
+        // ---
+        objList.numExpect = Converter::getDecData(canLine.messData, 0, 8);
+        objList.measCount = Converter::getDecData(canLine.messData, 8, 16);
+        objList.interfVers = Converter::getDecData(canLine.messData, 24, 4);
+    }
+    if(canLine.messId[0] == '6' && (canLine.messId[2] == 'b' || canLine.messId[2] == 'B')){ // GENERAL INFO
+        ObjectInfo object;
+        // ID
+        object.id = Converter::getDecData(canLine.messData, 0, 8);
+        // RCS
+        object.RCS = Converter::getDecData(canLine.messData, 56, 8);
+        object.RCS *= resObjRCS;
+        object.RCS += offsetObjRCS;
+        // VRelLong
+        object.vRelLong = Converter::getDecData(canLine.messData, 32, 10);
+        object.vRelLong *= resObjVRelLong;
+        object.vRelLong += offsetObjVRelLong;
+        // VRelLat
+        object.vRelLat = Converter::getDecData(canLine.messData, 42, 9);
+        object.vRelLat *= resObjVRelLat;
+        object.vRelLat += offsetObjVRelLat;
+        // DistLong
+        object.distLong = Converter::getDecData(canLine.messData, 8, 13);
+        object.distLong *= resObjDistLong;
+        object.distLong += offsetObjDistLong;
+        // DistLat
+        object.distLat = Converter::getDecData(canLine.messData, 21, 11);
+        object.distLat *= resObjDistLat;
+        object.distLat += offsetObjDistLat;
+        object.distLat = -object.distLat;// NOTE: objects left/right?
+        // Type
+        uint8_t numType = Converter::getDecData(canLine.messData, 53, 3);
+        object.type = static_cast<DynProp>(numType);
+        // Azimuth
+        object.clacAzimuth();
+        // ---
+        objectsAll.push_back(object);
+    }
+    if(canLine.messId[0] == '6' && (canLine.messId[2] == 'c' || canLine.messId[2] == 'C')){ // QUALITY
+        uint8_t idObj = Converter::getDecData(canLine.messData, 0, 8);
+        uint8_t pDh0Obj = Converter::getDecData(canLine.messData, 48, 3);
+        if(objectsAll.size() > idObj){
+            switch (pDh0Obj) {
+            case 0:
+                objectsAll[idObj].Pdh0 = 0.0f;
+                break;
+            case 1:
+                objectsAll[idObj].Pdh0 = 24.99f;
+                break;
+            case 2:
+                objectsAll[idObj].Pdh0 = 49.99f;
+                break;
+            case 3:
+                objectsAll[idObj].Pdh0 = 74.99f;
+                break;
+            case 4:
+                objectsAll[idObj].Pdh0 = 89.99f;
+                break;
+            case 5:
+                objectsAll[idObj].Pdh0 = 98.99f;
+                break;
+            case 6:
+                objectsAll[idObj].Pdh0 = 99.89f;
+                break;
+            case 7:
+                objectsAll[idObj].Pdh0 = 100.0f;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    if(canLine.messId[0] == '6' && (canLine.messId[2] == 'd' || canLine.messId[2] == 'D')){ //
+
+    }
+    if(canLine.messId[0] == '6' && (canLine.messId[2] == 'e' || canLine.messId[2] == 'E')){ //
+
     }
 }
 
 void DisplayData::applyFilters(){
     clustersFiltered.clear();
+    objectsFiltered.clear();
     // ---
     std::vector<bool> types{ui->cBClMov->isChecked(), ui->cBClStat->isChecked(),
                 ui->cBClOnCom->isChecked(), ui->cBClStatCond->isChecked(),
@@ -249,16 +327,21 @@ void DisplayData::applyFilters(){
                 && (cl.Pdh0 >= minPdh0 && cl.Pdh0 <= maxPdh0) && (types[static_cast<uint8_t>(cl.type)]))
             clustersFiltered.push_back(cl);
     }
-    /*std::cout << "Win:" << windowTitle().toStdString() << " | Before: "
-     << clustersAll.size() << " | After: " << clustersFiltered.size() << std::endl;*/
+    for(const auto &obj : objectsAll){
+        if((obj.RCS >= minRcs && obj.RCS <= maxRcs) && (obj.distLong >= minDLong && obj.distLong <= maxDLong)
+                && (obj.distLat >= minDLat && obj.distLat <= maxDLat) &&(obj.vRelLong >= minVLong && obj.vRelLong <= maxVLong)
+                && (obj.vRelLat >= minVLat && obj.vRelLat <= maxVLat) && (obj.azimuth >= minAzmth && obj.azimuth <= maxAzmth)
+                && (obj.Pdh0 >= minPdh0 && obj.Pdh0 <= maxPdh0) && (types[static_cast<uint8_t>(obj.type)]))
+            objectsFiltered.push_back(obj);
+    }
 }
 
 void DisplayData::updateShowFlags(){
     int sz = ui->gridProps->rowCount();
-    ui->wDraw->props.resize(sz);
+    ui->wDraw->properties.resize(sz);
     for (int i = 0; i < sz; i++) {
         QRadioButton* rb = static_cast<QRadioButton*>(ui->gridProps->itemAtPosition(i, 0)->widget());
-        ui->wDraw->props[i] = rb->isChecked();
+        ui->wDraw->properties[i] = rb->isChecked();
     }
 }
 
@@ -283,7 +366,7 @@ int DisplayData::calcSpeed(){
 
     if(statusSpeed == StatusSpeed::forward){
         for (uint8_t a = 1; a < 0xFF; a++){
-            if (m_dataInfo[a].type == ClusterDynProp::oncoming){
+            if (m_dataInfo[a].type == DynProp::oncoming){
                 val = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
                 pHistoArray[val]++;
             }
@@ -291,9 +374,9 @@ int DisplayData::calcSpeed(){
     }
     if(statusSpeed == StatusSpeed::slowSpeed){
         for (uint8_t a = 1; a < 0xFF; a++){
-            if (m_dataInfo[a].type == ClusterDynProp::oncoming ||
-                    m_dataInfo[a].type == ClusterDynProp::stationary ||
-                    m_dataInfo[a].type == ClusterDynProp::moving){
+            if (m_dataInfo[a].type == DynProp::oncoming ||
+                    m_dataInfo[a].type == DynProp::stationary ||
+                    m_dataInfo[a].type == DynProp::moving){
                 val = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
                 pHistoArray[val]++;
             }
@@ -301,7 +384,7 @@ int DisplayData::calcSpeed(){
     }
     if(statusSpeed == StatusSpeed::backward){
         for (uint8_t a = 1; a < 0xFF; a++){
-            if (m_dataInfo[a].type == ClusterDynProp::moving){
+            if (m_dataInfo[a].type == DynProp::moving){
                 val = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
                 pHistoArray[val]++;
             }
@@ -328,7 +411,7 @@ int DisplayData::calcSpeed(){
     if (point1LMax + point1RMax)
         koeff = static_cast<float>(pointMax) / static_cast<float>(point1LMax + point1RMax);
 
-    if (valMax > 8 && numExpectSumm > 8){
+    if (valMax > 8 && clustList.numExpectSumm > 8){
         float averSpeed4 = 0.0f;
         float valMax4 = 0.0f;
 

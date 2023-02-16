@@ -18,6 +18,7 @@ void VisImage::paintEvent(QPaintEvent *){
     drawAxes();
     drawRadar();    
     drawClusters();
+    drawObjects();
     drawCursor();
 
     painter->end();
@@ -25,9 +26,9 @@ void VisImage::paintEvent(QPaintEvent *){
 
 void VisImage::resizeEvent(QResizeEvent *event){
     QMainWindow* locParent = static_cast<QMainWindow*>(parent());
-    int parHei = locParent->height();
-    parHei -= 10;
-    setMaximumHeight(parHei);
+    int parentHeight = locParent->height();
+    parentHeight -= 10;
+    setMaximumHeight(parentHeight);
 
     int wid = event->size().width();
     int hei = wid / aspect;
@@ -110,8 +111,8 @@ void VisImage::drawRadar(){
 void VisImage::drawClusters(){
     QPen penClust = QPen(Qt::black, 1);
     painter->setPen(penClust);
-
     if(gridStepPx <= 0) return;
+
     for (const auto& cl : clusters) {
         QColor currCol = (*colors)[static_cast<uint8_t>(cl.type)];
         painter->setBrush(currCol);
@@ -122,22 +123,53 @@ void VisImage::drawClusters(){
         // --- text ---
         if(isShowInfo){
             QString textInfo;
-            if(props[0]) textInfo = Converter::floatCutOff(cl.RCS, 1);
-            if(props[1]) textInfo = Converter::floatCutOff(cl.distLong, 1);
-            if(props[2]) textInfo = Converter::floatCutOff(cl.distLat, 1);
-            if(props[3]) textInfo = Converter::floatCutOff(cl.vRelLong, 1);
-            if(props[4]) textInfo = Converter::floatCutOff(cl.vRelLat, 1);
-            if(props[5]) textInfo = Converter::floatCutOff(cl.Pdh0, 1);
-            if(props[6]) textInfo = Converter::floatCutOff(cl.azimuth, 1);
+            if(properties[0]) textInfo = Converter::floatCutOff(cl.RCS, 1);
+            if(properties[1]) textInfo = Converter::floatCutOff(cl.distLong, 1);
+            if(properties[2]) textInfo = Converter::floatCutOff(cl.distLat, 1);
+            if(properties[3]) textInfo = Converter::floatCutOff(cl.vRelLong, 1);
+            if(properties[4]) textInfo = Converter::floatCutOff(cl.vRelLat, 1);
+            if(properties[5]) textInfo = Converter::floatCutOff(cl.Pdh0, 1);
+            if(properties[6]) textInfo = Converter::floatCutOff(cl.azimuth, 1);
             painter->drawText(wCl+2, hCl-2, textInfo);
         }
     }
 
-    painter->drawText(1, 12, "Measure count: " + QString::number(measCount));
+    painter->drawText(1, 12, "Measure count: " + QString::number(clustList.measCount));
     painter->drawText(1, 26, "Clusters in frame (filtered): " + QString::number(clusters.size()));
-    painter->drawText(1, 40, "Clusters in frame (all): " + QString::number(numClSumm));
-    painter->drawText(1, 54, "Far zone (" + QString::number(configInfo->getFarZone()) + "m): " + QString::number(numClFar));
-    painter->drawText(1, 68, "Near zone (" + QString::number(configInfo->nearZone) + "m): " + QString::number(numClNear));
+    painter->drawText(1, 40, "Clusters in frame (all): " + QString::number(clustList.numExpectSumm));
+    painter->drawText(1, 54, "Far zone (" + QString::number(configInfo->getFarZone()) + "m): " + QString::number(clustList.numExpectFar));
+    painter->drawText(1, 68, "Near zone (" + QString::number(configInfo->nearZone) + "m): " + QString::number(clustList.numExpectNear));
+    // ---
+    clusters.clear();
+}
+
+void VisImage::drawObjects(){
+    QPen penObj = QPen(Qt::black, 1);
+    painter->setPen(penObj);
+    if(gridStepPx <= 0) return;
+
+    for (const auto& obj : objects) {
+        QColor currCol = (*colors)[static_cast<uint8_t>(obj.type)];
+        painter->setBrush(currCol);
+        int wObj = width()/2 + (obj.distLat / gridStepM * gridStepPx);
+        int hObj = height() - obj.distLong / gridStepM * gridStepPx;
+        int side = calcRad(obj.RCS);
+        painter->drawRect(wObj-side/2, hObj-side/2, side, side);
+        // --- text ---
+        if(isShowInfo){
+            QString textInfo;
+            if(properties[0]) textInfo = Converter::floatCutOff(obj.RCS, 1);
+            if(properties[1]) textInfo = Converter::floatCutOff(obj.distLong, 1);
+            if(properties[2]) textInfo = Converter::floatCutOff(obj.distLat, 1);
+            if(properties[3]) textInfo = Converter::floatCutOff(obj.vRelLong, 1);
+            if(properties[4]) textInfo = Converter::floatCutOff(obj.vRelLat, 1);
+            if(properties[5]) textInfo = Converter::floatCutOff(obj.Pdh0, 1);
+            if(properties[6]) textInfo = Converter::floatCutOff(obj.azimuth, 1);
+            painter->drawText(wObj+2, hObj-2, textInfo);
+        }
+    }
+    // ---
+    objects.clear();
 }
 
 void VisImage::drawCursor(){
@@ -149,7 +181,7 @@ void VisImage::drawCursor(){
 }
 
 int VisImage::calcRad(float rcs){
-    int res = (int)((rcs - offsetRCS) / gridStepM);
+    int res = (int)((rcs - offsetClustRCS) / gridStepM);
     if(res <= 0) return 1;
     return res;
 }

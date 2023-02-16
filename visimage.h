@@ -13,18 +13,19 @@ class VisImage : public QWidget{
 public:
     VisImage(QWidget *parent = nullptr);
 
-    bool isShowInfo     = false;
-    uint8_t numClNear   = 0;
-    uint8_t numClFar    = 0;
-    uint8_t numClSumm   = 0;
-    uint16_t measCount  = 0;    
-    float aspect        = 0.0f;
+    bool isShowInfo = false;
+    float aspect    = 0.0f;
+    std::vector<QColor>* colors;
 
     ConfigRadar *configInfo = nullptr;
 
-    std::vector<bool> props;
+    ClusterList clustList;
     std::vector<ClusterInfo> clusters;
-    std::vector<QColor>* colors;
+    std::vector<bool> properties;
+
+    // --- objects ---
+    ObjectList objList;
+    std::vector<ObjectInfo> objects;
 
     void resizeAspect();
 
@@ -45,6 +46,7 @@ private:
     void drawAxes();
     void drawRadar();    
     void drawClusters();
+    void drawObjects();
     void drawCursor();
     int calcRad(float rcs);
 

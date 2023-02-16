@@ -20,7 +20,7 @@ public:
     ~DialogConfig();
 
     ConfigRadar* configRadar = nullptr;
-    ConfigCluster* configCluster = nullptr;
+    ConfigClustObj* configCluster = nullptr;
 
     InUse* inUse = nullptr;
     std::string deviceName;
