@@ -710,19 +710,6 @@
             </layout>
            </widget>
           </item>
-          <item row="3" column="2">
-           <widget class="QPushButton" name="pBRadGenerate">
-            <property name="font">
-             <font>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Generate</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0">
            <widget class="QGroupBox" name="gBSetRadQual">
             <property name="title">
@@ -927,6 +914,18 @@
           <item row="3" column="1">
            <widget class="QComboBox" name="cBoxSetRadId"/>
           </item>
+          <item row="3" column="2">
+           <widget class="QPushButton" name="pBGenRadConf">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Generate</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -934,21 +933,270 @@
      </widget>
      <widget class="QWidget" name="tbClusterConfig">
       <attribute name="title">
-       <string>Cluster configuration</string>
+       <string>Clusters/Objects configuration</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_8">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="gBCurrClust">
+       <item row="5" column="1">
+        <widget class="QGroupBox" name="groupBox_10">
          <property name="title">
-          <string>Current configuration</string>
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QRadioButton" name="radioButton_3">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QRadioButton" name="radioButton_11">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3">
+        <widget class="QGroupBox" name="groupBox_16">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QRadioButton" name="radioButton">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QRadioButton" name="radioButton_5">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3">
+        <widget class="QGroupBox" name="groupBox_12">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="3">
+        <widget class="QPushButton" name="pBGenClObjConf">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Generate</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QRadioButton" name="radioButton_6">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QGroupBox" name="groupBox_14">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QRadioButton" name="radioButton_4">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QRadioButton" name="radioButton_7">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QGroupBox" name="groupBox_15">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3">
+        <widget class="QRadioButton" name="radioButton_12">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QRadioButton" name="radioButton_8">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QGroupBox" name="groupBox_7">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QRadioButton" name="radioButton_10">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QRadioButton" name="radioButton_9">
+         <property name="text">
+          <string>RadioButton</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QGroupBox" name="gBSetClust">
-         <property name="title">
-          <string>Set configuration</string>
+        <widget class="QRadioButton" name="radioButton_2">
+         <property name="text">
+          <string>RadioButton</string>
          </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QGroupBox" name="groupBox_8">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QGroupBox" name="groupBox_11">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QGroupBox" name="groupBox_13">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QRadioButton" name="radioButton_13">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QRadioButton" name="radioButton_14">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QRadioButton" name="radioButton_15">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="3">
+        <widget class="QRadioButton" name="radioButton_16">
+         <property name="text">
+          <string>RadioButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="QGroupBox" name="groupBox_17">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QRadioButton" name="radioButton_17">
+              <property name="text">
+               <string>RadioButton</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="radioButton_18">
+              <property name="text">
+               <string>RadioButton</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -961,7 +1209,6 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -987,7 +1234,6 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -1014,7 +1260,6 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>

@@ -9,7 +9,7 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
 
     // --- connections ---
     connect(ui->pBClearResStr, SIGNAL(clicked()), this, SLOT(clearResStr()));
-    connect(ui->pBRadGenerate, SIGNAL(clicked()), this, SLOT(generateCommand()));
+    connect(ui->pBGenRadConf, SIGNAL(clicked()), this, SLOT(generateCommand()));
     connect(ui->pBSend, SIGNAL(clicked()), this, SLOT(send()));
 
     connect(ui->cBSetRadQual, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadQual(bool)));

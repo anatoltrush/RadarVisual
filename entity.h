@@ -52,11 +52,19 @@ const float resObjDistLat       = 0.2f;
 const float resObjVRelLong      = 0.25f;
 const float resObjVRelLat       = 0.25f;
 
+const float resObjAngle         = 0.4f;
+const float resObjLenght        = 0.2f;
+const float resObjWidth         = 0.2f;
+
 const float offsetObjRCS        = -64.0f;
 const float offsetObjDistLong   = -500.0f;
 const float offsetObjDistLat    = -204.6f;
 const float offsetObjVRelLong   = -128.0f;
 const float offsetObjVRelLat    = -64.0f;
+
+const float offsetObjAngle      = -180.0f;
+const float offsetObjLenght     = 0.0f;
+const float offsetObjWidth      = 0.0f;
 
 enum class MsgType : uint64_t {Undefined = 0, OpenCVImage = 1001, Detections = 1003, CANMsg = 1005,
                                RadarData = 1200, AutoExposeData = 1203, ObjectInfo = 1300};
@@ -216,8 +224,11 @@ struct ObjectInfo{
     float RCS       = 0.0f;
     float Pdh0      = 0.0f;
     float azimuth   = 0.0f;
+    float width     = 0.0f;
+    float length    = 0.0f;
+    float angle     = 0.0f;
     DynProp type    = DynProp::unknown;
-    ObjectClass objClass = ObjectClass::point;
+    ObjectClass objClass = ObjectClass::reserved;
     void clacAzimuth(){azimuth = std::atan(distLat / distLong) * 180.0f / M_PI;}
 };
 

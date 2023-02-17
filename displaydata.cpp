@@ -114,37 +114,38 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
     }
     if(canLine.messId[0] == '7' && canLine.messId[2] == '2'){ // QUALITY
         uint8_t idCl = Converter::getDecData(canLine.messData, 0, 8);
-        uint8_t pDh0Cl = Converter::getDecData(canLine.messData, 29, 3);
-        if(clustersAll.size() > idCl){
-            switch (pDh0Cl) {
-            case 0:
-                clustersAll[idCl].Pdh0 = 0.0f;
-                break;
-            case 1:
-                clustersAll[idCl].Pdh0 = 24.99f;
-                break;
-            case 2:
-                clustersAll[idCl].Pdh0 = 49.99f;
-                break;
-            case 3:
-                clustersAll[idCl].Pdh0 = 74.99f;
-                break;
-            case 4:
-                clustersAll[idCl].Pdh0 = 89.99f;
-                break;
-            case 5:
-                clustersAll[idCl].Pdh0 = 98.99f;
-                break;
-            case 6:
-                clustersAll[idCl].Pdh0 = 99.89f;
-                break;
-            case 7:
-                clustersAll[idCl].Pdh0 = 100.0f;
-                break;
-            default:
-                break;
+        for(auto &cl : clustersAll)
+            if(idCl == cl.id){
+                uint8_t pDh0Cl = Converter::getDecData(canLine.messData, 29, 3);
+                switch (pDh0Cl) {
+                case 0:
+                    cl.Pdh0 = 0.0f;
+                    break;
+                case 1:
+                    cl.Pdh0 = 24.99f;
+                    break;
+                case 2:
+                    cl.Pdh0 = 49.99f;
+                    break;
+                case 3:
+                    cl.Pdh0 = 74.99f;
+                    break;
+                case 4:
+                    cl.Pdh0 = 89.99f;
+                    break;
+                case 5:
+                    cl.Pdh0 = 98.99f;
+                    break;
+                case 6:
+                    cl.Pdh0 = 99.89f;
+                    break;
+                case 7:
+                    cl.Pdh0 = 100.0f;
+                    break;
+                default:
+                    break;
+                }
             }
-        }
     }
 
     // --- RADAR STATE ---
@@ -288,17 +289,28 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
             }
         }
     }
-    if(canLine.messId[0] == '6' && (canLine.messId[2] == 'd' || canLine.messId[2] == 'D')){ //
-        // Class
+    if(canLine.messId[0] == '6' && (canLine.messId[2] == 'd' || canLine.messId[2] == 'D')){ // EXTENDED
         uint8_t idObj = Converter::getDecData(canLine.messData, 0, 8);
-        uint8_t clss = Converter::getDecData(canLine.messData, 29, 3);
-        if(objectsAll.size() > idObj)
-            objectsAll[idObj].objClass = static_cast<ObjectClass>(clss);
-        // Angle
-        // Length
-        // Width
+        for(auto& obj : objectsAll)
+            if(idObj == obj.id){
+                // Class
+                uint8_t clss = Converter::getDecData(canLine.messData, 29, 3);
+                obj.objClass = static_cast<ObjectClass>(clss);
+                // Angle
+                obj.angle = Converter::getDecData(canLine.messData, 32, 10);
+                obj.angle *= resObjAngle;
+                obj.angle += offsetObjAngle;
+                // Length
+                obj.length = Converter::getDecData(canLine.messData, 48, 8);
+                obj.length *= resObjLenght;
+                obj.length += offsetObjLenght;
+                // Width
+                obj.width = Converter::getDecData(canLine.messData, 56, 8);
+                obj.width *= resObjWidth;
+                obj.width += offsetObjWidth;
+            }
     }
-    if(canLine.messId[0] == '6' && (canLine.messId[2] == 'e' || canLine.messId[2] == 'E')){ //
+    if(canLine.messId[0] == '6' && (canLine.messId[2] == 'e' || canLine.messId[2] == 'E')){ // COLLISION
 
     }
 }
