@@ -190,6 +190,17 @@ struct ClusterInfo{
     void clacAzimuth(){azimuth = std::atan(distLat / distLong) * 180.0f / M_PI;}
 };
 
+enum class ObjectClass{
+    point       = 0,
+    car         = 1,
+    truck       = 2,
+    pedestrian  = 3,
+    motorcycle  = 4,
+    bicycle     = 5,
+    wide        = 6,
+    reserved    = 7
+};
+
 struct ObjectList{
     uint8_t numExpect   = 0;
     uint8_t interfVers  = 0;
@@ -206,6 +217,7 @@ struct ObjectInfo{
     float Pdh0      = 0.0f;
     float azimuth   = 0.0f;
     DynProp type    = DynProp::unknown;
+    ObjectClass objClass = ObjectClass::point;
     void clacAzimuth(){azimuth = std::atan(distLat / distLong) * 180.0f / M_PI;}
 };
 

@@ -13,7 +13,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
         colors[0] = Qt::red;
         colors[1] = Qt::yellow;
         colors[2] = Qt::blue;
-        colors[3] = QColor(50, 205, 50); // green
+        colors[3] = QColor(70, 220, 70); // green
         colors[4] = Qt::darkGray;
         colors[5] = Qt::darkGreen;
         colors[6] = QColor(255, 140, 0); // orange
@@ -289,7 +289,14 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         }
     }
     if(canLine.messId[0] == '6' && (canLine.messId[2] == 'd' || canLine.messId[2] == 'D')){ //
-
+        // Class
+        uint8_t idObj = Converter::getDecData(canLine.messData, 0, 8);
+        uint8_t clss = Converter::getDecData(canLine.messData, 29, 3);
+        if(objectsAll.size() > idObj)
+            objectsAll[idObj].objClass = static_cast<ObjectClass>(clss);
+        // Angle
+        // Length
+        // Width
     }
     if(canLine.messId[0] == '6' && (canLine.messId[2] == 'e' || canLine.messId[2] == 'E')){ //
 
