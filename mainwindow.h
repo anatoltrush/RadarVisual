@@ -76,8 +76,7 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TEST: obj len, wid, ang - draw
-// TEST: through the window
 // TODO: ?Objects & Clusters config #202
-// TODO: ?Objects draw & config & qual
+// TODO: ?Objects draw & qual & cillision
 // TODO: ?Windows (Serial bus)
+// TODO: ?Calc spent dist

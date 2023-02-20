@@ -18,7 +18,8 @@ void VisImage::paintEvent(QPaintEvent *){
     drawAxes();
     drawRadar();    
     drawClusters();
-    drawObjects();
+    //drawObjectsInfo(); // NOTE: other drawing
+    drawObjectsExt();
     drawCursor();
 
     painter->end();
@@ -38,7 +39,7 @@ void VisImage::resizeEvent(QResizeEvent *event){
 
 void VisImage::drawZones(){
     // --- red ---
-    int farRadius = (configInfo->getFarZone() / gridStepM) * gridStepPx;
+    int farRadius = (configInfo->getFarZone() / (float)gridStepM) * gridStepPx;
     QPainterPath farPath;
     farPath.moveTo(width() / 2, height());
     QRectF rectFar(width() / 2 - farRadius, height() - farRadius, farRadius * 2, farRadius * 2);
@@ -51,7 +52,7 @@ void VisImage::drawZones(){
     painter->drawPath(farPath);
 
     // --- blue ---
-    int nearRadius = (configInfo->nearZone / gridStepM) * gridStepPx;
+    int nearRadius = (configInfo->nearZone / (float)gridStepM) * gridStepPx;
     QPainterPath nearPath;
     nearPath.moveTo(width() / 2, height());
     QRectF rectNear(width() / 2 - nearRadius, height() - nearRadius, nearRadius * 2, nearRadius * 2);
@@ -116,8 +117,8 @@ void VisImage::drawClusters(){
     for (const auto& cl : clusters) {
         QColor currCol = (*colors)[static_cast<uint8_t>(cl.type)];
         painter->setBrush(currCol);
-        int wCl = width()/2 + (cl.distLat / gridStepM * gridStepPx);
-        int hCl = height() - cl.distLong / gridStepM * gridStepPx;
+        int wCl = width()/2 + cl.distLat / (float)gridStepM * gridStepPx;
+        int hCl = height() - cl.distLong / (float)gridStepM * gridStepPx;
         int radius = calcRad(cl.RCS);
         painter->drawEllipse(QPoint(wCl, hCl), radius, radius);
         // --- text ---
@@ -144,19 +145,55 @@ void VisImage::drawClusters(){
     clusters.clear();
 }
 
-void VisImage::drawObjects(){
-    QPen penObj = QPen(Qt::black, 1);
-    painter->setPen(penObj);
+void VisImage::drawObjectsInfo(){
+    QPen penObjInfo = QPen(Qt::black, 1);
+    painter->setPen(penObjInfo);
     if(gridStepPx <= 0) return;
 
     for (const auto& obj : objects) {
-        QColor currCol = (*colors)[static_cast<uint8_t>(obj.type)];
-        painter->setBrush(currCol);
-        int wObj = width()/2 + (obj.distLat / gridStepM * gridStepPx);
-        int hObj = height() - obj.distLong / gridStepM * gridStepPx;
+        QColor colObjInfo = (*colors)[static_cast<uint8_t>(obj.type)];
+        painter->setBrush(colObjInfo);
+        int wObj = width()/2 + obj.distLat / (float)gridStepM * gridStepPx;
+        int hObj = height() - obj.distLong / (float)gridStepM * gridStepPx;
         int side = calcRad(obj.RCS);
         painter->drawRect(wObj-side/2, hObj-side/2, side, side);
         // --- text ---
+        if(isShowInfo){
+            QString textInfo;
+            if(properties[0]) textInfo = Converter::floatCutOff(obj.RCS, 1);
+            if(properties[1]) textInfo = Converter::floatCutOff(obj.distLong, 1);
+            if(properties[2]) textInfo = Converter::floatCutOff(obj.distLat, 1);
+            if(properties[3]) textInfo = Converter::floatCutOff(obj.vRelLong, 1);
+            if(properties[4]) textInfo = Converter::floatCutOff(obj.vRelLat, 1);
+            if(properties[5]) textInfo = Converter::floatCutOff(obj.Pdh0, 1);
+            if(properties[6]) textInfo = Converter::floatCutOff(obj.azimuth, 1);
+            painter->drawText(wObj+2, hObj-2, textInfo);
+        }
+    }
+    painter->drawText(width()/2+1, 12, "<---Objects--->");
+    painter->drawText(width()/2+1, 26, "Measure count: " + QString::number(objList.measCount));
+    painter->drawText(width()/2+1, 40, "Objects in frame (filtered): " + QString::number(objects.size()));
+    painter->drawText(width()/2+1, 54, "Objects in frame (all): " + QString::number(objList.numExpect));
+}
+
+void VisImage::drawObjectsExt(){
+    if(gridStepPx <= 0) return;
+    painter->setBrush(QBrush());
+
+    for (const auto& obj : objects) {
+        QColor colObjExt = (*colors)[static_cast<uint8_t>(obj.type)];
+        painter->setPen(colObjExt);
+        int wObj = width()/2 + obj.distLat / (float)gridStepM * gridStepPx;
+        int hObj = height() - obj.distLong / (float)gridStepM * gridStepPx;
+        int wPx = obj.width / (float)gridStepM * gridStepPx;
+        int lPx = obj.length / (float)gridStepM * gridStepPx;
+        painter->translate(wObj, hObj);
+        painter->rotate(obj.angle);
+        painter->drawRect(-wPx/2, -lPx, wPx, lPx);
+        painter->resetTransform();
+        // --- text ---
+        QPen penObjInfo = QPen(Qt::black, 1);
+        painter->setPen(penObjInfo);
         if(isShowInfo){
             QString textInfo;
             if(properties[0]) textInfo = Converter::floatCutOff(obj.RCS, 1);
@@ -187,7 +224,7 @@ void VisImage::drawCursor(){
 }
 
 int VisImage::calcRad(float rcs){
-    int res = (int)((rcs - offsetClustRCS) / gridStepM);
+    int res = (int)((rcs - offsetClustRCS) / (float)gridStepM);
     if(res <= 0) return 1;
     return res;
 }

@@ -46,7 +46,8 @@ private:
     void drawAxes();
     void drawRadar();    
     void drawClusters();
-    void drawObjects();
+    void drawObjectsInfo();
+    void drawObjectsExt();
     void drawCursor();
     int calcRad(float rcs);
 
