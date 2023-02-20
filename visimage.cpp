@@ -183,11 +183,13 @@ void VisImage::drawObjectsExt(){
     for (const auto& obj : objects) {
         QColor colObjExt = (*colors)[static_cast<uint8_t>(obj.type)];
         painter->setPen(colObjExt);
-        int wObj = width()/2 + obj.distLat / (float)gridStepM * gridStepPx;
-        int hObj = height() - obj.distLong / (float)gridStepM * gridStepPx;
+        int xObj = width()/2 + obj.distLat / (float)gridStepM * gridStepPx;
+        int yObj = height() - obj.distLong / (float)gridStepM * gridStepPx;
         int wPx = obj.width / (float)gridStepM * gridStepPx;
+        if(wPx < 1) wPx = 1;
         int lPx = obj.length / (float)gridStepM * gridStepPx;
-        painter->translate(wObj, hObj);
+        if(lPx < 1) lPx = 1;
+        painter->translate(xObj, yObj);
         painter->rotate(obj.angle);
         painter->drawRect(-wPx/2, -lPx, wPx, lPx);
         painter->resetTransform();
@@ -203,7 +205,7 @@ void VisImage::drawObjectsExt(){
             if(properties[4]) textInfo = Converter::floatCutOff(obj.vRelLat, 1);
             if(properties[5]) textInfo = Converter::floatCutOff(obj.Pdh0, 1);
             if(properties[6]) textInfo = Converter::floatCutOff(obj.azimuth, 1);
-            painter->drawText(wObj+2, hObj-2, textInfo);
+            painter->drawText(xObj+2, yObj-2, textInfo);
         }
     }
     painter->drawText(width()/2+1, 12, "<---Objects--->");
@@ -220,7 +222,12 @@ void VisImage::drawCursor(){
     painter->setPen(penCursor);
     int curX = (curs.x() - width()/2) / (float)gridStepPx * gridStepM;
     int curY = (height() - curs.y()) / (float)gridStepPx * gridStepM;
-    painter->drawText(curs.x(), curs.y(), "x:" + QString::number(curX) + "|y:" + QString::number(curY));
+    float diag = curX*curX + curY*curY;
+    QString diagStr = Converter::floatCutOff(std::sqrt(diag), 1);
+    float az = std::atan(curX / (float)curY) * 180.0f / M_PI;
+    QString azStr = Converter::floatCutOff(az, 1);
+    painter->drawText(curs.x(), curs.y(), "x:" + QString::number(curX) + "m|y:" + QString::number(curY) + "m");
+    painter->drawText(curs.x(), curs.y() + 14, "d:" + diagStr + "m|az:" + azStr+"d");
 }
 
 int VisImage::calcRad(float rcs){

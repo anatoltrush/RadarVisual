@@ -76,7 +76,6 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: ?Objects & Clusters config #202
-// TODO: ?Objects draw & qual & cillision
+// TODO: ?Objects collision & Clusters config #202
 // TODO: ?Windows (Serial bus)
 // TODO: ?Calc spent dist
