@@ -21,6 +21,8 @@ private slots:
     void addDisplay();
 
     void inpCAN();
+    void pluginChanged(const QString &plugin);
+    void interfaceChanged(const QString &interf);
     void inpZMQ();
     void inpFile();
 
@@ -41,6 +43,7 @@ private:
     // ----- ----- ----- INPUT FROM CAN ----- ----- -----
     int handle = 0;
 #ifdef __WIN32
+    QList<QCanBusDeviceInfo> interfaces;
     Settings canSettings;
 #else
     struct sockaddr_can sockAddr;
@@ -55,6 +58,7 @@ private:
     bool openCan(const std::string &device);
 #endif
     void canRcv();
+    void updateSettings();
 
     // ----- ----- ----- INPUT FROM ZMQ ----- ----- -----
     bool isSubscrStarted = false;

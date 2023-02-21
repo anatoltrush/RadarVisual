@@ -59,11 +59,19 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     connect(ui->pBPlayFile, SIGNAL(clicked()), this, SLOT(playFile()));
     connect(ui->pBStopFile, SIGNAL(clicked()), this, SLOT(stopFile()));
 
+    connect(ui->cBCanPlugin, SIGNAL(currentTextChanged(QString)), this, SLOT(pluginChanged(QString)));
+    connect(ui->cBCanName, SIGNAL(currentTextChanged(QString)), this, SLOT(interfaceChanged(QString)));
+
 #ifdef __WIN32
     ui->lEInpCAN->hide();
+    QLabel* lPlug = new QLabel(this);
+    lPlug->setText("plugin:");
+    QLabel* lInName = new QLabel(this);
+    lInName->setText("interface name:");
+    ui->hLInputs->insertWidget(1, lPlug);
+    ui->hLInputs->insertWidget(3, lInName);
+    // ---
     ui->cBCanPlugin->addItems(QCanBus::instance()->plugins());
-    if(ui->cBCanPlugin->count() >= 5)
-        ui->cBCanPlugin->setCurrentText("socketcan");
 #else
     ui->cBCanPlugin->hide();
     ui->cBCanName->hide();
@@ -95,6 +103,7 @@ void MainWindow::start(){
         }
         // --- --- ---
 #ifdef __WIN32
+        updateSettings();
 #else
         bool isCanOpened = openCan(ui->lEInpCAN->text().toStdString());
         if(isCanOpened){
@@ -161,6 +170,36 @@ void MainWindow::start(){
 
 void MainWindow::inpCAN(){
     ui->pBStart->setEnabled(true);
+}
+
+void MainWindow::pluginChanged(const QString &plugin){
+    ui->cBCanName->clear();
+    interfaces = QCanBus::instance()->availableDevices(plugin);
+    for (const QCanBusDeviceInfo &info : qAsConst(interfaces))
+        ui->cBCanName->addItem(info.name());
+}
+
+void MainWindow::interfaceChanged(const QString &interf){
+    //ui->isVirtual->setChecked(false);
+    //ui->isFlexibleDataRateCapable->setChecked(false);
+
+    for (const QCanBusDeviceInfo &info : qAsConst(interfaces)) {
+        if (info.name() == interf) {
+            //ui->descriptionLabel->setText(info.description());
+            QString serialNumber = info.serialNumber();
+            if (serialNumber.isEmpty())
+                serialNumber = tr("n/a");
+            //ui->serialNumberLabel->setText(tr("Serial: %1").arg(serialNumber));
+            QString alias = info.alias();
+            if (alias.isEmpty())
+                alias = tr("n/a");
+            //ui->aliasLabel->setText(tr("Alias: %1").arg(alias));
+            //ui->channelLabel->setText(tr("Channel: %1").arg(info.channel()));
+            //ui->isVirtual->setChecked(info.isVirtual());
+            //ui->isFlexibleDataRateCapable->setChecked(info.hasFlexibleDataRate());
+            break;
+        }
+    }
 }
 
 void MainWindow::inpZMQ(){
@@ -281,6 +320,68 @@ void MainWindow::canRcv(){
         }
         ui->statBar->showMessage(statLocalMess);
     }
+}
+
+void MainWindow::updateSettings(){
+    canSettings.pluginName = ui->cBCanPlugin->currentText();
+    canSettings.deviceInterfaceName = ui->cBCanName->currentText();
+    //canSettings.useConfigurationEnabled = ui->useConfigurationBox->isChecked();
+
+    //canSettings.useModelRingBuffer = ui->ringBufferBox->isChecked();
+    //canSettings.modelRingBufferSize = ui->ringBufferLimitBox->value();
+    //canSettings.useAutoscroll = ui->autoscrollBox->isChecked();
+
+    /*if (canSettings.useConfigurationEnabled) {
+        canSettings.configurations.clear();
+        // process LoopBack
+        if (ui->loopbackBox->currentIndex() != 0) {
+            ConfigurationItem item;
+            item.first = QCanBusDevice::LoopbackKey;
+            item.second = ui->loopbackBox->currentData();
+            canSettings.configurations.append(item);
+        }
+
+        // process ReceiveOwnKey
+        if (ui->receiveOwnBox->currentIndex() != 0) {
+            ConfigurationItem item;
+            item.first = QCanBusDevice::ReceiveOwnKey;
+            item.second = ui->receiveOwnBox->currentData();
+            canSettings.configurations.append(item);
+        }
+
+        // process error filter
+        if (!ui->errorFilterEdit->text().isEmpty()) {
+            QString value = ui->errorFilterEdit->text();
+            bool ok = false;
+            int dec = value.toInt(&ok);
+            if (ok) {
+                ConfigurationItem item;
+                item.first = QCanBusDevice::ErrorFilterKey;
+                item.second = QVariant::fromValue(QCanBusFrame::FrameErrors(dec));
+                canSettings.configurations.append(item);
+            }
+        }
+
+        // process bitrate
+        const int bitrate = ui->bitrateBox->bitRate();
+        if (bitrate > 0) {
+            const ConfigurationItem item(QCanBusDevice::BitRateKey, QVariant(bitrate));
+            canSettings.configurations.append(item);
+        }
+
+        // process CAN FD setting
+        ConfigurationItem fdItem;
+        fdItem.first = QCanBusDevice::CanFdKey;
+        fdItem.second = ui->canFdBox->currentData();
+        canSettings.configurations.append(fdItem);
+
+        // process data bitrate
+        const int dataBitrate = ui->dataBitrateBox->bitRate();
+        if (dataBitrate > 0) {
+            const ConfigurationItem item(QCanBusDevice::DataBitRateKey, QVariant(dataBitrate));
+            canSettings.configurations.append(item);
+        }
+    }*/
 }
 
 void MainWindow::fillCanLines(QFile &file, int linesAmount){
