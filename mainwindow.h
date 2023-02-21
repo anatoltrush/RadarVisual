@@ -41,6 +41,7 @@ private:
     // ----- ----- ----- INPUT FROM CAN ----- ----- -----
     int handle = 0;
 #ifdef __WIN32
+    Settings canSettings;
 #else
     struct sockaddr_can sockAddr;
     struct ifreq ifr;

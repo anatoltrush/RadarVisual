@@ -9,6 +9,7 @@
 #include <QScreen>
 
 #ifdef __WIN32
+#include <QCanBus>
 #else
 #include <net/if.h>
 #include <linux/can.h>
@@ -85,9 +86,9 @@ enum class InUse{
 };
 
 struct MessageId{
-    uint64_t _msg_src = 0;
-    uint64_t _msg_num = 0;
-    int64_t _time = 0;
+    uint64_t _msg_src   = 0;
+    uint64_t _msg_num   = 0;
+    uint64_t _time      = 0;
 
     inline MessageId& operator = (const MessageId& id){
         _msg_src = id._msg_src;
@@ -110,7 +111,15 @@ struct canfd_frame{
     __u8    __res1;  /* reserved / padding */
     __u8    data[CANFD_MAX_DLEN] __attribute__((aligned(8)));
 };
-#else
+
+typedef QPair<QCanBusDevice::ConfigurationKey, QVariant> ConfigurationItem;
+
+struct Settings {
+    QString pluginName;
+    QString deviceInterfaceName;
+    QList<ConfigurationItem> configurations;
+    bool useConfigurationEnabled = false;
+};
 #endif
 
 struct ZmqCanMessage{
@@ -147,7 +156,7 @@ public:
     bool thrRcs         = false;
 
     uint8_t canNum      = 0;
-    uint8_t id       = 0;
+    uint8_t id          = 0;
     uint8_t power       = 0;
     uint8_t sortInd     = 0;
     uint8_t outputType  = 0;
@@ -231,9 +240,5 @@ struct ObjectInfo{
     ObjectClass objClass = ObjectClass::reserved;
     void clacAzimuth(){azimuth = std::atan(distLat / distLong) * 180.0f / M_PI;}
 };
-
-struct ObjectExt{};
-
-struct ObjectCollision{};
 
 #endif // ENTITY_H

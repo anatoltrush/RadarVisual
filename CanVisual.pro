@@ -1,6 +1,6 @@
 TARGET  = CanVisual
 CONFIG  += c++17
-QT      += core gui widgets serialbus
+QT      += core gui widgets
 
 QMAKE_TARGET_COPYRIGHT = Anatol Trush
 QMAKE_TARGET_DESCRIPTION = For work with ARS 408-21
@@ -23,6 +23,8 @@ INCLUDEPATH += C:\ZeroMQ\include
 LIBS += C:\ZeroMQ\bin\libzmq.dll
 
 INCLUDEPATH += C:\cppzmq\include
+
+QT      += serialbus
 }
 unix:{
 LIBS += -L/usr/local/lib \

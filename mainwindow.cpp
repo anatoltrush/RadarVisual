@@ -59,6 +59,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     connect(ui->pBPlayFile, SIGNAL(clicked()), this, SLOT(playFile()));
     connect(ui->pBStopFile, SIGNAL(clicked()), this, SLOT(stopFile()));
 
+#ifdef __WIN32
+    ui->lEInpCAN->hide();
+    ui->cBCanPlugin->addItems(QCanBus::instance()->plugins());
+    if(ui->cBCanPlugin->count() >= 5)
+        ui->cBCanPlugin->setCurrentText("socketcan");
+#else
+    ui->cBCanPlugin->hide();
+    ui->cBCanName->hide();
+#endif
     // --- click ---
     ui->pBAddDisplay->click();
 }
