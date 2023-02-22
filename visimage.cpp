@@ -182,7 +182,7 @@ void VisImage::drawObjectsExt(){
 
     for (const auto& obj : objects) {
         QColor colObjExt = (*colors)[static_cast<uint8_t>(obj.type)];
-        painter->setPen(colObjExt);
+        painter->setPen(QPen(colObjExt, 2));
         int xObj = width()/2 + obj.distLat / (float)gridStepM * gridStepPx;
         int yObj = height() - obj.distLong / (float)gridStepM * gridStepPx;
         int wPx = obj.width / (float)gridStepM * gridStepPx;
