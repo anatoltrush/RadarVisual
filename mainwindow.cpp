@@ -172,6 +172,7 @@ void MainWindow::inpCAN(){
     ui->pBStart->setEnabled(true);
 }
 
+#ifdef __WIN32
 void MainWindow::pluginChanged(const QString &plugin){
     ui->cBCanName->clear();
     interfaces = QCanBus::instance()->availableDevices(plugin);
@@ -201,6 +202,7 @@ void MainWindow::interfaceChanged(const QString &interf){
         }
     }
 }
+#endif
 
 void MainWindow::inpZMQ(){
     ui->pBStart->setEnabled(true);
@@ -215,6 +217,67 @@ void MainWindow::inpFile(){
 }
 
 #ifdef __WIN32
+void MainWindow::updateSettings(){
+    canSettings.pluginName = ui->cBCanPlugin->currentText();
+    canSettings.deviceInterfaceName = ui->cBCanName->currentText();
+    //canSettings.useConfigurationEnabled = ui->useConfigurationBox->isChecked();
+
+    //canSettings.useModelRingBuffer = ui->ringBufferBox->isChecked();
+    //canSettings.modelRingBufferSize = ui->ringBufferLimitBox->value();
+    //canSettings.useAutoscroll = ui->autoscrollBox->isChecked();
+
+    /*if (canSettings.useConfigurationEnabled) {
+        canSettings.configurations.clear();
+        // process LoopBack
+        if (ui->loopbackBox->currentIndex() != 0) {
+            ConfigurationItem item;
+            item.first = QCanBusDevice::LoopbackKey;
+            item.second = ui->loopbackBox->currentData();
+            canSettings.configurations.append(item);
+        }
+
+        // process ReceiveOwnKey
+        if (ui->receiveOwnBox->currentIndex() != 0) {
+            ConfigurationItem item;
+            item.first = QCanBusDevice::ReceiveOwnKey;
+            item.second = ui->receiveOwnBox->currentData();
+            canSettings.configurations.append(item);
+        }
+
+        // process error filter
+        if (!ui->errorFilterEdit->text().isEmpty()) {
+            QString value = ui->errorFilterEdit->text();
+            bool ok = false;
+            int dec = value.toInt(&ok);
+            if (ok) {
+                ConfigurationItem item;
+                item.first = QCanBusDevice::ErrorFilterKey;
+                item.second = QVariant::fromValue(QCanBusFrame::FrameErrors(dec));
+                canSettings.configurations.append(item);
+            }
+        }
+
+        // process bitrate
+        const int bitrate = ui->bitrateBox->bitRate();
+        if (bitrate > 0) {
+            const ConfigurationItem item(QCanBusDevice::BitRateKey, QVariant(bitrate));
+            canSettings.configurations.append(item);
+        }
+
+        // process CAN FD setting
+        ConfigurationItem fdItem;
+        fdItem.first = QCanBusDevice::CanFdKey;
+        fdItem.second = ui->canFdBox->currentData();
+        canSettings.configurations.append(fdItem);
+
+        // process data bitrate
+        const int dataBitrate = ui->dataBitrateBox->bitRate();
+        if (dataBitrate > 0) {
+            const ConfigurationItem item(QCanBusDevice::DataBitRateKey, QVariant(dataBitrate));
+            canSettings.configurations.append(item);
+        }
+    }*/
+}
 #else
 bool MainWindow::openCan(const std::string &device){
     isCanOpened = false;
@@ -320,68 +383,6 @@ void MainWindow::canRcv(){
         }
         ui->statBar->showMessage(statLocalMess);
     }
-}
-
-void MainWindow::updateSettings(){
-    canSettings.pluginName = ui->cBCanPlugin->currentText();
-    canSettings.deviceInterfaceName = ui->cBCanName->currentText();
-    //canSettings.useConfigurationEnabled = ui->useConfigurationBox->isChecked();
-
-    //canSettings.useModelRingBuffer = ui->ringBufferBox->isChecked();
-    //canSettings.modelRingBufferSize = ui->ringBufferLimitBox->value();
-    //canSettings.useAutoscroll = ui->autoscrollBox->isChecked();
-
-    /*if (canSettings.useConfigurationEnabled) {
-        canSettings.configurations.clear();
-        // process LoopBack
-        if (ui->loopbackBox->currentIndex() != 0) {
-            ConfigurationItem item;
-            item.first = QCanBusDevice::LoopbackKey;
-            item.second = ui->loopbackBox->currentData();
-            canSettings.configurations.append(item);
-        }
-
-        // process ReceiveOwnKey
-        if (ui->receiveOwnBox->currentIndex() != 0) {
-            ConfigurationItem item;
-            item.first = QCanBusDevice::ReceiveOwnKey;
-            item.second = ui->receiveOwnBox->currentData();
-            canSettings.configurations.append(item);
-        }
-
-        // process error filter
-        if (!ui->errorFilterEdit->text().isEmpty()) {
-            QString value = ui->errorFilterEdit->text();
-            bool ok = false;
-            int dec = value.toInt(&ok);
-            if (ok) {
-                ConfigurationItem item;
-                item.first = QCanBusDevice::ErrorFilterKey;
-                item.second = QVariant::fromValue(QCanBusFrame::FrameErrors(dec));
-                canSettings.configurations.append(item);
-            }
-        }
-
-        // process bitrate
-        const int bitrate = ui->bitrateBox->bitRate();
-        if (bitrate > 0) {
-            const ConfigurationItem item(QCanBusDevice::BitRateKey, QVariant(bitrate));
-            canSettings.configurations.append(item);
-        }
-
-        // process CAN FD setting
-        ConfigurationItem fdItem;
-        fdItem.first = QCanBusDevice::CanFdKey;
-        fdItem.second = ui->canFdBox->currentData();
-        canSettings.configurations.append(fdItem);
-
-        // process data bitrate
-        const int dataBitrate = ui->dataBitrateBox->bitRate();
-        if (dataBitrate > 0) {
-            const ConfigurationItem item(QCanBusDevice::DataBitRateKey, QVariant(dataBitrate));
-            canSettings.configurations.append(item);
-        }
-    }*/
 }
 
 void MainWindow::fillCanLines(QFile &file, int linesAmount){

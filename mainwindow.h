@@ -21,8 +21,10 @@ private slots:
     void addDisplay();
 
     void inpCAN();
+#ifdef __WIN32
     void pluginChanged(const QString &plugin);
     void interfaceChanged(const QString &interf);
+#endif
     void inpZMQ();
     void inpFile();
 
@@ -54,11 +56,11 @@ private:
     std::thread thrCanRcv;
     bool isCanOpened = false;
 #ifdef __WIN32
+    void updateSettings();
 #else
     bool openCan(const std::string &device);
 #endif
     void canRcv();
-    void updateSettings();
 
     // ----- ----- ----- INPUT FROM ZMQ ----- ----- -----
     bool isSubscrStarted = false;
