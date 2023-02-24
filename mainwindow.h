@@ -84,5 +84,6 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: ?Objects collision & Clusters config #202
+// TODO: ?Collisions #400, #401
 // TODO: ?Windows (Serial bus)
 // TODO: ?Calc spent dist

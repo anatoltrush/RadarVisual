@@ -161,7 +161,7 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
 
         // --- dist ---
         configRadar.setFarZone(Converter::getDecData(canLine.messData, 8, 10));
-        configRadar.setFarZone(configRadar.getFarZone() * resClustMaxDist);
+        configRadar.setFarZone(configRadar.getFarZone() * resConfRadMaxDist);
 
         // --- pers error ---
         configRadar.persistErr = Converter::getDecData(canLine.messData, 18, 1);

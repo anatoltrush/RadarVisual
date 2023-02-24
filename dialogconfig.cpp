@@ -8,8 +8,10 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
         ui->cBoxSetRadId->addItem("ID " + QString::number(i));
 
     // --- connections ---
+    // --- radar ---
     connect(ui->pBClearResStr, SIGNAL(clicked()), this, SLOT(clearResStr()));
-    connect(ui->pBGenRadConf, SIGNAL(clicked()), this, SLOT(generateCommand()));
+    connect(ui->pBGenRadConf, SIGNAL(clicked()), this, SLOT(genRadConfComm()));
+    connect(ui->pBGenClObjConf, SIGNAL(clicked()), this, SLOT(genClObjConfComm()));
     connect(ui->pBSend, SIGNAL(clicked()), this, SLOT(send()));
 
     connect(ui->cBSetRadQual, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadQual(bool)));
@@ -33,6 +35,13 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     emit ui->cBSetRadOut->clicked(false);
     emit ui->cBSetRadPow->clicked(false);
     emit ui->cBSetRadId->clicked(false);
+
+    // --- clusters/objects ---
+    connect(ui->cBSetClObjDist, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDist(bool)));
+    connect(ui->cBSetClObjDistA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistAct(bool)));
+
+    emit ui->cBSetClObjDist->clicked(false);
+    emit ui->cBSetClObjDistA->clicked(false);
 }
 
 DialogConfig::~DialogConfig(){
@@ -159,8 +168,7 @@ void DialogConfig::clearResStr(){
     ui->lEResStr->clear();
 }
 
-
-void DialogConfig::generateCommand(){
+void DialogConfig::genRadConfComm(){
     QString binStr(64, '0');
 
     // --- ID ---
@@ -213,7 +221,7 @@ void DialogConfig::generateCommand(){
 
     // --- distance ---
     if(ui->cBSetRadDist->isChecked()){
-        QString dist = QString::number((uint16_t)(ui->sBSetRadDist->value() / resClustMaxDist));
+        QString dist = QString::number((uint16_t)(ui->sBSetRadDist->value() / resConfRadMaxDist));
         uint8_t bitLen = 10;
         QString binDist = Converter::decToBin(dist, bitLen);
         binStr.replace(7, 1, "1");
@@ -274,6 +282,27 @@ void DialogConfig::generateCommand(){
     // ---
 
     ui->lEResStr->setText(resStr);
+}
+
+void DialogConfig::genClObjConfComm(){
+    std::vector<QString> commands;
+
+    // hide lE insert cBox;
+
+    QString binStr(40, '0');
+
+    // --- distance ---
+    if(ui->cBSetClObjDist->isChecked()){
+        if(ui->cBSetClObjDistA->isChecked()){ // active
+            QString distMin = QString::number((uint16_t)(ui->sBSetClObjDistMin->value() / resFiltMinDist));
+            QString distMax = QString::number((uint16_t)(ui->sBSetClObjDistMax->value() / resFiltMinDist));
+        }
+        else{ // not active
+
+        }
+    }
+
+    //ui->lEResStr->hide();
 }
 
 void DialogConfig::send(){
@@ -402,4 +431,15 @@ void DialogConfig::showHideSetRadPow(bool checked){
 
 void DialogConfig::showHideSetRadId(bool checked){
     ui->cBoxSetRadId->setEnabled(checked);
+}
+
+void DialogConfig::showHideSetClObjDist(bool checked){
+    ui->cBSetClObjDistA->setEnabled(checked);
+    ui->sBSetClObjDistMin->setEnabled(ui->cBSetClObjDistA->isEnabled()&& ui->cBSetClObjDistA->isChecked());
+    ui->sBSetClObjDistMax->setEnabled(ui->cBSetClObjDistA->isEnabled() && ui->cBSetClObjDistA->isChecked());
+}
+
+void DialogConfig::showHideSetClObjDistAct(bool checked){
+    ui->sBSetClObjDistMin->setEnabled(checked);
+    ui->sBSetClObjDistMax->setEnabled(checked);
 }

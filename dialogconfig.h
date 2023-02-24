@@ -29,7 +29,8 @@ public:
 
 private slots:
     void clearResStr();
-    void generateCommand();
+    void genRadConfComm();
+    void genClObjConfComm();
     void send();
 
     void showHideSetRadQual(bool checked);
@@ -42,6 +43,9 @@ private slots:
     void showHideSetRadOut(bool checked);
     void showHideSetRadPow(bool checked);
     void showHideSetRadId(bool checked);
+
+    void showHideSetClObjDist(bool checked);
+    void showHideSetClObjDistAct(bool checked);
 
 private:
     Ui::DialogConfig *ui;

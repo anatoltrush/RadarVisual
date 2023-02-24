@@ -918,6 +918,7 @@
            <widget class="QPushButton" name="pBGenRadConf">
             <property name="font">
              <font>
+              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -936,261 +937,62 @@
        <string>Clusters/Objects configuration</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_8">
-       <item row="5" column="1">
-        <widget class="QGroupBox" name="groupBox_10">
-         <property name="title">
-          <string>GroupBox</string>
+       <item row="1" column="3">
+        <widget class="QGroupBox" name="groupBox_8">
+         <property name="enabled">
+          <bool>false</bool>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QRadioButton" name="radioButton_3">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QRadioButton" name="radioButton_11">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="3">
-        <widget class="QGroupBox" name="groupBox_16">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QRadioButton" name="radioButton">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QRadioButton" name="radioButton_5">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="3">
-        <widget class="QGroupBox" name="groupBox_12">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="3">
-        <widget class="QPushButton" name="pBGenClObjConf">
-         <property name="font">
-          <font>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Generate</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QRadioButton" name="radioButton_6">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="QGroupBox" name="groupBox_14">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QGroupBox" name="groupBox_9">
          <property name="title">
           <string>GroupBox</string>
          </property>
         </widget>
        </item>
        <item row="0" column="3">
-        <widget class="QRadioButton" name="radioButton_4">
-         <property name="text">
-          <string>RadioButton</string>
+        <widget class="QGroupBox" name="gBSetClObjRcs">
+         <property name="enabled">
+          <bool>false</bool>
          </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QRadioButton" name="radioButton_7">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QGroupBox" name="groupBox_3">
          <property name="title">
-          <string>GroupBox</string>
+          <string>RCS</string>
          </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="QGroupBox" name="groupBox_15">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="3">
-        <widget class="QRadioButton" name="radioButton_12">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QRadioButton" name="radioButton_8">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QGroupBox" name="groupBox_7">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QRadioButton" name="radioButton_10">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QRadioButton" name="radioButton_9">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QRadioButton" name="radioButton_2">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="QGroupBox" name="groupBox_8">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QGroupBox" name="groupBox_6">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QGroupBox" name="groupBox_11">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QGroupBox" name="groupBox_13">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QGroupBox" name="groupBox_4">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QRadioButton" name="radioButton_13">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QRadioButton" name="radioButton_14">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="QRadioButton" name="radioButton_15">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="3">
-        <widget class="QRadioButton" name="radioButton_16">
-         <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="QGroupBox" name="groupBox_17">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_5">
+         <layout class="QGridLayout" name="gridLayout_35">
           <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <widget class="QCheckBox" name="cBSetClObjRcs">
+            <property name="text">
+             <string>Valid</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="cBSetClObjRcsA">
+            <property name="text">
+             <string>Active</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
             <item>
-             <widget class="QRadioButton" name="radioButton_17">
+             <widget class="QSpinBox" name="spinBox_5"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>RadioButton</string>
+               <string>TextLabel</string>
               </property>
              </widget>
             </item>
+           </layout>
+          </item>
+          <item row="3" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
-             <widget class="QRadioButton" name="radioButton_18">
+             <widget class="QSpinBox" name="spinBox_4"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_6">
               <property name="text">
-               <string>RadioButton</string>
+               <string>TextLabel</string>
               </property>
              </widget>
             </item>
@@ -1199,16 +1001,366 @@
          </layout>
         </widget>
        </item>
+       <item row="1" column="2">
+        <widget class="QGroupBox" name="groupBox_7">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="gBSetClObjDist">
+         <property name="title">
+          <string>Distance</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QCheckBox" name="cBSetClObjDist">
+              <property name="text">
+               <string>Valid</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="cBSetClObjDistA">
+              <property name="text">
+               <string>Active</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="hLSetClObjDistMin">
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>min:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="sBSetClObjDistMin">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximum">
+               <number>409</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>m</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="hLSetClObjDistMax">
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>max</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="sBSetClObjDistMax">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximum">
+               <number>409</number>
+              </property>
+              <property name="value">
+               <number>409</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>m</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QGroupBox" name="groupBox_13">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QGroupBox" name="groupBox_14">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QGroupBox" name="groupBox_12">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="gBSetClObjNofObj">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>Number of objects</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="cBSetClObjNofObj">
+            <property name="text">
+             <string>Valid</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="cBSetClObjNofObjA">
+            <property name="text">
+             <string>Active</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="spinBox_7"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QGroupBox" name="groupBox_11">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QGroupBox" name="gBSetClObjAzim">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>Azimuth</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_34">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="cBSetClObjAzim">
+            <property name="text">
+             <string>Valid</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QSpinBox" name="spinBox_3"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="cBSetClObjAzimA">
+            <property name="text">
+             <string>Active</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QSpinBox" name="spinBox_6"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QGroupBox" name="groupBox_15">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3">
+        <widget class="QPushButton" name="pBGenClObjConf">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Generate</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QGroupBox" name="groupBox_16">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QGroupBox" name="gBSetClObjType">
+         <property name="title">
+          <string>Type</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QRadioButton" name="rBSetClObjTypeCl">
+              <property name="text">
+               <string>Clusters</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rBSetClObjTypeObj">
+              <property name="text">
+               <string>Objects</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
    </item>
    <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="hLResult">
      <item>
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -1234,6 +1386,7 @@
        </property>
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -1260,6 +1413,7 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>

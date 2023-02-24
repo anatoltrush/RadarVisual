@@ -79,12 +79,13 @@ CanLine Converter::getCanLineFromCanFd(const std::string &device, const canfd_fr
 
 QString Converter::binToHex(const QString &binStr){
     QString hexStr;
+    uint8_t points = binStr.length() / 8 - 1;
     bool ok = false;
     hexStr = QString::number(binStr.toULongLong(&ok, 2), 16);
     while (hexStr.length() < binStr.length() / 4)
         hexStr.prepend("0");
     hexStr = hexStr.toUpper();
-    for (size_t i = 0; i < 7; i++){
+    for (size_t i = 0; i < points; i++){
         uint8_t ind = i * 3 + 2;
         hexStr.insert(ind, '.');
     }
