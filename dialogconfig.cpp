@@ -8,6 +8,13 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
         ui->cBoxSetRadId->addItem("ID " + QString::number(i));
 
     // --- connections ---
+    connect(ui->tWConfig, SIGNAL(currentChanged(int)), this, SLOT(showHideLineCombo(int)));
+    ui->tWConfig->setCurrentIndex(0);
+
+    connect(ui->rBSetClObjTypeCl, SIGNAL(clicked()), this, SLOT(updateUIClusters()()));
+    connect(ui->rBSetClObjTypeObj, SIGNAL(clicked()), this, SLOT(updateUIObjects()()));
+    ui->rBSetClObjTypeCl->click();
+
     // --- radar ---
     connect(ui->pBClearResStr, SIGNAL(clicked()), this, SLOT(clearResStr()));
     connect(ui->pBGenRadConf, SIGNAL(clicked()), this, SLOT(genRadConfComm()));
@@ -37,10 +44,10 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     emit ui->cBSetRadId->clicked(false);
 
     // --- clusters/objects ---
-    connect(ui->cBSetClObjDist, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDist(bool)));
+    connect(ui->cBSetClObjDistV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistVal(bool)));
     connect(ui->cBSetClObjDistA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistAct(bool)));
 
-    emit ui->cBSetClObjDist->clicked(false);
+    emit ui->cBSetClObjDistV->clicked(false);
     emit ui->cBSetClObjDistA->clicked(false);
 }
 
@@ -166,6 +173,7 @@ void DialogConfig::updateUI(){
 
 void DialogConfig::clearResStr(){
     ui->lEResStr->clear();
+    ui->cBResStr->clear();
 }
 
 void DialogConfig::genRadConfComm(){
@@ -263,6 +271,7 @@ void DialogConfig::genRadConfComm(){
             binStr.replace(32, 3, "011");
     }
 
+    // --- cansend + bin to hex ---
     QString resStr;
     if(*inUse == InUse::can)
         resStr = ("cansend " + QString::fromStdString(deviceName) + " 2" + QString::number(configRadar->id) + "0#");
@@ -270,39 +279,58 @@ void DialogConfig::genRadConfComm(){
         resStr = ("cansend can" + QString::number(configRadar->canNum) + " 2" + QString::number(configRadar->id) + "0#");
     resStr += Converter::binToHex(binStr);
 
-    // --- send line ---
-    if(resStr.length() == 40){
+    // --- canline for zmq line ---
+    if(resStr.length() >= 40){
         QStringList listData = resStr.split(' ');
-        sendLine.timeStamp = GET_CUR_TIME_MICRO;
-        sendLine.canNum = listData[1];
-        sendLine.messId = listData[2].mid(0, 3);
-        sendLine.messData = listData[2].mid(4, 23);
-        sendLine.messData.remove('.');
+        zmqCanLine.timeStamp = GET_CUR_TIME_MICRO;
+        zmqCanLine.canNum = listData[1];
+        zmqCanLine.messId = listData[2].mid(0, 3);
+        zmqCanLine.messData = listData[2].mid(4, 23);
+        zmqCanLine.messData.remove('.');
     }
-    // ---
-
+    // --- UI ---
     ui->lEResStr->setText(resStr);
 }
 
 void DialogConfig::genClObjConfComm(){
-    std::vector<QString> commands;
-
-    // hide lE insert cBox;
-
-    QString binStr(40, '0');
+    ui->cBResStr->clear();
+    QList<QString> commands;
 
     // --- distance ---
-    if(ui->cBSetClObjDist->isChecked()){
+    if(ui->cBSetClObjDistV->isChecked()){
+        QString strDist(40, '0');
+        strDist.replace(6, 1, "1"); // valid
+        strDist.replace(1, 4, "0001"); // index
+        ui->rBSetClObjTypeCl->isChecked() ? strDist.replace(0, 1, "0") : strDist.replace(0, 1, "1"); // type
         if(ui->cBSetClObjDistA->isChecked()){ // active
+            strDist.replace(5, 1, "1"); // active
+            uint8_t bitLen = 12;
             QString distMin = QString::number((uint16_t)(ui->sBSetClObjDistMin->value() / resFiltMinDist));
+            strDist.replace(12, bitLen, Converter::decToBin(distMin, bitLen));
             QString distMax = QString::number((uint16_t)(ui->sBSetClObjDistMax->value() / resFiltMinDist));
+            strDist.replace(28, bitLen, Converter::decToBin(distMax, bitLen));
         }
         else{ // not active
-
+            strDist.replace(5, 0, "1");
         }
+        commands.append(strDist);
     }
 
-    //ui->lEResStr->hide();
+    // --- cansend + bin to hex ---
+    for(auto& comm: commands){
+        QString resStr;
+        if(*inUse == InUse::can)
+            resStr = ("cansend " + QString::fromStdString(deviceName) + " 2" + QString::number(configRadar->id) + "2#");
+        else
+            resStr = ("cansend can" + QString::number(configRadar->canNum) + " 2" + QString::number(configRadar->id) + "2#");
+        resStr += Converter::binToHex(comm);
+        comm = resStr;
+    }
+
+    // --- canlines for zmq line ---
+
+    // --- UI ---
+    ui->cBResStr->addItems(commands);
 }
 
 void DialogConfig::send(){
@@ -343,7 +371,7 @@ void DialogConfig::send(){
                 idToCan._msg_src = configRadar->id;
                 canfd_frame canFrame;
 
-                Converter::getCanFdFromCanLine(canFrame, sendLine);
+                Converter::getCanFdFromCanLine(canFrame, zmqCanLine);
                 Converter::getZmqFromCanFd(messToCan, canFrame, idToCan);
                 // ---
                 std::string whatSend;
@@ -433,7 +461,26 @@ void DialogConfig::showHideSetRadId(bool checked){
     ui->cBoxSetRadId->setEnabled(checked);
 }
 
-void DialogConfig::showHideSetClObjDist(bool checked){
+void DialogConfig::showHideLineCombo(int index){
+    if(index == 0){
+        ui->lEResStr->show();
+        ui->cBResStr->hide();
+    }
+    else{
+        ui->cBResStr->show();
+        ui->lEResStr->hide();
+    }
+}
+
+void DialogConfig::updateUIClusters(){
+    // TODO: implement show/hide
+}
+
+void DialogConfig::updateUIObjects(){
+    // TODO: implement show/hide
+}
+
+void DialogConfig::showHideSetClObjDistVal(bool checked){
     ui->cBSetClObjDistA->setEnabled(checked);
     ui->sBSetClObjDistMin->setEnabled(ui->cBSetClObjDistA->isEnabled()&& ui->cBSetClObjDistA->isChecked());
     ui->sBSetClObjDistMax->setEnabled(ui->cBSetClObjDistA->isEnabled() && ui->cBSetClObjDistA->isChecked());

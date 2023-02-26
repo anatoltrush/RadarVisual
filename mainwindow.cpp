@@ -480,8 +480,8 @@ void MainWindow::loadFile(){
     }
     else{
         std::ifstream fileStream(pathFileCanLog.toStdString());
-        int stringCount = std::distance((std::istream_iterator<std::string>(fileStream)),
-                                        (std::istream_iterator<std::string>())) / 3; // 3 words in line
+        int stringCount = std::distance(std::istream_iterator<std::string>(fileStream),
+                                        std::istream_iterator<std::string>()) / 3; // 3 words in line
         fillCanLines(file, stringCount); // ...loading...
         ui->pBLoadFile->setStyleSheet("background-color: green");
         isFileLoaded = true;

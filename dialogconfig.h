@@ -44,7 +44,11 @@ private slots:
     void showHideSetRadPow(bool checked);
     void showHideSetRadId(bool checked);
 
-    void showHideSetClObjDist(bool checked);
+    void showHideLineCombo(int index);
+    void updateUIClusters();
+    void updateUIObjects();
+
+    void showHideSetClObjDistVal(bool checked);
     void showHideSetClObjDistAct(bool checked);
 
 private:
@@ -54,7 +58,9 @@ private:
     uint64_t msg_num = 0;
     Client zmqClient;
     QString zmqAddrSend;
-    CanLine sendLine;
+    CanLine zmqCanLine;
+
+    std::vector<CanLine>zmqCanLines;
 };
 
 #endif // DIALOGCONFIG_H
