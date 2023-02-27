@@ -8,11 +8,11 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
         ui->cBoxSetRadId->addItem("ID " + QString::number(i));
 
     // --- connections ---
-    connect(ui->tWConfig, SIGNAL(currentChanged(int)), this, SLOT(showHideLineCombo(int)));
+    connect(ui->tWConfig, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     ui->tWConfig->setCurrentIndex(0);
 
-    connect(ui->rBSetClObjTypeCl, SIGNAL(clicked()), this, SLOT(updateUIClusters()()));
-    connect(ui->rBSetClObjTypeObj, SIGNAL(clicked()), this, SLOT(updateUIObjects()()));
+    connect(ui->rBSetClObjTypeCl, SIGNAL(clicked()), this, SLOT(updateUIClusters()));
+    connect(ui->rBSetClObjTypeObj, SIGNAL(clicked()), this, SLOT(updateUIObjects()));
     ui->rBSetClObjTypeCl->click();
 
     // --- radar ---
@@ -299,9 +299,9 @@ void DialogConfig::genClObjConfComm(){
     // --- distance ---
     if(ui->cBSetClObjDistV->isChecked()){
         QString strDist(40, '0');
-        strDist.replace(6, 1, "1"); // valid
-        strDist.replace(1, 4, "0001"); // index
         ui->rBSetClObjTypeCl->isChecked() ? strDist.replace(0, 1, "0") : strDist.replace(0, 1, "1"); // type
+        strDist.replace(1, 4, "0001"); // index
+        strDist.replace(6, 1, "1"); // valid
         if(ui->cBSetClObjDistA->isChecked()){ // active
             strDist.replace(5, 1, "1"); // active
             uint8_t bitLen = 12;
@@ -311,7 +311,7 @@ void DialogConfig::genClObjConfComm(){
             strDist.replace(28, bitLen, Converter::decToBin(distMax, bitLen));
         }
         else{ // not active
-            strDist.replace(5, 0, "1");
+            strDist.replace(5, 1, "0");
         }
         commands.append(strDist);
     }
@@ -334,6 +334,10 @@ void DialogConfig::genClObjConfComm(){
 }
 
 void DialogConfig::send(){
+    ui->tWConfig->currentIndex() == 0 ? sendOne() : sendMulti();
+}
+
+void DialogConfig::sendOne(){
     if(ui->lEResStr->text().isEmpty()){
         QMessageBox::information(this, "Send...", "Empty can string");
         return;
@@ -409,6 +413,57 @@ void DialogConfig::send(){
     }
 }
 
+void DialogConfig::sendMulti(){
+    if(ui->cBResStr->count() == 0){
+        QMessageBox::information(this, "Send...", "Empty can list");
+        return;
+    }
+    // --- --- ---
+    switch (*inUse) {
+    case InUse::nothing:    // --- NTHNG ---
+        QMessageBox::information(this, "Send...", "Nothing started");
+        break;
+    case InUse::can:{       // --- CAN ---
+        for (int i = 0; i < ui->cBResStr->count(); i++) {
+            int res = system(ui->cBResStr->itemText(i).toStdString().c_str());
+            if(res != 0){
+                ui->pBSend->setStyleSheet("background-color: red");
+                QMessageBox::information(this, "Send via CAN...", "Smthng wrong: " + QString::number(res));
+                break;
+            }
+        }
+        ui->pBSend->setStyleSheet("background-color: green");
+        break;
+    }
+    case InUse::zmq:{       // --- ZMQ ---
+        if(ui->lESendZmq->text().isEmpty()){
+            QMessageBox::information(this, "Send via ZMQ", "Empty ZMQ address");
+            return;
+        }
+        else{
+            zmqClient.stop();
+            zmqAddrSend = ui->lESendZmq->text();
+            zmqClient.configure(zmqAddrSend.toStdString());
+            std::string whatStart;
+            bool isCliStarted = zmqClient.start(whatStart);
+            if(isCliStarted){
+                // TODO: implement
+            }
+            else{
+                ui->lSendZmq->setStyleSheet("background-color: red");
+                QMessageBox::information(this, "Send via ZMQ", "Can't start ZMQ:\n" + QString::fromStdString(whatStart));
+            }
+        }
+        break;
+    }
+    case InUse::file:       // --- FILE ---
+        QMessageBox::information(this, "Send...", "What are you going to send to the file? :-)");
+        break;
+    default:
+        break;
+    }
+}
+
 void DialogConfig::showHideSetRadQual(bool checked){
     ui->rBSetRadQualIn->setEnabled(checked);
     ui->rBSetRadQualAct->setEnabled(checked);
@@ -461,7 +516,7 @@ void DialogConfig::showHideSetRadId(bool checked){
     ui->cBoxSetRadId->setEnabled(checked);
 }
 
-void DialogConfig::showHideLineCombo(int index){
+void DialogConfig::tabChanged(int index){
     if(index == 0){
         ui->lEResStr->show();
         ui->cBResStr->hide();

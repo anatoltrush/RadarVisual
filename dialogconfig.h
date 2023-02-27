@@ -32,6 +32,8 @@ private slots:
     void genRadConfComm();
     void genClObjConfComm();
     void send();
+    void sendOne();
+    void sendMulti();
 
     void showHideSetRadQual(bool checked);
     void showHideSetRadExt(bool checked);
@@ -44,7 +46,7 @@ private slots:
     void showHideSetRadPow(bool checked);
     void showHideSetRadId(bool checked);
 
-    void showHideLineCombo(int index);
+    void tabChanged(int index);
     void updateUIClusters();
     void updateUIObjects();
 

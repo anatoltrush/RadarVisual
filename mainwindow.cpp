@@ -59,10 +59,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     connect(ui->pBPlayFile, SIGNAL(clicked()), this, SLOT(playFile()));
     connect(ui->pBStopFile, SIGNAL(clicked()), this, SLOT(stopFile()));
 
+#ifdef __WIN32
     connect(ui->cBCanPlugin, SIGNAL(currentTextChanged(QString)), this, SLOT(pluginChanged(QString)));
     connect(ui->cBCanName, SIGNAL(currentTextChanged(QString)), this, SLOT(interfaceChanged(QString)));
 
-#ifdef __WIN32
     ui->lEInpCAN->hide();
     QLabel* lPlug = new QLabel(this);
     lPlug->setText("plugin:");
@@ -429,7 +429,10 @@ void MainWindow::playCanFile(){
                     /*std::cout << currInd << " | "<< GET_CUR_TIME_MICRO << " | " << canLines[currInd].messId.toStdString()
                               << " | " << canLines[currInd].messData.toStdString() << std::endl;*/
                     // --- send to display ---
-                    if (canLines[currInd].messId.size() != 3) continue;
+                    if (canLines[currInd].messId.size() != 3){
+                        currInd++;
+                        continue;
+                    }
                     sendToDisplay(canLines[currInd]);
                     // --- stop ---
                     if(currInd >= (canLines.size() - 1)){
@@ -479,7 +482,8 @@ void MainWindow::loadFile(){
         return;
     }
     else{
-        std::ifstream fileStream(pathFileCanLog.toStdString());
+        //std::ifstream fileStream(pathFileCanLog.toStdString());
+        std::ifstream fileStream(pathFileCanLog.toLocal8Bit());
         int stringCount = std::distance(std::istream_iterator<std::string>(fileStream),
                                         std::istream_iterator<std::string>()) / 3; // 3 words in line
         fillCanLines(file, stringCount); // ...loading...
@@ -518,6 +522,6 @@ void MainWindow::sendToDisplay(const CanLine &canLine){
     uint8_t messIdInd = canLine.messId[1].digitValue();
     for (uint8_t i = 0; i < RADAR_NUM; i++)
         if(!displays[i]->isHidden())
-            if(displays[i]->configRadar.id == messIdInd) // NOTE: Send line to display
-                displays[i]->receiveCanLine(canLine);
+            if(displays[i]->configRadar.id == messIdInd)
+                displays[i]->receiveCanLine(canLine); // NOTE: Send line to display
 }

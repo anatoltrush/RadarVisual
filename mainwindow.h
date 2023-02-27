@@ -83,7 +83,7 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: ?Objects collision & Clusters config #202
+// TODO: ?Objects collision & Clusters config #202, hints (check Active)
 // TODO: ?Collisions #400, #401
 // TODO: ?Windows (Serial bus)
 // TODO: ?Calc spent dist
