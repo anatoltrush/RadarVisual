@@ -482,8 +482,7 @@ void MainWindow::loadFile(){
         return;
     }
     else{
-        //std::ifstream fileStream(pathFileCanLog.toStdString());
-        std::ifstream fileStream(pathFileCanLog.toLocal8Bit());
+        std::ifstream fileStream(pathFileCanLog.toLocal8Bit()); // + cyrillic
         int stringCount = std::distance(std::istream_iterator<std::string>(fileStream),
                                         std::istream_iterator<std::string>()) / 3; // 3 words in line
         fillCanLines(file, stringCount); // ...loading...
