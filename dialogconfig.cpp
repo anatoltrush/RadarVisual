@@ -44,11 +44,18 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     emit ui->cBSetRadId->clicked(false);
 
     // --- clusters/objects ---
-    connect(ui->cBSetClObjDistV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistVal(bool)));
-    connect(ui->cBSetClObjDistA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistAct(bool)));
+    // Nof
+    emit ui->cBSetClObjNofObjV->clicked(false);
 
+    connect(ui->cBSetClObjDistV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistVal(bool))); // Dist
+    connect(ui->cBSetClObjDistA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistAct(bool)));
     emit ui->cBSetClObjDistV->clicked(false);
-    emit ui->cBSetClObjDistA->clicked(false);
+
+    // Azim
+    emit ui->cBSetClObjAzimV->clicked(false);
+
+    // Rcs
+    emit ui->cBSetClObjRcsV->clicked(false);
 }
 
 DialogConfig::~DialogConfig(){
@@ -327,7 +334,7 @@ void DialogConfig::genClObjConfComm(){
         comm = resStr;
     }
 
-    // --- canlines for zmq line ---
+    // TODO:--- canlines for zmq line ---
 
     // --- UI ---
     ui->cBResStr->addItems(commands);

@@ -1020,9 +1020,6 @@
       <layout class="QGridLayout" name="gridLayout_8">
        <item row="0" column="0">
         <widget class="QGroupBox" name="gBSetClObjNofObj">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>Number of objects</string>
          </property>
@@ -1049,18 +1046,24 @@
            <layout class="QHBoxLayout" name="horizontalLayout_10">
             <item>
              <widget class="QLabel" name="label_10">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
-               <string>TextLabel</string>
+               <string>Nof obj limit:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_7"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_9">
-              <property name="text">
-               <string>TextLabel</string>
+             <widget class="QSpinBox" name="sBSetClObjNofObj">
+              <property name="toolTip">
+               <string>0...4095</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>5000</number>
               </property>
              </widget>
             </item>
@@ -1074,7 +1077,7 @@
          <property name="title">
           <string>Distance</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_7">
+         <layout class="QGridLayout" name="gridLayout_47">
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
@@ -1094,8 +1097,8 @@
            </layout>
           </item>
           <item row="1" column="0">
-           <layout class="QHBoxLayout" name="hLSetClObjDistMin">
-            <item>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
              <widget class="QLabel" name="label_7">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1108,7 +1111,7 @@
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="QSpinBox" name="sBSetClObjDistMin">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -1116,12 +1119,18 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="toolTip">
+               <string>0...409.5</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>5000</number>
+              </property>
               <property name="maximum">
                <number>409</number>
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="2">
              <widget class="QLabel" name="label">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1134,11 +1143,7 @@
               </property>
              </widget>
             </item>
-           </layout>
-          </item>
-          <item row="2" column="0">
-           <layout class="QHBoxLayout" name="hLSetClObjDistMax">
-            <item>
+            <item row="1" column="0">
              <widget class="QLabel" name="label_8">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1147,17 +1152,23 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>max</string>
+               <string>max:</string>
               </property>
              </widget>
             </item>
-            <item>
+            <item row="1" column="1">
              <widget class="QSpinBox" name="sBSetClObjDistMax">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string>0...409.5</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>5000</number>
               </property>
               <property name="maximum">
                <number>409</number>
@@ -1167,7 +1178,7 @@
               </property>
              </widget>
             </item>
-            <item>
+            <item row="1" column="2">
              <widget class="QLabel" name="label_2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1187,55 +1198,10 @@
        </item>
        <item row="0" column="2">
         <widget class="QGroupBox" name="gBSetClObjAzim">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>Azimuth</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_34">
-          <item row="2" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <item>
-             <widget class="QLabel" name="label_12">
-              <property name="text">
-               <string>TextLabel</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="spinBox_6"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>TextLabel</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
-            <item>
-             <widget class="QLabel" name="label_11">
-              <property name="text">
-               <string>TextLabel</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="spinBox_3"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>TextLabel</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
+         <layout class="QGridLayout" name="gridLayout_48">
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
@@ -1254,60 +1220,91 @@
             </item>
            </layout>
           </item>
+          <item row="1" column="0">
+           <layout class="QGridLayout" name="gridLayout_34">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_11">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>min:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="sBSetClObjAzimMin">
+              <property name="toolTip">
+               <string>-50...52.375</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>5000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_3">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>m</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_12">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>max:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="sBSetClObjAzimMax">
+              <property name="toolTip">
+               <string>-50...52.375</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>5000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="label_5">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>m</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
          </layout>
         </widget>
        </item>
        <item row="0" column="3">
         <widget class="QGroupBox" name="gBSetClObjRcs">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>RCS</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_35">
-          <item row="2" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_8">
-            <item>
-             <widget class="QLabel" name="label_14">
-              <property name="text">
-               <string>TextLabel</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="spinBox_4"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>TextLabel</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <item>
-             <widget class="QLabel" name="label_13">
-              <property name="text">
-               <string>TextLabel</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="spinBox_5"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>TextLabel</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
+         <layout class="QGridLayout" name="gridLayout_49">
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_9">
             <item>
@@ -1321,6 +1318,82 @@
              <widget class="QCheckBox" name="cBSetClObjRcsA">
               <property name="text">
                <string>Active</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <layout class="QGridLayout" name="gridLayout_35">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_13">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>min:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="sBSetClObjRcsMin">
+              <property name="toolTip">
+               <string>-50...52.375</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>5000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_4">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>m</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_14">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>max:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="sBSetClObjRcsMax">
+              <property name="toolTip">
+               <string>-50...52.375</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>5000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="label_6">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>m</string>
               </property>
              </widget>
             </item>
@@ -1343,14 +1416,14 @@
             <item>
              <widget class="QCheckBox" name="checkBox">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_2">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Active</string>
               </property>
              </widget>
             </item>
@@ -1373,14 +1446,14 @@
             <item>
              <widget class="QCheckBox" name="checkBox_3">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_4">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Active</string>
               </property>
              </widget>
             </item>
@@ -1403,14 +1476,14 @@
             <item>
              <widget class="QCheckBox" name="checkBox_5">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_6">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Active</string>
               </property>
              </widget>
             </item>
@@ -1433,14 +1506,14 @@
             <item>
              <widget class="QCheckBox" name="checkBox_7">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_8">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Active</string>
               </property>
              </widget>
             </item>
@@ -1463,14 +1536,14 @@
             <item>
              <widget class="QCheckBox" name="checkBox_9">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_10">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Active</string>
               </property>
              </widget>
             </item>
@@ -1493,14 +1566,14 @@
             <item>
              <widget class="QCheckBox" name="checkBox_11">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_12">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Active</string>
               </property>
              </widget>
             </item>
@@ -1523,14 +1596,14 @@
             <item>
              <widget class="QCheckBox" name="checkBox_13">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_14">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Active</string>
               </property>
              </widget>
             </item>
@@ -1553,14 +1626,14 @@
             <item>
              <widget class="QCheckBox" name="checkBox_15">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_16">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Active</string>
               </property>
              </widget>
             </item>
@@ -1583,14 +1656,14 @@
             <item>
              <widget class="QCheckBox" name="checkBox_17">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_18">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Active</string>
               </property>
              </widget>
             </item>
@@ -1613,14 +1686,14 @@
             <item>
              <widget class="QCheckBox" name="checkBox_19">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_20">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Active</string>
               </property>
              </widget>
             </item>
@@ -1643,14 +1716,14 @@
             <item>
              <widget class="QCheckBox" name="checkBox_21">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_22">
               <property name="text">
-               <string>CheckBox</string>
+               <string>Active</string>
               </property>
              </widget>
             </item>

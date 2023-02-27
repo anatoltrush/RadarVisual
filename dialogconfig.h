@@ -50,8 +50,11 @@ private slots:
     void updateUIClusters();
     void updateUIObjects();
 
-    void showHideSetClObjDistVal(bool checked);
+    // Nof objects
+    void showHideSetClObjDistVal(bool checked); // Dist
     void showHideSetClObjDistAct(bool checked);
+    // Azim
+    // Rcs
 
 private:
     Ui::DialogConfig *ui;
