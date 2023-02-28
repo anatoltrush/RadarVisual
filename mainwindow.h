@@ -83,7 +83,7 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: ?Objects/Clusters: #202, show/hide, hints
+// TODO: ?Objects/Clusters: #202, hints (11 left)
 // TODO: ?Objects/Clusters: 2 commands, analyze answer
 // TODO: ?Collisions #400, #401
 // TODO: ?Windows (Serial bus)

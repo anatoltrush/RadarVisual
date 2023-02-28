@@ -26,7 +26,6 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -52,7 +51,6 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -71,7 +69,6 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -95,7 +92,6 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -1004,7 +1000,6 @@
            <widget class="QPushButton" name="pBGenRadConf">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -1069,6 +1064,12 @@
               </property>
               <property name="toolTipDuration">
                <number>5000</number>
+              </property>
+              <property name="maximum">
+               <number>4095</number>
+              </property>
+              <property name="value">
+               <number>250</number>
               </property>
              </widget>
             </item>
@@ -1369,6 +1370,15 @@
               <property name="toolTipDuration">
                <number>5000</number>
               </property>
+              <property name="minimum">
+               <number>-50</number>
+              </property>
+              <property name="maximum">
+               <number>52</number>
+              </property>
+              <property name="value">
+               <number>-50</number>
+              </property>
              </widget>
             </item>
             <item row="0" column="2">
@@ -1405,6 +1415,15 @@
               <property name="toolTipDuration">
                <number>5000</number>
               </property>
+              <property name="minimum">
+               <number>-50</number>
+              </property>
+              <property name="maximum">
+               <number>52</number>
+              </property>
+              <property name="value">
+               <number>52</number>
+              </property>
              </widget>
             </item>
             <item row="1" column="2">
@@ -1427,9 +1446,6 @@
        </item>
        <item row="1" column="0">
         <widget class="QGroupBox" name="gBSetClObjVOnc">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>VrelOncome</string>
          </property>
@@ -1437,14 +1453,14 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_11">
             <item>
-             <widget class="QCheckBox" name="checkBox">
+             <widget class="QCheckBox" name="cBSetClObjVOncV">
               <property name="text">
                <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_2">
+             <widget class="QCheckBox" name="cBSetClObjVOncA">
               <property name="text">
                <string>Active</string>
               </property>
@@ -1457,9 +1473,6 @@
        </item>
        <item row="1" column="1">
         <widget class="QGroupBox" name="gBSetClObjVDep">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>VrelDepart</string>
          </property>
@@ -1467,14 +1480,14 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_12">
             <item>
-             <widget class="QCheckBox" name="checkBox_3">
+             <widget class="QCheckBox" name="cBSetClObjVDepV">
               <property name="text">
                <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_4">
+             <widget class="QCheckBox" name="cBSetClObjVDepA">
               <property name="text">
                <string>Active</string>
               </property>
@@ -1487,9 +1500,6 @@
        </item>
        <item row="1" column="2">
         <widget class="QGroupBox" name="gBSetClObjX">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>X position</string>
          </property>
@@ -1497,14 +1507,14 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_13">
             <item>
-             <widget class="QCheckBox" name="checkBox_5">
+             <widget class="QCheckBox" name="cBSetClObjXV">
               <property name="text">
                <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_6">
+             <widget class="QCheckBox" name="cBSetClObjXA">
               <property name="text">
                <string>Active</string>
               </property>
@@ -1517,9 +1527,6 @@
        </item>
        <item row="1" column="3">
         <widget class="QGroupBox" name="gBSetClObjY">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>Y position</string>
          </property>
@@ -1527,14 +1534,14 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_14">
             <item>
-             <widget class="QCheckBox" name="checkBox_7">
+             <widget class="QCheckBox" name="cBSetClObjYV">
               <property name="text">
                <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_8">
+             <widget class="QCheckBox" name="cBSetClObjYA">
               <property name="text">
                <string>Active</string>
               </property>
@@ -1547,9 +1554,6 @@
        </item>
        <item row="2" column="0">
         <widget class="QGroupBox" name="gBSetClObjVXOnc">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>VXOncome</string>
          </property>
@@ -1557,14 +1561,14 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_15">
             <item>
-             <widget class="QCheckBox" name="checkBox_9">
+             <widget class="QCheckBox" name="cBSetClObjVXOncV">
               <property name="text">
                <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_10">
+             <widget class="QCheckBox" name="cBSetClObjVXOncA">
               <property name="text">
                <string>Active</string>
               </property>
@@ -1577,9 +1581,6 @@
        </item>
        <item row="2" column="1">
         <widget class="QGroupBox" name="gBSetClObjVXDep">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>VXDepart</string>
          </property>
@@ -1587,14 +1588,14 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_16">
             <item>
-             <widget class="QCheckBox" name="checkBox_11">
+             <widget class="QCheckBox" name="cBSetClObjVXDepV">
               <property name="text">
                <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_12">
+             <widget class="QCheckBox" name="cBSetClObjVXDepA">
               <property name="text">
                <string>Active</string>
               </property>
@@ -1607,9 +1608,6 @@
        </item>
        <item row="2" column="2">
         <widget class="QGroupBox" name="gBSetClObjVYRL">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>VYRightLeft</string>
          </property>
@@ -1617,14 +1615,14 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_17">
             <item>
-             <widget class="QCheckBox" name="checkBox_13">
+             <widget class="QCheckBox" name="cBSetClObjVYRLV">
               <property name="text">
                <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_14">
+             <widget class="QCheckBox" name="cBSetClObjVYRLA">
               <property name="text">
                <string>Active</string>
               </property>
@@ -1637,9 +1635,6 @@
        </item>
        <item row="2" column="3">
         <widget class="QGroupBox" name="gBSetClObjVYLR">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>VYLeftRight</string>
          </property>
@@ -1647,14 +1642,14 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_18">
             <item>
-             <widget class="QCheckBox" name="checkBox_15">
+             <widget class="QCheckBox" name="cBSetClObjVYLRV">
               <property name="text">
                <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_16">
+             <widget class="QCheckBox" name="cBSetClObjVYLRA">
               <property name="text">
                <string>Active</string>
               </property>
@@ -1667,9 +1662,6 @@
        </item>
        <item row="3" column="0">
         <widget class="QGroupBox" name="gBSetClObjLTim">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>Lifetime</string>
          </property>
@@ -1677,14 +1669,14 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_19">
             <item>
-             <widget class="QCheckBox" name="checkBox_17">
+             <widget class="QCheckBox" name="cBSetClObjLTimV">
               <property name="text">
                <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_18">
+             <widget class="QCheckBox" name="cBSetClObjLTimA">
               <property name="text">
                <string>Active</string>
               </property>
@@ -1697,9 +1689,6 @@
        </item>
        <item row="3" column="1">
         <widget class="QGroupBox" name="gBSetClObjSz">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>Size</string>
          </property>
@@ -1707,14 +1696,14 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_20">
             <item>
-             <widget class="QCheckBox" name="checkBox_19">
+             <widget class="QCheckBox" name="cBSetClObjSzV">
               <property name="text">
                <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_20">
+             <widget class="QCheckBox" name="cBSetClObjSzA">
               <property name="text">
                <string>Active</string>
               </property>
@@ -1727,9 +1716,6 @@
        </item>
        <item row="3" column="2">
         <widget class="QGroupBox" name="gBSetClObjProb">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="title">
           <string>ProbExists</string>
          </property>
@@ -1737,14 +1723,14 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_21">
             <item>
-             <widget class="QCheckBox" name="checkBox_21">
+             <widget class="QCheckBox" name="cBSetClObjProbV">
               <property name="text">
                <string>Valid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_22">
+             <widget class="QCheckBox" name="cBSetClObjProbA">
               <property name="text">
                <string>Active</string>
               </property>
@@ -1788,7 +1774,6 @@
           <widget class="QPushButton" name="pBGenClObjConf">
            <property name="font">
             <font>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
