@@ -53,7 +53,8 @@ private slots:
     // Nof objects
     void showHideSetClObjDistVal(bool checked); // Dist
     void showHideSetClObjDistAct(bool checked);
-    // Azim
+    void showHideSetClObjAzimVal(bool checked);// Azim
+    void showHideSetClObjAzimAct(bool checked);
     // Rcs
 
 private:

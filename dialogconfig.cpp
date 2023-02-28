@@ -51,7 +51,8 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     connect(ui->cBSetClObjDistA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistAct(bool)));
     emit ui->cBSetClObjDistV->clicked(false);
 
-    // Azim
+    connect(ui->cBSetClObjAzimV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjAzimVal(bool))); // Azim
+    connect(ui->cBSetClObjAzimA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjAzimAct(bool)));
     emit ui->cBSetClObjAzimV->clicked(false);
 
     // Rcs
@@ -302,6 +303,7 @@ void DialogConfig::genRadConfComm(){
 void DialogConfig::genClObjConfComm(){
     ui->cBResStr->clear();
     QList<QString> commands;
+    uint8_t bitLen = 12;
 
     // --- distance ---
     if(ui->cBSetClObjDistV->isChecked()){
@@ -311,16 +313,33 @@ void DialogConfig::genClObjConfComm(){
         strDist.replace(6, 1, "1"); // valid
         if(ui->cBSetClObjDistA->isChecked()){ // active
             strDist.replace(5, 1, "1"); // active
-            uint8_t bitLen = 12;
-            QString distMin = QString::number((uint16_t)(ui->sBSetClObjDistMin->value() / resFiltMinDist));
+            QString distMin = QString::number((uint16_t)(ui->sBSetClObjDistMin->value() / resFiltDist));
             strDist.replace(12, bitLen, Converter::decToBin(distMin, bitLen));
-            QString distMax = QString::number((uint16_t)(ui->sBSetClObjDistMax->value() / resFiltMinDist));
+            QString distMax = QString::number((uint16_t)(ui->sBSetClObjDistMax->value() / resFiltDist));
             strDist.replace(28, bitLen, Converter::decToBin(distMax, bitLen));
         }
         else{ // not active
             strDist.replace(5, 1, "0");
         }
         commands.append(strDist);
+    }
+    // --- azimuth ---
+    if(ui->cBSetClObjAzimV->isChecked()){
+        QString strAzim(40, '0');
+        ui->rBSetClObjTypeCl->isChecked() ? strAzim.replace(0, 1, "0") : strAzim.replace(0, 1, "1"); // type
+        strAzim.replace(1, 4, "0010"); // index
+        strAzim.replace(6, 1, "1"); // valid
+        if(ui->cBSetClObjAzimA->isChecked()){ // active
+            strAzim.replace(5, 1, "1"); // active
+            QString azMin = QString::number((uint16_t)((ui->sBSetClObjAzimMin->value() - offsetFiltAzim) / resFiltAzim));
+            strAzim.replace(12, bitLen, Converter::decToBin(azMin, bitLen));
+            QString azMax = QString::number((uint16_t)((ui->sBSetClObjAzimMax->value() - offsetFiltAzim) / resFiltAzim));
+            strAzim.replace(28, bitLen, Converter::decToBin(azMax, bitLen));
+        }
+        else{ // not active
+            strAzim.replace(5, 1, "0");
+        }
+        commands.append(strAzim);
     }
 
     // --- cansend + bin to hex ---
@@ -551,4 +570,15 @@ void DialogConfig::showHideSetClObjDistVal(bool checked){
 void DialogConfig::showHideSetClObjDistAct(bool checked){
     ui->sBSetClObjDistMin->setEnabled(checked);
     ui->sBSetClObjDistMax->setEnabled(checked);
+}
+
+void DialogConfig::showHideSetClObjAzimVal(bool checked){
+    ui->cBSetClObjAzimA->setEnabled(checked);
+    ui->sBSetClObjAzimMin->setEnabled(ui->cBSetClObjAzimA->isEnabled()&& ui->cBSetClObjAzimA->isChecked());
+    ui->sBSetClObjAzimMax->setEnabled(ui->cBSetClObjAzimA->isEnabled() && ui->cBSetClObjAzimA->isChecked());
+}
+
+void DialogConfig::showHideSetClObjAzimAct(bool checked){
+    ui->sBSetClObjAzimMin->setEnabled(checked);
+    ui->sBSetClObjAzimMax->setEnabled(checked);
 }

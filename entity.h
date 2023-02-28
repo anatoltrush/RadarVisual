@@ -68,7 +68,10 @@ const float offsetObjLenght     = 0.0f;
 const float offsetObjWidth      = 0.0f;
 
 // --- clusters/objects filterts --
-const float resFiltMinDist      = 0.1f;
+const float resFiltDist     = 0.1f;
+const float resFiltAzim     = 0.025f;
+
+const float offsetFiltAzim  = -50.0f;
 
 enum class MsgType : uint64_t {Undefined = 0, OpenCVImage = 1001, Detections = 1003, CANMsg = 1005,
                                RadarData = 1200, AutoExposeData = 1203, ObjectInfo = 1300};
