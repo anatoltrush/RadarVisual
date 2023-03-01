@@ -148,7 +148,7 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
             }
     }
 
-    // --- RADAR STATE ---
+    // --- RADAR STATE & FILTERS---
     if(canLine.messId[0] == '2' && canLine.messId[2] == '1'){ // RADAR STATE
         // --- can num ---
         configRadar.canNum = std::atoi(&canLine.canNum.toStdString().back());
@@ -205,6 +205,12 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         // --- --- ---
         dConfig->updateUI();
     }
+    if(canLine.messId[0] == '2' && canLine.messId[2] == '3'){ // Filters
+        dConfig->is203Got = true;
+        dConfig->fltClust = Converter::getDecData(canLine.messData, 0, 5);
+        dConfig->fltObj = Converter::getDecData(canLine.messData, 8, 5);
+        dConfig->updateUI();
+    }
 
     // --- ------ OBJECTS --- --- ---
     if(canLine.messId[0] == '6' && (canLine.messId[2] == 'a' || canLine.messId[2] == 'A')){ // OBJS LIST
@@ -246,7 +252,7 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         object.distLat = Converter::getDecData(canLine.messData, 21, 11);
         object.distLat *= resObjDistLat;
         object.distLat += offsetObjDistLat;
-        object.distLat = -object.distLat;// NOTE: objects left/right?
+        object.distLat = -object.distLat; // NOTE: objects left/right?
         // Type
         uint8_t numType = Converter::getDecData(canLine.messData, 53, 3);
         object.type = static_cast<DynProp>(numType);

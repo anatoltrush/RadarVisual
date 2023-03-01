@@ -25,6 +25,10 @@ public:
     InUse* inUse = nullptr;
     std::string deviceName;
 
+    bool is203Got       = false;
+    uint16_t fltClust   = 0;
+    uint16_t fltObj     = 0;
+
     void updateUI();
 
 private slots:

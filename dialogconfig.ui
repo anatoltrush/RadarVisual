@@ -26,6 +26,7 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -51,6 +52,7 @@
        </property>
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -69,6 +71,7 @@
        </property>
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -92,6 +95,7 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -1000,6 +1004,7 @@
            <widget class="QPushButton" name="pBGenRadConf">
             <property name="font">
              <font>
+              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -1750,22 +1755,32 @@
            </property>
            <layout class="QGridLayout" name="gridLayout_5">
             <item row="0" column="0">
-             <layout class="QHBoxLayout" name="horizontalLayout_2">
-              <item>
-               <widget class="QRadioButton" name="rBSetClObjTypeCl">
-                <property name="text">
-                 <string>Clusters</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="rBSetClObjTypeObj">
-                <property name="text">
-                 <string>Objects</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QRadioButton" name="rBSetClObjTypeCl">
+              <property name="text">
+               <string>Clusters</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QRadioButton" name="rBSetClObjTypeObj">
+              <property name="text">
+               <string>Objects</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="lFiltersCl">
+              <property name="text">
+               <string>- filters on</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="lFiltersObj">
+              <property name="text">
+               <string>- filters on</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -1774,6 +1789,7 @@
           <widget class="QPushButton" name="pBGenClObjConf">
            <property name="font">
             <font>
+             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>

@@ -179,6 +179,12 @@ void DialogConfig::updateUI(){
 
     // --- threshold ---
     configRadar->thrRcs ? ui->rBCurrRadThrHigh->setChecked(true) : ui->rBCurrRadThrStand->setChecked(true);
+
+    // --- filters ---
+    if(is203Got){
+        ui->lFiltersCl->setText(QString::number(fltClust) + " filters ON");
+        ui->lFiltersObj->setText(QString::number(fltObj) + " filters ON");
+    }
 }
 
 void DialogConfig::clearResStr(){
@@ -309,19 +315,19 @@ void DialogConfig::genClObjConfComm(){
 
     // --- number of objs ---
     if(ui->cBSetClObjNofObjV->isChecked()){
-        QString strRcs(40, '0');
-        ui->rBSetClObjTypeCl->isChecked() ? strRcs.replace(0, 1, "0") : strRcs.replace(0, 1, "1"); // type
-        strRcs.replace(1, 4, "0000"); // index
-        strRcs.replace(6, 1, "1"); // valid
+        QString strNof(40, '0');
+        ui->rBSetClObjTypeCl->isChecked() ? strNof.replace(0, 1, "0") : strNof.replace(0, 1, "1"); // type
+        strNof.replace(1, 4, "0000"); // index
+        strNof.replace(6, 1, "1"); // valid
         if(ui->cBSetClObjNofObjA->isChecked()){ // active
-            strRcs.replace(5, 1, "1"); // active
+            strNof.replace(5, 1, "1"); // active
             QString nof = QString::number((uint16_t)(ui->sBSetClObjNofObj->value()));
-            strRcs.replace(28, bitLen, Converter::decToBin(nof, bitLen));
+            strNof.replace(28, bitLen, Converter::decToBin(nof, bitLen));
         }
         else{ // not active
-            strRcs.replace(5, 1, "0");
+            strNof.replace(5, 1, "0");
         }
-        commands.append(strRcs);
+        commands.append(strNof);
     }
     // --- distance ---
     if(ui->cBSetClObjDistV->isChecked()){
@@ -348,7 +354,7 @@ void DialogConfig::genClObjConfComm(){
         strAzim.replace(1, 4, "0010"); // index
         strAzim.replace(6, 1, "1"); // valid
         if(ui->cBSetClObjAzimA->isChecked()){ // active
-            strAzim.replace(5, 1, "1"); // active
+            strAzim.replace(5, 1, "1"); // active  // NOTE: azimuth objects left/right?
             QString azMin = QString::number((uint16_t)((ui->sBSetClObjAzimMin->value() - offsetFiltAzim) / resFiltAzim));
             strAzim.replace(12, bitLen, Converter::decToBin(azMin, bitLen));
             QString azMax = QString::number((uint16_t)((ui->sBSetClObjAzimMax->value() - offsetFiltAzim) / resFiltAzim));
@@ -369,7 +375,7 @@ void DialogConfig::genClObjConfComm(){
             strRcs.replace(5, 1, "1"); // active
             QString rcsMin = QString::number((uint16_t)((ui->sBSetClObjRcsMin->value() - offsetFiltRcs) / resFiltRcs));
             strRcs.replace(12, bitLen, Converter::decToBin(rcsMin, bitLen));
-            QString rcsMax = QString::number((uint16_t)((ui->sBSetClObjAzimMax->value() - offsetFiltRcs) / resFiltRcs));
+            QString rcsMax = QString::number((uint16_t)((ui->sBSetClObjRcsMax->value() - offsetFiltRcs) / resFiltRcs));
             strRcs.replace(28, bitLen, Converter::decToBin(rcsMax, bitLen));
         }
         else{ // not active
@@ -493,6 +499,7 @@ void DialogConfig::sendMulti(){
                 QMessageBox::information(this, "Send via CAN...", "Smthng wrong: " + QString::number(res));
                 break;
             }
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
         }
         ui->pBSend->setStyleSheet("background-color: green");
         break;
