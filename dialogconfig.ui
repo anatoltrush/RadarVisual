@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1062</width>
-    <height>622</height>
+    <width>845</width>
+    <height>552</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,6 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -52,7 +51,6 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -71,7 +69,6 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -95,7 +92,6 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -1004,7 +1000,6 @@
            <widget class="QPushButton" name="pBGenRadConf">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -1771,14 +1766,14 @@
             <item row="1" column="0">
              <widget class="QLabel" name="lFiltersCl">
               <property name="text">
-               <string>- filters on</string>
+               <string>- filters ON</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
              <widget class="QLabel" name="lFiltersObj">
               <property name="text">
-               <string>- filters on</string>
+               <string>- filters ON</string>
               </property>
              </widget>
             </item>
@@ -1789,7 +1784,6 @@
           <widget class="QPushButton" name="pBGenClObjConf">
            <property name="font">
             <font>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
