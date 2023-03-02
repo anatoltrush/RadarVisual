@@ -84,17 +84,17 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     connect(ui->cBSetClObjDistA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistAct(bool)));
     emit ui->cBSetClObjDistV->clicked(false);*/
 
-    /* L S B connect(ui->cBSetClObjDistV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistVal(bool))); // Dist
-    connect(ui->cBSetClObjDistA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistAct(bool)));
-    emit ui->cBSetClObjDistV->clicked(false);
+    connect(ui->cBSetClObjLTimV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjLTimVal(bool))); // Dist
+    connect(ui->cBSetClObjLTimA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjLTimAct(bool)));
+    emit ui->cBSetClObjLTimV->clicked(false);
 
-    connect(ui->cBSetClObjDistV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistVal(bool))); // Dist
-    connect(ui->cBSetClObjDistA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistAct(bool)));
-    emit ui->cBSetClObjDistV->clicked(false);
+    connect(ui->cBSetClObjSzV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjSzVal(bool))); // Dist
+    connect(ui->cBSetClObjSzA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjSzAct(bool)));
+    emit ui->cBSetClObjSzV->clicked(false);
 
-    connect(ui->cBSetClObjDistV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistVal(bool))); // Dist
-    connect(ui->cBSetClObjDistA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjDistAct(bool)));
-    emit ui->cBSetClObjDistV->clicked(false);*/
+    connect(ui->cBSetClObjProbV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjProbVal(bool))); // Dist
+    connect(ui->cBSetClObjProbA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjProbAct(bool)));
+    emit ui->cBSetClObjProbV->clicked(false);
 
     /* X, Y connect(ui->cBSetClObjAzimV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjAzimVal(bool))); // Azim
     connect(ui->cBSetClObjAzimA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjAzimAct(bool)));
@@ -107,7 +107,6 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
 
 DialogConfig::~DialogConfig(){
     zmqClient.stop();
-
     delete ui;
 }
 
@@ -365,7 +364,7 @@ void DialogConfig::genClObjConfComm(){
         strNof.replace(6, 1, "1"); // valid
         if(ui->cBSetClObjNofObjA->isChecked()){ // active
             strNof.replace(5, 1, "1"); // active
-            QString nof = QString::number((uint16_t)(ui->sBSetClObjNofObj->value()));
+            QString nof = QString::number((uint16_t)ui->sBSetClObjNofObj->value());
             strNof.replace(28, bitLen, Converter::decToBin(nof, bitLen));
         }
         else{ // not active
@@ -378,8 +377,8 @@ void DialogConfig::genClObjConfComm(){
     if(ui->cBSetClObjDistV->isChecked()){
         QString strDist(40, '0');
         ui->rBSetClObjTypeCl->isChecked() ? strDist.replace(0, 1, "0") : strDist.replace(0, 1, "1"); // type
-        strDist.replace(1, 4, "0001"); // index
         strDist.replace(6, 1, "1"); // valid
+        strDist.replace(1, 4, "0001"); // index
         if(ui->cBSetClObjDistA->isChecked()){ // active
             strDist.replace(5, 1, "1"); // active
             QString distMin = QString::number((uint16_t)(ui->sBSetClObjDistMin->value() / resFiltDist));
@@ -467,6 +466,63 @@ void DialogConfig::genClObjConfComm(){
             strVDep.replace(5, 1, "0");
         }
         commands.append(strVDep);
+    }
+
+    // --- lifetime ---
+    if(ui->cBSetClObjLTimV->isChecked()){
+        QString strLTim(40, '0');
+        ui->rBSetClObjTypeCl->isChecked() ? strLTim.replace(0, 1, "0") : strLTim.replace(0, 1, "1"); // type
+        strLTim.replace(6, 1, "1"); // valid
+        strLTim.replace(1, 4, "0110"); // index
+        if(ui->cBSetClObjLTimA->isChecked()){ // active
+            strLTim.replace(5, 1, "1"); // active
+            QString ltimMin = QString::number((uint16_t)(ui->sBSetClObjLTimMin->value() / resFiltLTim));
+            strLTim.replace(12, bitLen, Converter::decToBin(ltimMin, bitLen));
+            QString ltimMax = QString::number((uint16_t)(ui->sBSetClObjLTimMax->value() / resFiltLTim));
+            strLTim.replace(28, bitLen, Converter::decToBin(ltimMax, bitLen));
+        }
+        else{ // not active
+            strLTim.replace(5, 1, "0");
+        }
+        commands.append(strLTim);
+    }
+
+    // --- size ---
+    if(ui->cBSetClObjSzV->isChecked()){
+        QString strSz(40, '0');
+        ui->rBSetClObjTypeCl->isChecked() ? strSz.replace(0, 1, "0") : strSz.replace(0, 1, "1"); // type
+        strSz.replace(6, 1, "1"); // valid
+        strSz.replace(1, 4, "0111"); // index
+        if(ui->cBSetClObjSzA->isChecked()){ // active
+            strSz.replace(5, 1, "1"); // active
+            QString szMin = QString::number((uint16_t)(ui->sBSetClObjSzMin->value() / resFiltSize));
+            strSz.replace(12, bitLen, Converter::decToBin(szMin, bitLen));
+            QString szMax = QString::number((uint16_t)(ui->sBSetClObjSzMax->value() / resFiltSize));
+            strSz.replace(28, bitLen, Converter::decToBin(szMax, bitLen));
+        }
+        else{ // not active
+            strSz.replace(5, 1, "0");
+        }
+        commands.append(strSz);
+    }
+
+    // --- probability ---
+    if(ui->cBSetClObjProbV->isChecked()){
+        QString strProb(40, '0');
+        ui->rBSetClObjTypeCl->isChecked() ? strProb.replace(0, 1, "0") : strProb.replace(0, 1, "1"); // type
+        strProb.replace(6, 1, "1"); // valid
+        strProb.replace(1, 4, "1000"); // index
+        if(ui->cBSetClObjProbA->isChecked()){ // active
+            strProb.replace(5, 1, "1"); // active
+            QString probMin = QString::number((uint16_t)ui->sBSetClObjProbMin->value());
+            strProb.replace(12, bitLen, Converter::decToBin(probMin, bitLen));
+            QString probMax = QString::number((uint16_t)ui->sBSetClObjProbMax->value());
+            strProb.replace(28, bitLen, Converter::decToBin(probMax, bitLen));
+        }
+        else{ // not active
+            strProb.replace(5, 1, "0");
+        }
+        commands.append(strProb);
     }
 
     // --- cansend + bin to hex ---
@@ -738,7 +794,7 @@ void DialogConfig::showHideSetClObjNofAct(bool checked){
 
 void DialogConfig::showHideSetClObjDistVal(bool checked){
     ui->cBSetClObjDistA->setEnabled(checked);
-    ui->sBSetClObjDistMin->setEnabled(ui->cBSetClObjDistA->isEnabled()&& ui->cBSetClObjDistA->isChecked());
+    ui->sBSetClObjDistMin->setEnabled(ui->cBSetClObjDistA->isEnabled() && ui->cBSetClObjDistA->isChecked());
     ui->sBSetClObjDistMax->setEnabled(ui->cBSetClObjDistA->isEnabled() && ui->cBSetClObjDistA->isChecked());
 }
 
@@ -749,7 +805,7 @@ void DialogConfig::showHideSetClObjDistAct(bool checked){
 
 void DialogConfig::showHideSetClObjAzimVal(bool checked){
     ui->cBSetClObjAzimA->setEnabled(checked);
-    ui->sBSetClObjAzimMin->setEnabled(ui->cBSetClObjAzimA->isEnabled()&& ui->cBSetClObjAzimA->isChecked());
+    ui->sBSetClObjAzimMin->setEnabled(ui->cBSetClObjAzimA->isEnabled() && ui->cBSetClObjAzimA->isChecked());
     ui->sBSetClObjAzimMax->setEnabled(ui->cBSetClObjAzimA->isEnabled() && ui->cBSetClObjAzimA->isChecked());
 }
 
@@ -760,7 +816,7 @@ void DialogConfig::showHideSetClObjAzimAct(bool checked){
 
 void DialogConfig::showHideSetClObjRcsVal(bool checked){
     ui->cBSetClObjRcsA->setEnabled(checked);
-    ui->sBSetClObjRcsMin->setEnabled(ui->cBSetClObjRcsA->isEnabled()&& ui->cBSetClObjRcsA->isChecked());
+    ui->sBSetClObjRcsMin->setEnabled(ui->cBSetClObjRcsA->isEnabled() && ui->cBSetClObjRcsA->isChecked());
     ui->sBSetClObjRcsMax->setEnabled(ui->cBSetClObjRcsA->isEnabled() && ui->cBSetClObjRcsA->isChecked());
 }
 
@@ -771,7 +827,7 @@ void DialogConfig::showHideSetClObjRcsAct(bool checked){
 
 void DialogConfig::showHideSetClObjVRelOncVal(bool checked){
     ui->cBSetClObjVOncA->setEnabled(checked);
-    ui->sBSetClObjVOncMin->setEnabled(ui->cBSetClObjVOncA->isEnabled()&& ui->cBSetClObjVOncA->isChecked());
+    ui->sBSetClObjVOncMin->setEnabled(ui->cBSetClObjVOncA->isEnabled() && ui->cBSetClObjVOncA->isChecked());
     ui->sBSetClObjVOncMax->setEnabled(ui->cBSetClObjVOncA->isEnabled() && ui->cBSetClObjVOncA->isChecked());
 }
 
@@ -782,11 +838,44 @@ void DialogConfig::showHideSetClObjVRelOncAct(bool checked){
 
 void DialogConfig::showHideSetClObjVRelDepVal(bool checked){
     ui->cBSetClObjVDepA->setEnabled(checked);
-    ui->sBSetClObjVDepMin->setEnabled(ui->cBSetClObjVDepA->isEnabled()&& ui->cBSetClObjVDepA->isChecked());
+    ui->sBSetClObjVDepMin->setEnabled(ui->cBSetClObjVDepA->isEnabled() && ui->cBSetClObjVDepA->isChecked());
     ui->sBSetClObjVDepMax->setEnabled(ui->cBSetClObjVDepA->isEnabled() && ui->cBSetClObjVDepA->isChecked());
 }
 
 void DialogConfig::showHideSetClObjVRelDepAct(bool checked){
     ui->sBSetClObjVDepMin->setEnabled(checked);
     ui->sBSetClObjVDepMax->setEnabled(checked);
+}
+
+void DialogConfig::showHideSetClObjLTimVal(bool checked){
+    ui->cBSetClObjLTimA->setEnabled(checked);
+    ui->sBSetClObjLTimMin->setEnabled(ui->cBSetClObjLTimA->isEnabled() && ui->cBSetClObjLTimA->isChecked());
+    ui->sBSetClObjLTimMax->setEnabled(ui->cBSetClObjLTimA->isEnabled() && ui->cBSetClObjLTimA->isChecked());
+}
+
+void DialogConfig::showHideSetClObjLTimAct(bool checked){
+    ui->sBSetClObjLTimMin->setEnabled(checked);
+    ui->sBSetClObjLTimMax->setEnabled(checked);
+}
+
+void DialogConfig::showHideSetClObjSzVal(bool checked){
+    ui->cBSetClObjSzA->setEnabled(checked);
+    ui->sBSetClObjSzMin->setEnabled(ui->cBSetClObjSzA->isEnabled() && ui->cBSetClObjSzA->isChecked());
+    ui->sBSetClObjSzMax->setEnabled(ui->cBSetClObjSzA->isEnabled() && ui->cBSetClObjSzA->isChecked());
+}
+
+void DialogConfig::showHideSetClObjSzAct(bool checked){
+    ui->sBSetClObjSzMin->setEnabled(checked);
+    ui->sBSetClObjSzMax->setEnabled(checked);
+}
+
+void DialogConfig::showHideSetClObjProbVal(bool checked){
+    ui->cBSetClObjProbA->setEnabled(checked);
+    ui->sBSetClObjProbMin->setEnabled(ui->cBSetClObjProbA->isEnabled() && ui->cBSetClObjProbA->isChecked());
+    ui->sBSetClObjProbMax->setEnabled(ui->cBSetClObjProbA->isEnabled() && ui->cBSetClObjProbA->isChecked());
+}
+
+void DialogConfig::showHideSetClObjProbAct(bool checked){
+    ui->sBSetClObjProbMin->setEnabled(checked);
+    ui->sBSetClObjProbMax->setEnabled(checked);
 }

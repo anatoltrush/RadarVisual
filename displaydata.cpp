@@ -122,22 +122,22 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
                     cl.Pdh0 = 0.0f;
                     break;
                 case 1:
-                    cl.Pdh0 = 24.99f;
+                    cl.Pdh0 = 25.0f;
                     break;
                 case 2:
-                    cl.Pdh0 = 49.99f;
+                    cl.Pdh0 = 50.0f;
                     break;
                 case 3:
-                    cl.Pdh0 = 74.99f;
+                    cl.Pdh0 = 75.0f;
                     break;
                 case 4:
-                    cl.Pdh0 = 89.99f;
+                    cl.Pdh0 = 90.0f;
                     break;
                 case 5:
-                    cl.Pdh0 = 98.99f;
+                    cl.Pdh0 = 99.0f;
                     break;
                 case 6:
-                    cl.Pdh0 = 99.89f;
+                    cl.Pdh0 = 99.9f;
                     break;
                 case 7:
                     cl.Pdh0 = 100.0f;

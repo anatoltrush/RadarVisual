@@ -67,7 +67,12 @@ private slots:
     void showHideSetClObjVRelDepVal(bool checked); // VrelDep
     void showHideSetClObjVRelDepAct(bool checked);
     // 4 V4
-    // 3 L S P
+    void showHideSetClObjLTimVal(bool checked); // LTime
+    void showHideSetClObjLTimAct(bool checked);
+    void showHideSetClObjSzVal(bool checked); // Size
+    void showHideSetClObjSzAct(bool checked);
+    void showHideSetClObjProbVal(bool checked); // Prob
+    void showHideSetClObjProbAct(bool checked);
     // 2 X Y
 
 private:
