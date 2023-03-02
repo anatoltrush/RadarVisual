@@ -9,6 +9,7 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
 
     // --- connections ---
     connect(ui->tWConfig, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+    ui->tWConfig->setCurrentIndex(1);
     ui->tWConfig->setCurrentIndex(0);
 
     connect(ui->rBSetClObjTypeCl, SIGNAL(clicked()), this, SLOT(updateUIClusters()));

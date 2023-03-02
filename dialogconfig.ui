@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1062</width>
-    <height>660</height>
+    <width>845</width>
+    <height>580</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,6 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -52,7 +51,6 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -71,7 +69,6 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -95,7 +92,6 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -109,7 +105,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tWConfig">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tbRadarConfig">
       <attribute name="title">
@@ -1004,7 +1000,6 @@
            <widget class="QPushButton" name="pBGenRadConf">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -2724,7 +2719,6 @@
              <widget class="QRadioButton" name="rBSetClObjTypeCl">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2737,7 +2731,6 @@
              <widget class="QRadioButton" name="rBSetClObjTypeObj">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2750,7 +2743,6 @@
              <widget class="QLabel" name="lFiltersCl">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2763,7 +2755,6 @@
              <widget class="QLabel" name="lFiltersObj">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2779,7 +2770,6 @@
           <widget class="QPushButton" name="pBGenClObjConf">
            <property name="font">
             <font>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>

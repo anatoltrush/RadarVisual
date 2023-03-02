@@ -47,6 +47,7 @@ private:
 #ifdef __WIN32
     QList<QCanBusDeviceInfo> interfaces;
     Settings canSettings;
+    std::unique_ptr<QCanBusDevice> canDevice;
 #else
     struct sockaddr_can sockAddr;
     struct ifreq ifr;
@@ -83,7 +84,7 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: ?#202 Objects/Clusters: (6 left) + draw class + Send via ZMQ + test emuc
+// TODO: ?#202 Objects/Clusters: (6 left) + draw class + Send via ZMQ
 // TODO: ?Collisions #400, #401
 // TODO: ?Windows (Serial bus)
 // TODO: ?Calc spent dist
