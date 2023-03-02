@@ -71,9 +71,21 @@ const float offsetObjWidth      = 0.0f;
 const float resFiltDist     = 0.1f;
 const float resFiltAzim     = 0.025f;
 const float resFiltRcs      = 0.025f;
+const float resFiltVROnc    = 0.0315f;
+const float resFiltVRDep    = 0.0315f;
+const float resFiltLifeTime = 0.1f;
+const float resFiltSize     = 0.025f;
+const float resFiltX        = 0.2f;
+const float resFiltY        = 0.2f;
+const float resFiltVYRL     = 0.0315f;
+const float resFiltVXOnc    = 0.0315f;
+const float resFiltVYLR     = 0.0315f;
+const float resFiltVXDep    = 0.0315f;
 
 const float offsetFiltAzim  = -50.0f;
 const float offsetFiltRcs   = -50.0f;
+const float offsetFiltX     = -500.0f;
+const float offsetFiltY     = -409.5f;
 
 enum class MsgType : uint64_t {Undefined = 0, OpenCVImage = 1001, Detections = 1003, CANMsg = 1005,
                                RadarData = 1200, AutoExposeData = 1203, ObjectInfo = 1300};
@@ -198,7 +210,7 @@ struct ClusterList{
     uint8_t numExpectNear   = 0;
     uint8_t numExpectFar    = 0;
     uint8_t numExpectSumm   = 0;
-    uint8_t interfVers  = 0;
+    uint8_t interfVers      = 0;
     uint16_t measCount      = 0;
 };
 

@@ -62,16 +62,24 @@ private slots:
     void showHideSetClObjAzimAct(bool checked);
     void showHideSetClObjRcsVal(bool checked); // Rcs
     void showHideSetClObjRcsAct(bool checked);
+    void showHideSetClObjVRelOncVal(bool checked); // VrelOnc
+    void showHideSetClObjVRelOncAct(bool checked);
+    void showHideSetClObjVRelDepVal(bool checked); // VrelDep
+    void showHideSetClObjVRelDepAct(bool checked);
+    // 4 V4
+    // 3 L S P
+    // 2 X Y
 
 private:
     Ui::DialogConfig *ui;
+
+    uint8_t delayCanMs = 50;
 
     // --- ZMQ ---
     uint64_t msg_num = 0;
     Client zmqClient;
     QString zmqAddrSend;
     CanLine zmqCanLine;
-
     std::vector<CanLine>zmqCanLines;
 };
 
