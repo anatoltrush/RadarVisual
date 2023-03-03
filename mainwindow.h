@@ -84,7 +84,9 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: ?#202 Objects/Clusters: (6 left) + draw class + Send via ZMQ
+// TODO: ?#202 Objects/Clusters: draw class + Send via ZMQ
 // TODO: ?Collisions #400, #401
 // TODO: ?Windows (Serial bus)
 // TODO: ?Calc spent dist
+// TODO: ?Warnings (temp & interfer)
+// TODO: ?Redo resize VisImg

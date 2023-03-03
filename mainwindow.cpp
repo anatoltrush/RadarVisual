@@ -23,21 +23,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     thrZmqRcv = std::thread(&MainWindow::zmqRcv, this);
     thrPlayFile = std::thread(&MainWindow::playCanFile, this);
 
-    // --- placing ---
-    QScreen* screen = QApplication::primaryScreen();
-    int wScrn = screen->geometry().width();
-    int hScrn = screen->geometry().height();
-
-    int wFir = this->width();
-    int wSec = displays[0]->width();
-    int hSec = displays[0]->height();
-
-    int fullW = wFir + wSec;
-    int sideGap = (wScrn - fullW) / 2;
-    int upGap = (hScrn - hSec) / 2;
-
-    this->move(sideGap, upGap);
-
     // ---
     this->setWindowFlags(Qt::WindowCloseButtonHint);
     this->setWindowTitle(this->windowTitle() + " v" +
@@ -70,7 +55,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     lInName->setText("interface name:");
     ui->hLInputs->insertWidget(1, lPlug);
     ui->hLInputs->insertWidget(3, lInName);
-    // ---
     ui->cBCanPlugin->addItems(QCanBus::instance()->plugins());
 #else
     ui->cBCanPlugin->hide();
@@ -78,6 +62,22 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->gBCanExtInfo->hide();
     this->resize(440, this->height());
 #endif
+
+    // --- placing ---
+    QScreen* screen = QApplication::primaryScreen();
+    int wScrn = screen->geometry().width();
+    int hScrn = screen->geometry().height();
+
+    int wFir = this->width();
+    int wSec = displays[0]->width();
+    int hSec = displays[0]->height();
+
+    int fullW = wFir + wSec;
+    int sideGap = (wScrn - fullW) / 2;
+    int upGap = (hScrn - hSec) / 2;
+
+    this->move(sideGap, upGap);
+
     // --- click ---
     ui->pBAddDisplay->click();
 }

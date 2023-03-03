@@ -9,14 +9,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>612</width>
-    <height>267</height>
+    <width>719</width>
+    <height>283</height>
    </rect>
   </property>
   <property name="maximumSize">
    <size>
-    <width>840</width>
-    <height>400</height>
+    <width>720</width>
+    <height>300</height>
    </size>
   </property>
   <property name="focusPolicy">
@@ -62,6 +62,7 @@
          <property name="font">
           <font>
            <pointsize>15</pointsize>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -179,6 +180,7 @@
          <property name="font">
           <font>
            <pointsize>15</pointsize>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>

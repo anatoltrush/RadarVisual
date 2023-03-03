@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>845</width>
-    <height>580</height>
+    <width>1062</width>
+    <height>660</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,6 +26,7 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -51,6 +52,7 @@
        </property>
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -69,6 +71,7 @@
        </property>
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -92,6 +95,7 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -105,7 +109,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tWConfig">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tbRadarConfig">
       <attribute name="title">
@@ -1000,6 +1004,7 @@
            <widget class="QPushButton" name="pBGenRadConf">
             <property name="font">
              <font>
+              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -1684,7 +1689,7 @@
        <item row="1" column="2">
         <widget class="QGroupBox" name="gBSetClObjX">
          <property name="title">
-          <string>X position</string>
+          <string>Y position</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_39">
           <item row="0" column="0">
@@ -1805,7 +1810,7 @@
        <item row="1" column="3">
         <widget class="QGroupBox" name="gBSetClObjY">
          <property name="title">
-          <string>Y position</string>
+          <string>X position</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_41">
           <item row="0" column="0">
@@ -2719,6 +2724,7 @@
              <widget class="QRadioButton" name="rBSetClObjTypeCl">
               <property name="font">
                <font>
+                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2731,6 +2737,7 @@
              <widget class="QRadioButton" name="rBSetClObjTypeObj">
               <property name="font">
                <font>
+                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2743,6 +2750,7 @@
              <widget class="QLabel" name="lFiltersCl">
               <property name="font">
                <font>
+                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2755,6 +2763,7 @@
              <widget class="QLabel" name="lFiltersObj">
               <property name="font">
                <font>
+                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2770,6 +2779,7 @@
           <widget class="QPushButton" name="pBGenClObjConf">
            <property name="font">
             <font>
+             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>

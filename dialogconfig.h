@@ -66,14 +66,24 @@ private slots:
     void showHideSetClObjVRelOncAct(bool checked);
     void showHideSetClObjVRelDepVal(bool checked); // VrelDep
     void showHideSetClObjVRelDepAct(bool checked);
-    // 4 V4
+    void showHideSetClObjVYLRVal(bool checked); // VYLR
+    void showHideSetClObjVYLRAct(bool checked);
+    void showHideSetClObjVXOncVal(bool checked); // VXOnc
+    void showHideSetClObjVXOncAct(bool checked);
+    void showHideSetClObjVYRLVal(bool checked); // VYRL
+    void showHideSetClObjVYRLAct(bool checked);
+    void showHideSetClObjVXDepVal(bool checked); // VXDep
+    void showHideSetClObjVXDepAct(bool checked);
     void showHideSetClObjLTimVal(bool checked); // LTime
     void showHideSetClObjLTimAct(bool checked);
     void showHideSetClObjSzVal(bool checked); // Size
     void showHideSetClObjSzAct(bool checked);
     void showHideSetClObjProbVal(bool checked); // Prob
     void showHideSetClObjProbAct(bool checked);
-    // 2 X Y
+    void showHideSetClObjXVal(bool checked); // X
+    void showHideSetClObjXAct(bool checked);
+    void showHideSetClObjYVal(bool checked); // Y
+    void showHideSetClObjYAct(bool checked);
 
 private:
     Ui::DialogConfig *ui;
