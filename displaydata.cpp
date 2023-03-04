@@ -28,7 +28,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
         QToolButton* tButton = static_cast<QToolButton*>(ui->gridTypes->itemAtPosition(i, 0)->widget());
         tButton->setIcon(px);
     }
-    // ---
+    // --- bind ---
     ui->wDraw->configInfo = &configRadar;
 
     // --- config ---
@@ -40,10 +40,14 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     connect(ui->cBInfo, SIGNAL(clicked(bool)), this, SLOT(info(bool)));
     connect(ui->cBRadNum, SIGNAL(currentIndexChanged(int)), this, SLOT(radNum(int)));
     connect(ui->cBChsDist, SIGNAL(currentTextChanged(QString)), this, SLOT(chooseDist(QString)));
+    connect(this, SIGNAL(signalUpdDisplay()), this, SLOT(updateDisplayUI()));
 
-    // --- click ---
+    // --- post events ---
     ui->cBInfo->click();
     ui->cBChsDist->setCurrentIndex(5); // set 250m
+
+    ui->lWarrning->setStyleSheet("background-color: red");
+    ui->lWarrning->hide();
 }
 
 DisplayData::~DisplayData(){
@@ -203,13 +207,14 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         configRadar.thrRcs = Converter::getDecData(canLine.messData, 59, 3);
 
         // --- --- ---
-        dConfig->updateUI();
+        dConfig->updateConfigUI();
+        emit signalUpdDisplay();
     }
-    if(canLine.messId[0] == '2' && canLine.messId[2] == '3'){ // Filters
+    if(canLine.messId[0] == '2' && canLine.messId[2] == '3'){ // FILTERS
         dConfig->is203Got = true;
         dConfig->fltClust = Converter::getDecData(canLine.messData, 0, 5);
         dConfig->fltObj = Converter::getDecData(canLine.messData, 8, 5);
-        dConfig->updateUI();
+        dConfig->updateConfigUI();
     }
 
     // --- ------ OBJECTS --- --- ---
@@ -502,6 +507,25 @@ int DisplayData::calcSpeed(){
 void DisplayData::showSpeedUI(){
     ui->lSpeed_M_KM->setText("Speed: " + Converter::floatCutOff(speedVehicle, 1) + "m/s (" +
                              Converter::floatCutOff(speedVehicle * 3.6f, 1) + "km/h)");
+}
+
+void DisplayData::updateDisplayUI(){
+    if(configRadar.temperatErr){
+        ui->lWarrning->setText("<-TEMPERATURE ERROR!->");
+        ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
+    }
+    if(configRadar.persistErr){
+        ui->lWarrning->setText("<-PERSISTENT ERROR!->");
+        ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
+    }
+    if(configRadar.temporarErr){
+        ui->lWarrning->setText("<-TEMPORARY ERROR!->");
+        ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
+    }
+    if(configRadar.interference){
+        ui->lWarrning->setText("<-INTERFERENCE DETECTED->");
+        ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
+    }
 }
 
 void DisplayData::chooseDist(const QString &data){

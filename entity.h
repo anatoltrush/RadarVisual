@@ -139,7 +139,6 @@ struct Settings {
     QString deviceInterfaceName;
     QList<ConfigurationItem> configurations;
     bool useConfigurationEnabled = false;
-    bool useModelRingBuffer = true;
     int modelRingBufferSize = 1000;
     bool useAutoscroll = false;
 };

@@ -29,7 +29,10 @@ public:
     uint16_t fltClust   = 0;
     uint16_t fltObj     = 0;
 
-    void updateUI();
+    void updateConfigUI();
+
+signals:
+    int signalCanSend(const QString& strData);
 
 private slots:
     void clearResStr();

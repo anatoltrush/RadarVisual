@@ -138,8 +138,10 @@ void VisImage::drawClusters(){
     painter->drawText(1, 26, "Measure count: " + QString::number(clustList.measCount));
     painter->drawText(1, 40, "Clusters in frame (filtered): " + QString::number(clusters.size()));
     painter->drawText(1, 54, "Clusters in frame (all): " + QString::number(clustList.numExpectSumm));
-    painter->drawText(1, 68, "Far zone (" + QString::number(configInfo->getFarZone()) + "m): " + QString::number(clustList.numExpectFar));
-    painter->drawText(1, 82, "Near zone (" + QString::number(configInfo->nearZone) + "m): " + QString::number(clustList.numExpectNear));
+    painter->drawText(1, 68, "Far zone (" + QString::number(configInfo->getFarZone()) + "m): " +
+                      QString::number(clustList.numExpectFar));
+    painter->drawText(1, 82, "Near zone (" + QString::number(configInfo->nearZone) + "m): " +
+                      QString::number(clustList.numExpectNear));
     // ---
     clustList = ClusterList();
     clusters.clear();

@@ -111,7 +111,7 @@ DialogConfig::~DialogConfig(){
     delete ui;
 }
 
-void DialogConfig::updateUI(){
+void DialogConfig::updateConfigUI(){
     // --- ZMQ ---
     if(*inUse == InUse::zmq){
         ui->lSendZmq->show();
@@ -672,7 +672,11 @@ void DialogConfig::sendOne(){
         QMessageBox::information(this, "Send...", "Nothing started");
         break;
     case InUse::can:{       // --- CAN ---
+#ifdef __WIN32
+        int res = emit signalCanSend(ui->lEResStr->text());
+#else
         int res = system(ui->lEResStr->text().toStdString().c_str());
+#endif
         if(res == 0) ui->pBSend->setStyleSheet("background-color: green");
         else{
             ui->pBSend->setStyleSheet("background-color: red");
@@ -718,8 +722,8 @@ void DialogConfig::sendOne(){
                 }
                 else{
                     ui->lSendZmq->setStyleSheet("background-color: red");
-                    QMessageBox::information(this, "Send via ZMQ", "No response received:\n"
-+ QString::fromStdString(whatSend) + "\n(Check ip & port and restart application)");
+                    QMessageBox::information(this, "Send via ZMQ", "No response received:\n" +
+                                             QString::fromStdString(whatSend) + "\n(Check ip & port and restart application)");
                 }
             }
             else{
@@ -749,7 +753,11 @@ void DialogConfig::sendMulti(){
         break;
     case InUse::can:{       // --- CAN ---
         for (int i = 0; i < ui->cBResStr->count(); i++) {
+#ifdef __WIN32
+            int res = emit signalCanSend(ui->lEResStr->text());
+#else
             int res = system(ui->cBResStr->itemText(i).toStdString().c_str());
+#endif
             if(res != 0){
                 ui->pBSend->setStyleSheet("background-color: red");
                 QMessageBox::information(this, "Send via CAN...", "Smthng wrong: " + QString::number(res));

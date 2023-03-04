@@ -27,6 +27,11 @@ private slots:
 
     // --- CONFIGS ---
     void configRadarCall();
+    // ---
+    void updateDisplayUI();
+
+signals:
+    void signalUpdDisplay();
 
 private:
     Ui::DisplayData *ui;

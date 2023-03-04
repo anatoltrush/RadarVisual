@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>740</width>
-    <height>754</height>
+    <height>730</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,6 @@
         <property name="font">
          <font>
           <pointsize>12</pointsize>
-          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -83,7 +82,6 @@
           <property name="font">
            <font>
             <pointsize>11</pointsize>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -307,7 +305,7 @@
       <item>
        <widget class="QGroupBox" name="gBClFilt">
         <property name="title">
-         <string>Filter:</string>
+         <string>Show filter:</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="1" column="0">
@@ -698,6 +696,28 @@
      </spacer>
     </item>
     <item row="2" column="0">
+     <widget class="QLabel" name="lWarrning">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>---</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>

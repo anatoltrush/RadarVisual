@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         // bind
         displays[i]->versID = &sVersion->versID;
         displays[i]->dConfig->inUse = &inUse;
+        connect(displays[i]->dConfig, SIGNAL(signalCanSend(QString)),this, SLOT(sendCanFrame(QString)));
     }
 
     // --- threads ---
@@ -52,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     QLabel* lPlug = new QLabel(this);
     lPlug->setText("plugin:");
     QLabel* lInName = new QLabel(this);
-    lInName->setText("interface name:");
+    lInName->setText("interf name:");
     ui->hLInputs->insertWidget(1, lPlug);
     ui->hLInputs->insertWidget(3, lInName);
     ui->cBCanPlugin->addItems(QCanBus::instance()->plugins());
@@ -83,10 +84,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 }
 
 MainWindow::~MainWindow(){
+    if(canDevice) canDevice->disconnectDevice();
+
     isAppStopped = true;
     if (thrCanRcv.joinable()) thrCanRcv.join();
     if (thrPlayFile.joinable()) thrPlayFile.join();
-    if (thrZmqRcv.joinable()) thrZmqRcv.join();
+    if (thrZmqRcv.joinable()) thrZmqRcv.join();    
 
     for (uint8_t i = 0; i < RADAR_NUM; i++)
         delete displays[i];
@@ -100,7 +103,23 @@ void MainWindow::start(){
     // --- --- --- from CAN --- --- ---
     if(ui->rBInpCAN->isChecked()){
 #ifdef __WIN32
-        updateSettings();
+        bool isCanOpened = connectDevice();
+        if(isCanOpened){
+            ui->pBStart->setStyleSheet("background-color: green");
+            ui->rBInpZMQ->setEnabled(false);
+            ui->rBInpFile->setEnabled(false);
+            ui->pBLoadFile->setEnabled(false);
+            // --- status bar ---
+            for (uint8_t i = 0; i < RADAR_NUM; i++){
+                displays[i]->statusBar()->showMessage("Source: CAN (" + canSets.pluginName+"|"+canSets.deviceInterfaceName + ")");
+                displays[i]->dConfig->deviceName = canSets.deviceInterfaceName.toStdString();
+            }
+            // --- in use ---
+            inUse = InUse::can;
+        }
+        else{
+            ui->pBStart->setStyleSheet("background-color: red");
+        }
 #else
         if(ui->lEInpCAN->text().isEmpty()){
             QMessageBox::information(this, "Input from CAN", "Empty CAN name");
@@ -174,6 +193,12 @@ void MainWindow::inpCAN(){
     ui->pBStart->setEnabled(true);
 }
 
+int MainWindow::sendCanFrame(const QString &frame){
+    int a = 0; // TODO: int MainWindow::sendCanFrame(const QString &frame)
+    a++;
+    return 1;
+}
+
 #ifdef __WIN32
 void MainWindow::pluginChanged(const QString &plugin){
     ui->cBCanName->clear();
@@ -219,9 +244,93 @@ void MainWindow::inpFile(){
 }
 
 #ifdef __WIN32
-void MainWindow::updateSettings(){
-    canSettings.pluginName = ui->cBCanPlugin->currentText();
-    canSettings.deviceInterfaceName = ui->cBCanName->currentText();
+bool MainWindow::connectDevice(){
+    canSets.pluginName = ui->cBCanPlugin->currentText();
+    canSets.deviceInterfaceName = ui->cBCanName->currentText();
+
+    QString errorString;
+    canDevice.reset(QCanBus::instance()->createDevice(canSets.pluginName, canSets.deviceInterfaceName, &errorString));
+    if (!canDevice){
+        QMessageBox::information(this, "Input from CAN", "Can't start CAN:\n" +
+                                 tr("Error creating device '%1', reason: '%2'").arg(canSets.pluginName).arg(errorString));
+        return false;
+    }
+
+    numberFramesWritten = 0;
+
+    connect(canDevice.get(), &QCanBusDevice::errorOccurred, this, &MainWindow::processErrors);
+    connect(canDevice.get(), &QCanBusDevice::framesReceived, this, &MainWindow::processReceivedFrames);
+    connect(canDevice.get(), &QCanBusDevice::framesWritten, this, &MainWindow::processFramesWritten);
+
+    if (!canDevice->connectDevice()) {
+        QMessageBox::information(this, "CAN connection...", tr("Connection error: %1").arg(canDevice->errorString()));
+        canDevice.reset();
+        return false;
+    }
+    else {
+        const QVariant bitRate = canDevice->configurationParameter(QCanBusDevice::BitRateKey);
+        if (bitRate.isValid()) {
+            const bool isCanFd = canDevice->configurationParameter(QCanBusDevice::CanFdKey).toBool();
+            const QVariant dataBitRate = canDevice->configurationParameter(QCanBusDevice::DataBitRateKey);
+            if(isCanFd && dataBitRate.isValid()){
+                ui->lStatus->setText(tr("Status: plugin: %1, connected to %2 at %3 / %4 kBit/s")
+                                  .arg(canSets.pluginName).arg(canSets.deviceInterfaceName)
+                                  .arg(bitRate.toInt() / 1000).arg(dataBitRate.toInt() / 1000));
+            }
+            else{
+                ui->lStatus->setText(tr("Status: plugin: %1, connected to %2 at %3 kBit/s")
+                                  .arg(canSets.pluginName).arg(canSets.deviceInterfaceName)
+                                  .arg(bitRate.toInt() / 1000));
+            }
+        }
+        else {
+            ui->lStatus->setText(tr("Status: plugin: %1, connected to %2")
+                              .arg(canSets.pluginName).arg(canSets.deviceInterfaceName));
+        }
+        return true;
+    }
+}
+
+void MainWindow::processErrors(QCanBusDevice::CanBusError error) const{
+    switch (error){
+    case QCanBusDevice::ReadError:
+    case QCanBusDevice::WriteError:
+    case QCanBusDevice::ConnectionError:
+    case QCanBusDevice::ConfigurationError:
+    case QCanBusDevice::UnknownError:
+        ui->statBar->showMessage(canDevice->errorString());
+        break;
+    default:
+        break;
+    }
+}
+
+void MainWindow::processReceivedFrames(){
+    if (!canDevice) return;
+
+    while (canDevice->framesAvailable()) {
+        numberFramesReceived++;
+        const QCanBusFrame frame = canDevice->readFrame();
+
+        QString data;
+        if (frame.frameType() == QCanBusFrame::ErrorFrame)
+            data = canDevice->interpretErrorFrame(frame);
+        else
+            data = QLatin1String(frame.payload().toHex(' ').toUpper());
+
+        const QString time = QString::fromLatin1("%1.%2  ")
+                .arg(frame.timeStamp().seconds(), 10, 10, QLatin1Char(' '))
+                .arg(frame.timeStamp().microSeconds() / 100, 4, 10, QLatin1Char('0'));
+
+        const QString id = QString::number(frame.frameId(), 16);
+        const QString dlc = QString::number(frame.payload().size());
+        // TODO: implement receive
+        //m_model->appendFrame(QStringList({QString::number(numberFramesReceived), time, flags, id, dlc, data}));
+    }
+}
+
+void MainWindow::processFramesWritten(qint64 count){
+    numberFramesWritten += count;
 }
 #else
 bool MainWindow::openCan(const std::string &device){
@@ -310,7 +419,7 @@ void MainWindow::canRcv(){
     QString statLocalMess;
     canfd_frame pframe;
     int nbytes = 0;
-    while(!isAppStopped){        
+    while(!isAppStopped){
         std::this_thread::sleep_for(std::chrono::microseconds(delayCanUs));
         if(!isCanOpened) continue;
         delayCanUs = 5;
