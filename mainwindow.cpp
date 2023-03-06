@@ -84,7 +84,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 }
 
 MainWindow::~MainWindow(){
+#ifdef __WIN32
     if(canDevice) canDevice->disconnectDevice();
+#endif
 
     isAppStopped = true;
     if (thrCanRcv.joinable()) thrCanRcv.join();
