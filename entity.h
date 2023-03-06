@@ -25,8 +25,9 @@
 #include <unistd.h>
 #include <math.h>
 
-#define RADAR_NUM   8
-#define DATA_SIZE   256
+#define RADAR_NUM       8
+#define COLL_REG_NUM    8
+#define DATA_SIZE       256
 
 #define GET_CUR_TIME_MILLI (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 #define GET_CUR_TIME_MICRO (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
@@ -260,6 +261,8 @@ struct ObjectInfo{
     float angle     = 0.0f;
     DynProp type    = DynProp::unknown;
     ObjectClass objClass = ObjectClass::reserved;
+    bool collRegs[COLL_REG_NUM] = {false};
+    // methods
     void clacAzimuth(){azimuth = std::atan(distLat / distLong) * 180.0f / M_PI;}
     QString getClassStr() const{
         switch (objClass) {

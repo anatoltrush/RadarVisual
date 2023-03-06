@@ -338,9 +338,7 @@ void MainWindow::procReceivedFrames(){
         const QString time = QString::fromLatin1("%1.%2  ")
                 .arg(frame.timeStamp().seconds(), 10, 10, QLatin1Char(' '))
                 .arg(frame.timeStamp().microSeconds() / 100, 4, 10, QLatin1Char('0'));
-
         const QString id = QString::number(frame.frameId(), 16);
-        const QString dlc = QString::number(frame.payload().size());
 
         // --- --- ---
         CanLine rcvLine;
@@ -348,7 +346,8 @@ void MainWindow::procReceivedFrames(){
         rcvLine.messId = id;
         rcvLine.messData = data;
         rcvLine.messData.remove(QChar(' '));
-        rcvLine.timeStamp = time.toDouble();
+        QString locTime = time;
+        rcvLine.timeStamp = locTime.remove(QChar('.')).toDouble();
         sendToDisplay(rcvLine);
 
         // --- status bar ---

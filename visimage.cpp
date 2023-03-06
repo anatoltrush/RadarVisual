@@ -119,7 +119,7 @@ void VisImage::drawClusters(){
         painter->setBrush(currCol);
         int wCl = width()/2 + cl.distLat / (float)gridStepM * gridStepPx;
         int hCl = height() - cl.distLong / (float)gridStepM * gridStepPx;
-        int radius = calcRad(cl.RCS);
+        int radius = calcRadius(cl.RCS);
         painter->drawEllipse(QPoint(wCl, hCl), radius, radius);
         // --- text ---
         if(isShowInfo){
@@ -157,7 +157,7 @@ void VisImage::drawObjectsInfo(){
         painter->setBrush(colObjInfo);
         int wObj = width()/2 + obj.distLat / (float)gridStepM * gridStepPx;
         int hObj = height() - obj.distLong / (float)gridStepM * gridStepPx;
-        int side = calcRad(obj.RCS);
+        int side = calcRadius(obj.RCS);
         painter->drawRect(wObj-side/2, hObj-side/2, side, side);
         // --- text ---
         if(isShowInfo){
@@ -235,8 +235,8 @@ void VisImage::drawCursor(){
     painter->drawText(curs.x(), curs.y() + 14, "d:" + diagStr + "m|az:" + azStr+"d");
 }
 
-int VisImage::calcRad(float rcs){
-    int res = (int)((rcs - offsetClustRCS) / (float)gridStepM);
+int VisImage::calcRadius(float rcs){
+    int res = (int)((rcs - offsetClustRCS) / gridStepM);
     if(res <= 0) return 1;
     return res;
 }

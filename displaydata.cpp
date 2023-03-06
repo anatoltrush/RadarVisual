@@ -217,6 +217,14 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         dConfig->updateConfigUI();
     }
 
+    // --- COLLISIONS ---
+    if(canLine.messId[0] == '4' && canLine.messId[2] == '2'){
+        // ...implement in future...
+    }
+    if(canLine.messId[0] == '4' && canLine.messId[2] == '8'){
+        // ...implement in future...
+    }
+
     // --- ------ OBJECTS --- --- ---
     if(canLine.messId[0] == '6' && (canLine.messId[2] == 'a' || canLine.messId[2] == 'A')){ // OBJS LIST
         // NOTE: Send object frame to visual
@@ -322,7 +330,7 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
             }
     }
     if(canLine.messId[0] == '6' && (canLine.messId[2] == 'e' || canLine.messId[2] == 'E')){ // COLLISION
-
+        // ...implement in future...
     }
 }
 

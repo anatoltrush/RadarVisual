@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1062</width>
-    <height>660</height>
+    <width>845</width>
+    <height>580</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -107,8 +107,14 @@
    </item>
    <item row="0" column="0">
     <widget class="QTabWidget" name="tWConfig">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tbRadarConfig">
       <attribute name="title">
@@ -117,12 +123,24 @@
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
         <widget class="QGroupBox" name="gBCurrRad">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Current radar configuration</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="2" column="3">
            <widget class="QGroupBox" name="gBCurrRadDist">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Dist (max, m)</string>
             </property>
@@ -140,8 +158,14 @@
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>10</width>
+                 <width>0</width>
                  <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>80</width>
+                 <height>16777215</height>
                 </size>
                </property>
                <property name="readOnly">
@@ -154,6 +178,12 @@
           </item>
           <item row="1" column="1">
            <widget class="QGroupBox" name="gBCurrRadTemper">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Temperature err</string>
             </property>
@@ -183,6 +213,12 @@
           </item>
           <item row="1" column="2">
            <widget class="QGroupBox" name="gBCurrRadTempor">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Temporary err</string>
             </property>
@@ -212,6 +248,12 @@
           </item>
           <item row="0" column="1">
            <widget class="QGroupBox" name="gBCurrRadWrite">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Write status</string>
             </property>
@@ -241,6 +283,12 @@
           </item>
           <item row="0" column="2">
            <widget class="QGroupBox" name="gBCurrRadInterfer">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Interference</string>
             </property>
@@ -270,6 +318,12 @@
           </item>
           <item row="3" column="2">
            <widget class="QGroupBox" name="gBCurrRadPower">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Power</string>
             </property>
@@ -319,6 +373,12 @@
           </item>
           <item row="2" column="1">
            <widget class="QGroupBox" name="gBCurrRadExt">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Send ext info</string>
             </property>
@@ -348,6 +408,12 @@
           </item>
           <item row="2" column="2">
            <widget class="QGroupBox" name="gBCurrRadThr">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Threshold RCS</string>
             </property>
@@ -377,6 +443,12 @@
           </item>
           <item row="0" column="0">
            <widget class="QGroupBox" name="gBCurrRadRead">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Read status</string>
             </property>
@@ -406,6 +478,12 @@
           </item>
           <item row="2" column="0">
            <widget class="QGroupBox" name="gBCurrRadQual">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Send quality</string>
             </property>
@@ -435,6 +513,12 @@
           </item>
           <item row="3" column="0">
            <widget class="QGroupBox" name="gBCurrRadSortInd">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Sorting</string>
             </property>
@@ -474,6 +558,12 @@
           </item>
           <item row="1" column="3">
            <widget class="QGroupBox" name="gBCurrRadVolt">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Voltage err</string>
             </property>
@@ -503,6 +593,12 @@
           </item>
           <item row="0" column="3">
            <widget class="QGroupBox" name="gBCurrRadRelay">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Relay</string>
             </property>
@@ -532,6 +628,12 @@
           </item>
           <item row="1" column="0">
            <widget class="QGroupBox" name="gBCurrRadPersErr">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Persistent err</string>
             </property>
@@ -561,6 +663,12 @@
           </item>
           <item row="3" column="1">
            <widget class="QGroupBox" name="gBCurrRadOutType">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Output type</string>
             </property>
@@ -600,6 +708,12 @@
           </item>
           <item row="3" column="3">
            <widget class="QGroupBox" name="gBCurrRadMot">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string>Motion rx state</string>
             </property>
@@ -652,6 +766,12 @@
        </item>
        <item row="0" column="1">
         <widget class="QGroupBox" name="gBSetRad">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Set radar configuration</string>
          </property>

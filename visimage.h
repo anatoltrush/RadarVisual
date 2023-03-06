@@ -49,7 +49,7 @@ private:
     void drawObjectsInfo();
     void drawObjectsExt();
     void drawCursor();
-    int calcRad(float rcs);
+    int calcRadius(float rcs);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override {curs = event->pos();};
