@@ -199,6 +199,9 @@ void VisImage::drawObjectsExt(){
         QPen penObjInfo = QPen(Qt::black, 1);
         painter->setPen(penObjInfo);
         if(isShowInfo){
+            // --- class ---
+            painter->drawText(xObj-15, yObj-2, "|" + obj.getClassStr() + "|");
+            // --- rest ---
             QString textInfo;
             if(properties[0]) textInfo = Converter::floatCutOff(obj.RCS, 1);
             if(properties[1]) textInfo = Converter::floatCutOff(obj.distLong, 1);

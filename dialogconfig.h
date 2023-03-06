@@ -91,7 +91,7 @@ private slots:
 private:
     Ui::DialogConfig *ui;
 
-    uint8_t delayCanMs = 50;
+    uint8_t delaySendMsg = 50;
 
     // --- ZMQ ---
     uint64_t msg_num = 0;

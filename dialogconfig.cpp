@@ -651,7 +651,18 @@ void DialogConfig::genClObjConfComm(){
         comm = resStr;
     }
 
-    // TODO:--- canlines for zmq line ---
+    // --- canlines for zmq line ---
+    zmqCanLines.clear();
+    for(const auto& comm: commands){
+        QStringList listData = comm.split(' ');
+        CanLine temp;
+        temp.timeStamp = GET_CUR_TIME_MICRO;
+        temp.canNum = listData[1];
+        temp.messId = listData[2].mid(0, 3);
+        temp.messData = listData[2].mid(4, 23);
+        temp.messData.remove('.');
+        zmqCanLines.push_back(temp);
+    }
 
     // --- UI ---
     ui->cBResStr->addItems(commands);
@@ -717,13 +728,14 @@ void DialogConfig::sendOne(){
                     }
                     else{
                         ui->lSendZmq->setStyleSheet("background-color: red");
-                        QMessageBox::information(this, "Send via ZMQ", "Can't send ZMQ:\n" + QString::fromStdString(whatRcv));
+                        QMessageBox::information(this, "Send via ZMQ", "No response received:\n" +
+                                                 QString::fromStdString(whatRcv));
                     }
                 }
                 else{
                     ui->lSendZmq->setStyleSheet("background-color: red");
-                    QMessageBox::information(this, "Send via ZMQ", "No response received:\n" +
-                                             QString::fromStdString(whatSend) + "\n(Check ip & port and restart application)");
+                    QMessageBox::information(this, "Send via ZMQ", "Can't send ZMQ:\n" + QString::fromStdString(whatSend) +
+                                             "\n(Check ip & port and restart application)");
                 }
             }
             else{
@@ -763,7 +775,7 @@ void DialogConfig::sendMulti(){
                 QMessageBox::information(this, "Send via CAN...", "Smthng wrong: " + QString::number(res));
                 break;
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(delayCanMs));
+            std::this_thread::sleep_for(std::chrono::milliseconds(delaySendMsg));
         }
         ui->pBSend->setStyleSheet("background-color: green");
         break;
@@ -780,7 +792,41 @@ void DialogConfig::sendMulti(){
             std::string whatStart;
             bool isCliStarted = zmqClient.start(whatStart);
             if(isCliStarted){
-                // TODO: zmq implement
+                for (const auto &zmqCL : zmqCanLines) {
+                    zmq::message_t messToCan;
+                    MessageId idToCan;
+                    idToCan._time = GET_CUR_TIME_MICRO;
+                    idToCan._msg_num = msg_num++;
+                    idToCan._msg_src = configRadar->id;
+                    canfd_frame canFrame;
+
+                    Converter::getCanFdFromCanLine(canFrame, zmqCL);
+                    Converter::getZmqFromCanFd(messToCan, canFrame, idToCan);
+                    // ---
+                    std::string whatSend;
+                    bool isSent = zmqClient.send(messToCan, whatSend);
+                    if(isSent){
+                        zmq::message_t rcv;
+                        std::string whatRcv;
+                        bool isRcvd = zmqClient.receive(&rcv, whatRcv, 10);
+                        if(isRcvd){
+                            ui->lSendZmq->setStyleSheet("background-color: green");
+                        }
+                        else{
+                            ui->lSendZmq->setStyleSheet("background-color: red");
+                            QMessageBox::information(this, "Send via ZMQ", "No response received:\n" +
+                                                     QString::fromStdString(whatRcv));
+                            break;
+                        }
+                    }
+                    else{
+                        ui->lSendZmq->setStyleSheet("background-color: red");
+                        QMessageBox::information(this, "Send via ZMQ", "Can't send ZMQ:\n" + QString::fromStdString(whatSend) +
+                                                 "\n(Check ip & port and restart application)");
+                        break;
+                    }
+                    std::this_thread::sleep_for(std::chrono::milliseconds(delaySendMsg));
+                }
             }
             else{
                 ui->lSendZmq->setStyleSheet("background-color: red");

@@ -90,8 +90,8 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: ?#202 Objects/Clusters: draw class + Send via ZMQ
+// TODO: TEST: canBus on WIN10 & zmq multi
 // TODO: ?Collisions #400, #401
 // TODO: ?Windows (Serial bus)
-// TODO: ?Calc spent dist
-// TODO: ?Redo resize VisImg
+// TODO: ?Calc spent dist + Supports
+// TODO: ?Redo visImg

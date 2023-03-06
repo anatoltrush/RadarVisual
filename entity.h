@@ -261,6 +261,37 @@ struct ObjectInfo{
     DynProp type    = DynProp::unknown;
     ObjectClass objClass = ObjectClass::reserved;
     void clacAzimuth(){azimuth = std::atan(distLat / distLong) * 180.0f / M_PI;}
+    QString getClassStr() const{
+        switch (objClass) {
+        case ObjectClass::point:
+            return "pt";
+            break;
+        case ObjectClass::car:
+            return "cr";
+            break;
+        case ObjectClass::truck:
+            return "tr";
+            break;
+        case ObjectClass::pedestrian:
+            return "pd";
+            break;
+        case ObjectClass::motorcycle:
+            return "mt";
+            break;
+        case ObjectClass::bicycle:
+            return "bc";
+            break;
+        case ObjectClass::wide:
+            return "wd";
+            break;
+        case ObjectClass::reserved:
+            return "rs";
+            break;
+        default:
+            return "--";
+            break;
+        }
+    }
 };
 
 #endif // ENTITY_H
