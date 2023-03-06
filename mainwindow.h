@@ -21,7 +21,7 @@ private slots:
     void addDisplay();
 
     void inpCAN();
-    int sendCanFrame(const QString& frame);
+    int sendCanFrame(const QString& canStr);
 #ifdef __WIN32
     void pluginChanged(const QString &plugin);
     void interfaceChanged(const QString &interf);
@@ -54,7 +54,6 @@ private:
     struct ifreq ifr;
 #endif
     qint64 numFramesReceived = 0;
-    qint64 numFramesWritten = 0;
     std::string deviceName;
     uint16_t delayCanUs = 5000;
     std::thread thrCanRcv;
@@ -63,7 +62,6 @@ private:
     bool connectDevice();
     void procErrors(QCanBusDevice::CanBusError) const;
     void procReceivedFrames();
-    void procFramesWritten(qint64);
 #else
     bool openCan(const std::string &device);
 #endif
@@ -91,6 +89,5 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: ?Collisions #400, #401
-// TODO: ?Windows (Serial bus)
 // TODO: ?Calc spent dist + Supports
 // TODO: ?Redo visImg

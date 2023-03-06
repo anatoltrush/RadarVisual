@@ -766,7 +766,7 @@ void DialogConfig::sendMulti(){
     case InUse::can:{       // --- CAN ---
         for (int i = 0; i < ui->cBResStr->count(); i++) {
 #ifdef __WIN32
-            int res = emit signalCanSend(ui->lEResStr->text());
+            int res = emit signalCanSend(ui->cBResStr->itemText(i));
 #else
             int res = system(ui->cBResStr->itemText(i).toStdString().c_str());
 #endif

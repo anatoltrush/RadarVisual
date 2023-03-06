@@ -195,10 +195,25 @@ void MainWindow::inpCAN(){
     ui->pBStart->setEnabled(true);
 }
 
-int MainWindow::sendCanFrame(const QString &frame){
-    int a = 0; // TODO: int MainWindow::sendCanFrame(const QString &frame)
-    a++;
-    return 1;
+int MainWindow::sendCanFrame(const QString &canStr){
+    if(!canDevice) return -1;
+
+    // ---
+    QStringList strList1 = canStr.split(u' ', Qt::SkipEmptyParts);
+    if(strList1.size() < 3) return -2;
+    QStringList strList2 = strList1[2].split(u'#', Qt::SkipEmptyParts);
+    if(strList2.size() < 2) return -3;
+
+    // --- frame ---
+    uint32_t frameId = strList2[0].toUInt(nullptr, 16);
+    QByteArray payload = QByteArray::fromHex(strList2[1].remove(QChar('.')).toLatin1());
+
+    QCanBusFrame frame(frameId, payload);
+
+    // ---
+    bool isWritten = canDevice->writeFrame(frame);
+
+    return !isWritten;
 }
 
 #ifdef __WIN32
@@ -258,11 +273,8 @@ bool MainWindow::connectDevice(){
         return false;
     }
 
-    numFramesWritten = 0;
-
     connect(canDevice.get(), &QCanBusDevice::errorOccurred, this, &MainWindow::procErrors);
     connect(canDevice.get(), &QCanBusDevice::framesReceived, this, &MainWindow::procReceivedFrames);
-    connect(canDevice.get(), &QCanBusDevice::framesWritten, this, &MainWindow::procFramesWritten);
 
     if (!canDevice->connectDevice()) {
         QMessageBox::information(this, "CAN connection...", tr("Connection error: %1").arg(canDevice->errorString()));
@@ -275,18 +287,18 @@ bool MainWindow::connectDevice(){
             const bool isCanFd = canDevice->configurationParameter(QCanBusDevice::CanFdKey).toBool();
             const QVariant dataBitRate = canDevice->configurationParameter(QCanBusDevice::DataBitRateKey);
             if(isCanFd && dataBitRate.isValid()){
-                ui->lStatus->setText(tr("Status: plugin: %1, connected to %2 at %3 / %4 kBit/s")
+                ui->lStatus->setText(tr("Status: plugin: %1,\nconn. to %2 at %3 / %4 kBit/s")
                                   .arg(canSets.pluginName).arg(canSets.deviceInterfaceName)
                                   .arg(bitRate.toInt() / 1000).arg(dataBitRate.toInt() / 1000));
             }
             else{
-                ui->lStatus->setText(tr("Status: plugin: %1, connected to %2 at %3 kBit/s")
+                ui->lStatus->setText(tr("Status: plugin: %1,\nconn. to %2 at %3 kBit/s")
                                   .arg(canSets.pluginName).arg(canSets.deviceInterfaceName)
                                   .arg(bitRate.toInt() / 1000));
             }
         }
         else {
-            ui->lStatus->setText(tr("Status: plugin: %1, connected to %2")
+            ui->lStatus->setText(tr("Status: plugin: %1,\nconn. to %2")
                               .arg(canSets.pluginName).arg(canSets.deviceInterfaceName));
         }
         statusRadMess = "Connected";
@@ -330,6 +342,7 @@ void MainWindow::procReceivedFrames(){
 
         // --- --- ---
         CanLine rcvLine;
+        rcvLine.canNum = QString::fromStdString(deviceName);
         rcvLine.messId = id;
         rcvLine.messData = data;
         rcvLine.messData.remove(QChar(' '));
@@ -345,9 +358,6 @@ void MainWindow::procReceivedFrames(){
     }
 }
 
-void MainWindow::procFramesWritten(qint64 count){
-    numFramesWritten += count;
-}
 #else
 bool MainWindow::openCan(const std::string &device){
     isCanOpened = false;
