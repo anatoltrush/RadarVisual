@@ -15,7 +15,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         // bind
         displays[i]->versID = &sVersion->versID;
         displays[i]->dConfig->inUse = &inUse;
+#ifdef __WIN32
         connect(displays[i]->dConfig, SIGNAL(signalCanSend(QString)),this, SLOT(sendCanFrame(QString)));
+#endif
     }
 
     // --- threads ---
@@ -195,6 +197,7 @@ void MainWindow::inpCAN(){
     ui->pBStart->setEnabled(true);
 }
 
+#ifdef __WIN32
 int MainWindow::sendCanFrame(const QString &canStr){
     if(!canDevice) return -1;
 
@@ -216,7 +219,6 @@ int MainWindow::sendCanFrame(const QString &canStr){
     return !isWritten;
 }
 
-#ifdef __WIN32
 void MainWindow::pluginChanged(const QString &plugin){
     ui->cBCanName->clear();
     interfaces = QCanBus::instance()->availableDevices(plugin);

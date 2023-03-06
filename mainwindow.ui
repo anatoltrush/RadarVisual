@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>612</width>
+    <width>719</width>
     <height>295</height>
    </rect>
   </property>
@@ -40,7 +40,7 @@
     <item row="0" column="0">
      <widget class="QGroupBox" name="gBInput">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -60,6 +60,7 @@
         <widget class="QRadioButton" name="rBInpZMQ">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -79,6 +80,7 @@
          <property name="font">
           <font>
            <pointsize>15</pointsize>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -163,6 +165,7 @@
         <widget class="QRadioButton" name="rBInpCAN">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -207,6 +210,7 @@
          <property name="font">
           <font>
            <pointsize>15</pointsize>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -239,6 +243,7 @@
         <widget class="QRadioButton" name="rBInpFile">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>

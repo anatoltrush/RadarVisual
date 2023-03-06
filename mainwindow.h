@@ -21,8 +21,8 @@ private slots:
     void addDisplay();
 
     void inpCAN();
-    int sendCanFrame(const QString& canStr);
 #ifdef __WIN32
+    int sendCanFrame(const QString& canStr);
     void pluginChanged(const QString &plugin);
     void interfaceChanged(const QString &interf);
 #endif
