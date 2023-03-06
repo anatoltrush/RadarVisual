@@ -49,8 +49,8 @@ private:
     QList<QCanBusDeviceInfo> interfaces;
     Settings canSets;
     std::unique_ptr<QCanBusDevice> canDevice;
-    qint64 numberFramesReceived = 0;
-    qint64 numberFramesWritten = 0;
+    qint64 numFramesReceived = 0;
+    qint64 numFramesWritten = 0;
 #else
     struct sockaddr_can sockAddr;
     struct ifreq ifr;
@@ -61,9 +61,9 @@ private:
     bool isCanOpened = false;
 #ifdef __WIN32
     bool connectDevice();
-    void processErrors(QCanBusDevice::CanBusError) const;
-    void processReceivedFrames();
-    void processFramesWritten(qint64);
+    void procErrors(QCanBusDevice::CanBusError) const;
+    void procReceivedFrames();
+    void procFramesWritten(qint64);
 #else
     bool openCan(const std::string &device);
 #endif
@@ -90,7 +90,6 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: TEST: canBus on WIN10 & zmq multi
 // TODO: ?Collisions #400, #401
 // TODO: ?Windows (Serial bus)
 // TODO: ?Calc spent dist + Supports

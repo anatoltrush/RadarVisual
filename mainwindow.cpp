@@ -258,11 +258,11 @@ bool MainWindow::connectDevice(){
         return false;
     }
 
-    numberFramesWritten = 0;
+    numFramesWritten = 0;
 
-    connect(canDevice.get(), &QCanBusDevice::errorOccurred, this, &MainWindow::processErrors);
-    connect(canDevice.get(), &QCanBusDevice::framesReceived, this, &MainWindow::processReceivedFrames);
-    connect(canDevice.get(), &QCanBusDevice::framesWritten, this, &MainWindow::processFramesWritten);
+    connect(canDevice.get(), &QCanBusDevice::errorOccurred, this, &MainWindow::procErrors);
+    connect(canDevice.get(), &QCanBusDevice::framesReceived, this, &MainWindow::procReceivedFrames);
+    connect(canDevice.get(), &QCanBusDevice::framesWritten, this, &MainWindow::procFramesWritten);
 
     if (!canDevice->connectDevice()) {
         QMessageBox::information(this, "CAN connection...", tr("Connection error: %1").arg(canDevice->errorString()));
@@ -289,11 +289,12 @@ bool MainWindow::connectDevice(){
             ui->lStatus->setText(tr("Status: plugin: %1, connected to %2")
                               .arg(canSets.pluginName).arg(canSets.deviceInterfaceName));
         }
+        statusRadMess = "Connected";
         return true;
     }
 }
 
-void MainWindow::processErrors(QCanBusDevice::CanBusError error) const{
+void MainWindow::procErrors(QCanBusDevice::CanBusError error) const{
     switch (error){
     case QCanBusDevice::ReadError:
     case QCanBusDevice::WriteError:
@@ -307,11 +308,11 @@ void MainWindow::processErrors(QCanBusDevice::CanBusError error) const{
     }
 }
 
-void MainWindow::processReceivedFrames(){
+void MainWindow::procReceivedFrames(){
     if (!canDevice) return;
 
     while (canDevice->framesAvailable()) {
-        numberFramesReceived++;
+        numFramesReceived++;
         const QCanBusFrame frame = canDevice->readFrame();
 
         QString data;
@@ -326,13 +327,26 @@ void MainWindow::processReceivedFrames(){
 
         const QString id = QString::number(frame.frameId(), 16);
         const QString dlc = QString::number(frame.payload().size());
-        // TODO: implement receive
-        //m_model->appendFrame(QStringList({QString::number(numberFramesReceived), time, flags, id, dlc, data}));
+
+        // --- --- ---
+        CanLine rcvLine;
+        rcvLine.messId = id;
+        rcvLine.messData = data;
+        rcvLine.messData.remove(QChar(' '));
+        rcvLine.timeStamp = time.toDouble();
+        sendToDisplay(rcvLine);
+
+        // --- status bar ---
+        if(numFramesReceived % 10 == 0){
+            QString statLocalMess = statusRadMess + " | " + QString::number(sizeof(frame)) +
+                            " bytes received. Msg num: " + QString::number(numFramesReceived);
+            ui->statBar->showMessage(statLocalMess);
+        }
     }
 }
 
-void MainWindow::processFramesWritten(qint64 count){
-    numberFramesWritten += count;
+void MainWindow::procFramesWritten(qint64 count){
+    numFramesWritten += count;
 }
 #else
 bool MainWindow::openCan(const std::string &device){
@@ -432,12 +446,17 @@ void MainWindow::canRcv(){
         }
         else{
             // NOTE: Receive real can data
-            statLocalMess = statusRadMess + " | " + QString::number(nbytes) + " bytes received";
+            numFramesReceived++;
             CanLine canLine = Converter::getCanLineFromCanFd(deviceName, pframe, false);
             if (canLine.messId.size() != 3) continue;
             sendToDisplay(canLine);
         }
-        ui->statBar->showMessage(statLocalMess);
+        // --- status bar ---
+        if(numFramesReceived %10 == 0){
+            statLocalMess = statusRadMess + " | " + QString::number(nbytes) + " bytes received. Msg num: " +
+                    QString::number(numFramesReceived);
+            ui->statBar->showMessage(statLocalMess);
+        }
     }
 }
 
