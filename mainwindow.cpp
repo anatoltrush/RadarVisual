@@ -379,7 +379,7 @@ bool MainWindow::openCan(const std::string &device){
         }
 
         int enable_canfd = 0;
-        statusRadMess = "CAN interface ---> " + QString::fromStdString(device) + " <---";
+        statusRadMess = "CAN interf. ->" + QString::fromStdString(device) + "<-";
         if(setsockopt(handle, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &enable_canfd, sizeof(enable_canfd)) == 0)
             statusRadMess.append(" is set to CAN FD capable");
         else

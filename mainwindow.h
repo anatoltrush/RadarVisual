@@ -49,12 +49,12 @@ private:
     QList<QCanBusDeviceInfo> interfaces;
     Settings canSets;
     std::unique_ptr<QCanBusDevice> canDevice;
-    qint64 numFramesReceived = 0;
-    qint64 numFramesWritten = 0;
 #else
     struct sockaddr_can sockAddr;
     struct ifreq ifr;
 #endif
+    qint64 numFramesReceived = 0;
+    qint64 numFramesWritten = 0;
     std::string deviceName;
     uint16_t delayCanUs = 5000;
     std::thread thrCanRcv;
