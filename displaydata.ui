@@ -713,7 +713,7 @@
        </font>
       </property>
       <property name="text">
-       <string>---</string>
+       <string>&lt;- no errors -&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

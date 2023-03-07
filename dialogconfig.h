@@ -19,8 +19,8 @@ public:
     explicit DialogConfig(QWidget *parent = nullptr);
     ~DialogConfig();
 
-    ConfigRadar* configRadar = nullptr;
-    ConfigClustObj* configCluster = nullptr;
+    ConfigRadar configRadar;
+    CollDetState collDetState;
 
     InUse* inUse = nullptr;
     std::string deviceName;
@@ -30,6 +30,7 @@ public:
     uint16_t fltObj     = 0;
 
     void updateConfigUI();
+    void updateCollDetStateUI();
 
 signals:
     int signalCanSend(const QString& strData);
@@ -54,8 +55,8 @@ private slots:
     void showHideSetRadId(bool checked);
 
     void tabChanged(int index);
-    void updateUIClusters();
-    void updateUIObjects();
+    void selectedUIClusters();
+    void selectedUIObjects();
 
     void showHideSetClObjNofVal(bool checked); // Nof objects
     void showHideSetClObjNofAct(bool checked);

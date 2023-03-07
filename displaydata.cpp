@@ -28,19 +28,19 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
         QToolButton* tButton = static_cast<QToolButton*>(ui->gridTypes->itemAtPosition(i, 0)->widget());
         tButton->setIcon(px);
     }
-    // --- bind ---
-    ui->wDraw->configInfo = &configRadar;
 
     // --- config ---
     dConfig = new DialogConfig(this);
-    dConfig->configRadar = &configRadar;
+    // --- bind ---
+    ui->wDraw->configRadar = &dConfig->configRadar;
+    ui->wDraw->collDetState = &dConfig->collDetState;
 
     // --- connections ---
     connect(ui->pBConfigRadar, SIGNAL(clicked()), this, SLOT(configRadarCall()));
     connect(ui->cBInfo, SIGNAL(clicked(bool)), this, SLOT(info(bool)));
     connect(ui->cBRadNum, SIGNAL(currentIndexChanged(int)), this, SLOT(radNum(int)));
     connect(ui->cBChsDist, SIGNAL(currentTextChanged(QString)), this, SLOT(chooseDist(QString)));
-    connect(this, SIGNAL(signalUpdDisplay()), this, SLOT(updateDisplayUI()));
+    connect(this, SIGNAL(signalWarningsUI()), this, SLOT(updateWarningsUI()));
 
     // --- post events ---
     ui->cBInfo->click();
@@ -155,74 +155,66 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
     // --- RADAR STATE & FILTERS---
     if(canLine.messId[0] == '2' && canLine.messId[2] == '1'){ // RADAR STATE
         // --- can num ---
-        configRadar.canNum = std::atoi(&canLine.canNum.toStdString().back());
+        dConfig->configRadar.canNum = std::atoi(&canLine.canNum.toStdString().back());
 
         // --- write ---
-        configRadar.writeStatus = Converter::getDecData(canLine.messData, 0, 1);
+        dConfig->configRadar.writeStatus = Converter::getDecData(canLine.messData, 0, 1);
 
         // --- read ---
-        configRadar.readStatus = Converter::getDecData(canLine.messData, 1, 1);
+        dConfig->configRadar.readStatus = Converter::getDecData(canLine.messData, 1, 1);
 
         // --- dist ---
-        configRadar.setFarZone(Converter::getDecData(canLine.messData, 8, 10));
-        configRadar.setFarZone(configRadar.getFarZone() * resConfRadMaxDist);
+        dConfig->configRadar.setFarZone(Converter::getDecData(canLine.messData, 8, 10));
+        dConfig->configRadar.setFarZone(dConfig->configRadar.getFarZone() * resConfRadMaxDist);
 
         // --- pers error ---
-        configRadar.persistErr = Converter::getDecData(canLine.messData, 18, 1);
+        dConfig->configRadar.persistErr = Converter::getDecData(canLine.messData, 18, 1);
 
         // --- interfer ---
-        configRadar.interference = Converter::getDecData(canLine.messData, 19, 1);
+        dConfig->configRadar.interference = Converter::getDecData(canLine.messData, 19, 1);
 
         // --- temper ---
-        configRadar.temperatErr = Converter::getDecData(canLine.messData, 20, 1);
+        dConfig->configRadar.temperatErr = Converter::getDecData(canLine.messData, 20, 1);
 
         // --- tempor ---
-        configRadar.temporarErr = Converter::getDecData(canLine.messData, 21, 1);
+        dConfig->configRadar.temporarErr = Converter::getDecData(canLine.messData, 21, 1);
 
         // --- volt ---
-        configRadar.voltErr = Converter::getDecData(canLine.messData, 22, 1);
+        dConfig->configRadar.voltErr = Converter::getDecData(canLine.messData, 22, 1);
 
         // --- sort ---
-        configRadar.sortInd = Converter::getDecData(canLine.messData, 33, 3);
+        dConfig->configRadar.sortInd = Converter::getDecData(canLine.messData, 33, 3);
 
         // --- power ---
-        configRadar.power = Converter::getDecData(canLine.messData, 30, 3);
+        dConfig->configRadar.power = Converter::getDecData(canLine.messData, 30, 3);
 
         // --- relay ---
-        configRadar.relay = Converter::getDecData(canLine.messData, 46, 1);
+        dConfig->configRadar.relay = Converter::getDecData(canLine.messData, 46, 1);
 
         // --- output type ---
-        configRadar.outputType = Converter::getDecData(canLine.messData, 44, 2);
+        dConfig->configRadar.outputType = Converter::getDecData(canLine.messData, 44, 2);
 
         // --- send qual ---
-        configRadar.sendQual = Converter::getDecData(canLine.messData, 43, 1);
+        dConfig->configRadar.sendQual = Converter::getDecData(canLine.messData, 43, 1);
 
         // --- send ext ---
-        configRadar.sendExt = Converter::getDecData(canLine.messData, 42, 1);
+        dConfig->configRadar.sendExt = Converter::getDecData(canLine.messData, 42, 1);
 
         // --- motion ---
-        configRadar.motionRxState = Converter::getDecData(canLine.messData, 40, 2);
+        dConfig->configRadar.motionRxState = Converter::getDecData(canLine.messData, 40, 2);
 
         // --- threshold ---
-        configRadar.thrRcs = Converter::getDecData(canLine.messData, 59, 3);
+        dConfig->configRadar.thrRcs = Converter::getDecData(canLine.messData, 59, 3);
 
         // --- --- ---
         dConfig->updateConfigUI();
-        emit signalUpdDisplay();
+        emit signalWarningsUI();
     }
     if(canLine.messId[0] == '2' && canLine.messId[2] == '3'){ // FILTERS
         dConfig->is203Got = true;
         dConfig->fltClust = Converter::getDecData(canLine.messData, 0, 5);
         dConfig->fltObj = Converter::getDecData(canLine.messData, 8, 5);
         dConfig->updateConfigUI();
-    }
-
-    // --- COLLISIONS ---
-    if(canLine.messId[0] == '4' && canLine.messId[2] == '2'){
-        // ...implement in future...
-    }
-    if(canLine.messId[0] == '4' && canLine.messId[2] == '8'){
-        // ...implement in future...
     }
 
     // --- ------ OBJECTS --- --- ---
@@ -330,7 +322,27 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
             }
     }
     if(canLine.messId[0] == '6' && (canLine.messId[2] == 'e' || canLine.messId[2] == 'E')){ // COLLISION
-        // ...implement in future...
+        uint8_t idObj = Converter::getDecData(canLine.messData, 0, 8);
+        for(auto& obj : objectsAll)
+            if(idObj == obj.id){
+                uint8_t regBits = Converter::getDecData(canLine.messData, 8, 8);
+                QString strBits = Converter::decToBin(QString::number(regBits), COLL_REG_NUM);
+                for (int i = 0; i < strBits.length(); i++)
+                    if(strBits[i] == QChar('1')) obj.collRegs[i] = true;
+            }
+    }
+
+    // --- COLLISIONS ---
+    if(canLine.messId[0] == '4' && canLine.messId[2] == '2'){ // REGION DATA
+        // TODO: #402...implement in future...
+    }
+    if(canLine.messId[0] == '4' && canLine.messId[2] == '8'){ // COLLISION STATE
+        dConfig->collDetState.isActive = Converter::getDecData(canLine.messData, 6, 1);
+        dConfig->collDetState.nofRegs = Converter::getDecData(canLine.messData, 0, 4);
+        dConfig->collDetState.detectTimeSec = Converter::getDecData(canLine.messData, 8, 8);
+        dConfig->collDetState.detectTimeSec *= resDetectTime;
+        dConfig->collDetState.measCount = Converter::getDecData(canLine.messData, 16, 16);
+        dConfig->updateCollDetStateUI();
     }
 }
 
@@ -376,10 +388,10 @@ void DisplayData::applyFilters(){
 
 void DisplayData::updateShowFlags(){
     int sz = ui->gridProps->rowCount();
-    ui->wDraw->properties.resize(sz);
+    ui->wDraw->showProperties.resize(sz);
     for (int i = 0; i < sz; i++) {
         QRadioButton* rb = static_cast<QRadioButton*>(ui->gridProps->itemAtPosition(i, 0)->widget());
-        ui->wDraw->properties[i] = rb->isChecked();
+        ui->wDraw->showProperties[i] = rb->isChecked();
     }
 }
 
@@ -517,20 +529,20 @@ void DisplayData::showSpeedUI(){
                              Converter::floatCutOff(speedVehicle * 3.6f, 1) + "km/h)");
 }
 
-void DisplayData::updateDisplayUI(){
-    if(configRadar.temperatErr){
+void DisplayData::updateWarningsUI(){
+    if(dConfig->configRadar.temperatErr){
         ui->lWarrning->setText("<-TEMPERATURE ERROR!->");
         ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
     }
-    if(configRadar.persistErr){
+    if(dConfig->configRadar.persistErr){
         ui->lWarrning->setText("<-PERSISTENT ERROR!->");
         ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
     }
-    if(configRadar.temporarErr){
+    if(dConfig->configRadar.temporarErr){
         ui->lWarrning->setText("<-TEMPORARY ERROR!->");
         ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
     }
-    if(configRadar.interference){
+    if(dConfig->configRadar.interference){
         ui->lWarrning->setText("<-INTERFERENCE DETECTED->");
         ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
     }
@@ -542,7 +554,7 @@ void DisplayData::chooseDist(const QString &data){
 }
 
 void DisplayData::radNum(int index){
-    configRadar.id = index;
+    dConfig->configRadar.id = index;
     clustersFiltered.clear();
 }
 
@@ -551,6 +563,6 @@ void DisplayData::info(bool checked){
 }
 
 void DisplayData::configRadarCall(){
-    dConfig->setWindowTitle("Radar " + QString::number(configRadar.id));
+    dConfig->setWindowTitle("Radar " + QString::number(dConfig->configRadar.id));
     dConfig->show();
 }

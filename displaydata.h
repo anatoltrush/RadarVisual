@@ -13,11 +13,10 @@ public:
     ~DisplayData();
 
     int selfCount = -1;
-    ConfigRadar configRadar;
     VersionID* versID = nullptr;
-    // ---
-    DialogConfig* dConfig = nullptr;
 
+    // --- conf window ---
+    DialogConfig* dConfig = nullptr;
     void receiveCanLine(const CanLine &canLine);
 
 private slots:
@@ -28,10 +27,10 @@ private slots:
     // --- CONFIGS ---
     void configRadarCall();
     // ---
-    void updateDisplayUI();
+    void updateWarningsUI();
 
 signals:
-    void signalUpdDisplay();
+    void signalWarningsUI();
 
 private:
     Ui::DisplayData *ui;
@@ -60,7 +59,7 @@ private:
     float speedVehicle      = 0.0f;
     float speedQuality      = 0.0f;
 
-    float koeffKalmanSpeed = 0.5f;
+    float koeffKalmanSpeed  = 0.5f;
     float koeffKalmanQuality = 0.2f;
     int16_t zonaAnalyseQuality = 10;
 

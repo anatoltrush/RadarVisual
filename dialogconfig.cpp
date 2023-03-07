@@ -12,8 +12,8 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     ui->tWConfig->setCurrentIndex(1);
     ui->tWConfig->setCurrentIndex(0);
 
-    connect(ui->rBSetClObjTypeCl, SIGNAL(clicked()), this, SLOT(updateUIClusters()));
-    connect(ui->rBSetClObjTypeObj, SIGNAL(clicked()), this, SLOT(updateUIObjects()));
+    connect(ui->rBSetClObjTypeCl, SIGNAL(clicked()), this, SLOT(selectedUIClusters()));
+    connect(ui->rBSetClObjTypeObj, SIGNAL(clicked()), this, SLOT(selectedUIObjects()));
     ui->rBSetClObjTypeCl->click();
 
     // --- radar ---
@@ -123,31 +123,31 @@ void DialogConfig::updateConfigUI(){
     }
 
     // --- write ---
-    configRadar->writeStatus ? ui->rBCurrRadWriteS->setChecked(true) : ui->rBCurrRadWriteF->setChecked(true);
+    configRadar.writeStatus ? ui->rBCurrRadWriteS->setChecked(true) : ui->rBCurrRadWriteF->setChecked(true);
 
     // --- read ---
-    configRadar->readStatus ? ui->rBCurrRadReadS->setChecked(true) : ui->rBCurrRadReadF->setChecked(true);
+    configRadar.readStatus ? ui->rBCurrRadReadS->setChecked(true) : ui->rBCurrRadReadF->setChecked(true);
 
     // --- distance ---
-    ui->lECurrRadDist->setText(QString::number(configRadar->getFarZone()));
+    ui->lECurrRadDist->setText(QString::number(configRadar.getFarZone()));
 
     // --- pers error ---
-    configRadar->persistErr ? ui->rBCurrRadPersErrAct->setChecked(true) : ui->rBCurrRadPersErrNo->setChecked(true);
+    configRadar.persistErr ? ui->rBCurrRadPersErrAct->setChecked(true) : ui->rBCurrRadPersErrNo->setChecked(true);
 
     // --- interference ---
-    configRadar->interference ? ui->rBCurrRadInter->setChecked(true) : ui->rBCurrRadNoInter->setChecked(true);
+    configRadar.interference ? ui->rBCurrRadInter->setChecked(true) : ui->rBCurrRadNoInter->setChecked(true);
 
     // --- temperature ---
-    configRadar->temperatErr ? ui->rBCurrRadTemperErrAct->setChecked(true) : ui->rBCurrRadTemperErrNo->setChecked(true);
+    configRadar.temperatErr ? ui->rBCurrRadTemperErrAct->setChecked(true) : ui->rBCurrRadTemperErrNo->setChecked(true);
 
     // --- temporary ---
-    configRadar->temporarErr ? ui->rBCurrRadTemporErrAct->setChecked(true) : ui->rBCurrRadTemporErrNo->setChecked(true);
+    configRadar.temporarErr ? ui->rBCurrRadTemporErrAct->setChecked(true) : ui->rBCurrRadTemporErrNo->setChecked(true);
 
     // --- voltage ---
-    configRadar->voltErr ? ui->rBCurrRadVoltErrAct->setChecked(true) : ui->rBCurrRadVoltErrNo->setChecked(true);
+    configRadar.voltErr ? ui->rBCurrRadVoltErrAct->setChecked(true) : ui->rBCurrRadVoltErrNo->setChecked(true);
 
     // --- sort ---
-    switch (configRadar->sortInd) {
+    switch (configRadar.sortInd) {
     case 0:
         ui->rBCurrRadSortNo->setChecked(true);
         break;
@@ -162,7 +162,7 @@ void DialogConfig::updateConfigUI(){
     }
 
     // --- power ---
-    switch (configRadar->power) {
+    switch (configRadar.power) {
     case 0:
         ui->rBCurrRadPowStand->setChecked(true);
         break;
@@ -180,10 +180,10 @@ void DialogConfig::updateConfigUI(){
     }
 
     // --- relay ---
-    configRadar->relay ? ui->rBCurrRadRelAct->setChecked(true) : ui->rBCurrRadRelIn->setChecked(true);
+    configRadar.relay ? ui->rBCurrRadRelAct->setChecked(true) : ui->rBCurrRadRelIn->setChecked(true);
 
     // --- output type ---
-    switch (configRadar->outputType) {
+    switch (configRadar.outputType) {
     case 0:
         ui->rBCurrRadOutNone->setChecked(true);
         break;
@@ -198,13 +198,13 @@ void DialogConfig::updateConfigUI(){
     }
 
     // --- send qual ---
-    configRadar->sendQual ? ui->rBCurrRadQualAct->setChecked(true) : ui->rBCurrRadQualIn->setChecked(true);
+    configRadar.sendQual ? ui->rBCurrRadQualAct->setChecked(true) : ui->rBCurrRadQualIn->setChecked(true);
 
     // --- send ext ---
-    configRadar->sendExt ? ui->rBCurrRadExtAct->setChecked(true) : ui->rBCurrRadExtIn->setChecked(true);
+    configRadar.sendExt ? ui->rBCurrRadExtAct->setChecked(true) : ui->rBCurrRadExtIn->setChecked(true);
 
     // --- motion ---
-    switch (configRadar->motionRxState) {
+    switch (configRadar.motionRxState) {
     case 0:
         ui->rBCurrRadMotInpOk->setChecked(true);
         break;
@@ -222,13 +222,20 @@ void DialogConfig::updateConfigUI(){
     }
 
     // --- threshold ---
-    configRadar->thrRcs ? ui->rBCurrRadThrHigh->setChecked(true) : ui->rBCurrRadThrStand->setChecked(true);
+    configRadar.thrRcs ? ui->rBCurrRadThrHigh->setChecked(true) : ui->rBCurrRadThrStand->setChecked(true);
 
     // --- filters ---
     if(is203Got){
         ui->lFiltersCl->setText(QString::number(fltClust) + " filters ON");
         ui->lFiltersObj->setText(QString::number(fltObj) + " filters ON");
     }
+}
+
+void DialogConfig::updateCollDetStateUI(){
+    ui->cBCurrCollStAct->setChecked(collDetState.isActive);
+    ui->lCurrCollStNof->setText(QString::number(collDetState.nofRegs));
+    ui->lCurrCollStDetTim->setText(QString::number(collDetState.detectTimeSec));
+    ui->lCurrCollStMeas->setText(QString::number(collDetState.measCount));
 }
 
 void DialogConfig::clearResStr(){
@@ -334,9 +341,9 @@ void DialogConfig::genRadConfComm(){
     // --- cansend + bin to hex ---
     QString resStr;
     if(*inUse == InUse::can)
-        resStr = ("cansend " + QString::fromStdString(deviceName) + " 2" + QString::number(configRadar->id) + "0#");
+        resStr = ("cansend " + QString::fromStdString(deviceName) + " 2" + QString::number(configRadar.id) + "0#");
     else
-        resStr = ("cansend can" + QString::number(configRadar->canNum) + " 2" + QString::number(configRadar->id) + "0#");
+        resStr = ("cansend can" + QString::number(configRadar.canNum) + " 2" + QString::number(configRadar.id) + "0#");
     resStr += Converter::binToHex(binStr);
 
     // --- canline for zmq line ---
@@ -644,9 +651,9 @@ void DialogConfig::genClObjConfComm(){
     for(auto& comm: commands){
         QString resStr;
         if(*inUse == InUse::can)
-            resStr = ("cansend " + QString::fromStdString(deviceName) + " 2" + QString::number(configRadar->id) + "2#");
+            resStr = ("cansend " + QString::fromStdString(deviceName) + " 2" + QString::number(configRadar.id) + "2#");
         else
-            resStr = ("cansend can" + QString::number(configRadar->canNum) + " 2" + QString::number(configRadar->id) + "2#");
+            resStr = ("cansend can" + QString::number(configRadar.canNum) + " 2" + QString::number(configRadar.id) + "2#");
         resStr += Converter::binToHex(comm);
         comm = resStr;
     }
@@ -711,7 +718,7 @@ void DialogConfig::sendOne(){
                 MessageId idToCan;
                 idToCan._time = GET_CUR_TIME_MICRO;
                 idToCan._msg_num = msg_num++;
-                idToCan._msg_src = configRadar->id;
+                idToCan._msg_src = configRadar.id;
                 canfd_frame canFrame;
 
                 Converter::getCanFdFromCanLine(canFrame, zmqCanLine);
@@ -797,7 +804,7 @@ void DialogConfig::sendMulti(){
                     MessageId idToCan;
                     idToCan._time = GET_CUR_TIME_MICRO;
                     idToCan._msg_num = msg_num++;
-                    idToCan._msg_src = configRadar->id;
+                    idToCan._msg_src = configRadar.id;
                     canfd_frame canFrame;
 
                     Converter::getCanFdFromCanLine(canFrame, zmqCL);
@@ -906,7 +913,7 @@ void DialogConfig::tabChanged(int index){
     }
 }
 
-void DialogConfig::updateUIClusters(){
+void DialogConfig::selectedUIClusters(){
     ui->gBSetClObjX->setEnabled(false);
     ui->gBSetClObjY->setEnabled(false);
     ui->gBSetClObjVXOnc->setEnabled(false);
@@ -938,7 +945,7 @@ void DialogConfig::updateUIClusters(){
     emit ui->cBSetClObjProbV->clicked(false);
 }
 
-void DialogConfig::updateUIObjects(){
+void DialogConfig::selectedUIObjects(){
     ui->gBSetClObjVOnc->setEnabled(true);
     ui->gBSetClObjVDep->setEnabled(true);
     ui->gBSetClObjX->setEnabled(true);

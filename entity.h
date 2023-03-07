@@ -88,6 +88,9 @@ const float offsetFiltRcs   = -50.0f;
 const float offsetFiltX     = -500.0f;
 const float offsetFiltY     = -409.5f;
 
+// --- collisions ---
+const float resDetectTime   = 0.1f;
+
 enum class MsgType : uint64_t {Undefined = 0, OpenCVImage = 1001, Detections = 1003, CANMsg = 1005,
                                RadarData = 1200, AutoExposeData = 1203, ObjectInfo = 1300};
 
@@ -165,7 +168,6 @@ struct CanLine{
 };
 
 struct ConfigRadar{
-public:
     bool readStatus     = false;
     bool writeStatus    = false;
     bool persistErr     = false;
@@ -195,8 +197,6 @@ public:
 private:
     uint16_t farZone        = 0;
 };
-
-struct ConfigClustObj{};
 
 enum class DynProp{
     moving              = 0,
@@ -295,6 +295,30 @@ struct ObjectInfo{
             break;
         }
     }
+};
+
+struct CollDetState{
+    bool isActive       = false;
+    uint8_t nofRegs     = 0;
+    uint8_t detectTimeSec = 0;
+    uint16_t measCount  = 0;
+};
+
+enum class WarningLevel{
+    noWarning   = 0,
+    objWarning  = 1,
+    unused      = 2,
+    warnDeactiv = 3
+};
+
+struct CollRegion{
+    uint8_t id      = 0;
+    float pt1X      = 0.0f;
+    float pt1Y      = 0.0f;
+    float pt2X      = 0.0f;
+    float pt2Y      = 0.0f;
+    uint8_t nofObj  = 0;
+    WarningLevel warnLevel = WarningLevel::unused;
 };
 
 #endif // ENTITY_H

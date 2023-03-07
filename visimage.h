@@ -16,12 +16,15 @@ public:
     bool isShowInfo = false;
     float aspect    = 0.0f;
     std::vector<QColor>* colors;
+    std::vector<bool> showProperties;
 
-    ConfigRadar *configInfo = nullptr;
+    ConfigRadar *configRadar = nullptr;
+    CollDetState *collDetState = nullptr;
+    CollRegion regions[COLL_REG_NUM];
 
+    // --- clusters ---
     ClusterList clustList;
-    std::vector<ClusterInfo> clusters;
-    std::vector<bool> properties;
+    std::vector<ClusterInfo> clusters;    
 
     // --- objects ---
     ObjectList objList;
