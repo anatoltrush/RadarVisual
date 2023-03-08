@@ -7,7 +7,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     for(int i = 0; i < RADAR_NUM; i++)
         ui->cBRadNum->addItem("Radar " + QString::number(i));
 
-    ui->wDraw->colors = &this->colors;
+    ui->vDraw->colors = &this->colors;
     colors = std::vector<QColor>(ui->gridTypes->rowCount(), Qt::gray);
     if(colors.size() >= 8){
         colors[0] = Qt::red;
@@ -32,8 +32,8 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     // --- config ---
     dConfig = new DialogConfig(this);
     // --- bind ---
-    ui->wDraw->configRadar = &dConfig->configRadar;
-    ui->wDraw->collDetState = &dConfig->collDetState;
+    ui->vDraw->configRadar = &dConfig->configRadar;
+    ui->vDraw->collDetState = &dConfig->collDetState;
 
     // --- connections ---
     connect(ui->pBConfigRadar, SIGNAL(clicked()), this, SLOT(configRadarCall()));
@@ -64,9 +64,9 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         updateShowFlags();
         applyFilters();
 
-        ui->wDraw->clusters = clustersFiltered;
-        ui->wDraw->clustList = clustList;
-        ui->wDraw->update();
+        ui->vDraw->clusters = clustersFiltered;
+        ui->vDraw->clustList = clustList;
+        ui->vDraw->update();
         // ---
         clustersAll.clear();
         // ---
@@ -107,7 +107,7 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         cluster.distLat = Converter::getDecData(canLine.messData, 22, 10);
         cluster.distLat *= resClustDistLat;
         cluster.distLat += offsetClustDistLat;
-        cluster.distLat = -cluster.distLat;// NOTE: clusters left/right?
+        //cluster.distLat = -cluster.distLat;// NOTE: clusters left/right?
         // Type
         uint8_t numType = Converter::getDecData(canLine.messData, 53, 3);
         cluster.type = static_cast<DynProp>(numType);
@@ -223,9 +223,9 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         updateShowFlags();
         applyFilters();
 
-        ui->wDraw->objects = objectsFiltered;
-        ui->wDraw->objList = objList;
-        ui->wDraw->update();
+        ui->vDraw->objects = objectsFiltered;
+        ui->vDraw->objList = objList;
+        ui->vDraw->update();
         // ---
         objectsAll.clear();
         // ---
@@ -257,7 +257,7 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         object.distLat = Converter::getDecData(canLine.messData, 21, 11);
         object.distLat *= resObjDistLat;
         object.distLat += offsetObjDistLat;
-        object.distLat = -object.distLat; // NOTE: objects left/right?
+        //object.distLat = -object.distLat; // NOTE: objects left/right?
         // Type
         uint8_t numType = Converter::getDecData(canLine.messData, 53, 3);
         object.type = static_cast<DynProp>(numType);
@@ -334,13 +334,38 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
 
     // --- COLLISIONS ---
     if(canLine.messId[0] == '4' && canLine.messId[2] == '2'){ // REGION DATA
-        // TODO: #402...implement in future...
+        uint8_t idReg = Converter::getDecData(canLine.messData, 0, 3);
+        for (uint8_t i = 0; i < COLL_REG_NUM; i++) {
+            if(ui->vDraw->regions[i].id == idReg){
+                // --- warn level ---
+                uint8_t warn = Converter::getDecData(canLine.messData, 3, 2);
+                ui->vDraw->regions[i].warnLevel = static_cast<WarningLevel>(warn);
+                // --- X1 ---
+                ui->vDraw->regions[i].pt1X = Converter::getDecData(canLine.messData, 21, 11);
+                ui->vDraw->regions[i].pt1X *= resCollPt1X;
+                ui->vDraw->regions[i].pt1X += offsetCollPt1X;
+                // --- Y1 ---
+                ui->vDraw->regions[i].pt1Y = Converter::getDecData(canLine.messData, 8, 13);
+                ui->vDraw->regions[i].pt1Y *= resCollPt1Y;
+                ui->vDraw->regions[i].pt1Y += offsetCollPt1Y;
+                // --- X2 ---
+                ui->vDraw->regions[i].pt2X = Converter::getDecData(canLine.messData, 45, 11);
+                ui->vDraw->regions[i].pt2X *= resCollPt2X;
+                ui->vDraw->regions[i].pt2X += offsetCollPt2X;
+                // --- Y2 ---
+                ui->vDraw->regions[i].pt2Y = Converter::getDecData(canLine.messData, 32,13);
+                ui->vDraw->regions[i].pt2Y *= resCollPt2Y;
+                ui->vDraw->regions[i].pt2Y += offsetCollPt2Y;
+                // --- nof ---
+                ui->vDraw->regions[i].nofObj = Converter::getDecData(canLine.messData, 56, 8);
+            }
+        }
     }
     if(canLine.messId[0] == '4' && canLine.messId[2] == '8'){ // COLLISION STATE
         dConfig->collDetState.isActive = Converter::getDecData(canLine.messData, 6, 1);
         dConfig->collDetState.nofRegs = Converter::getDecData(canLine.messData, 0, 4);
         dConfig->collDetState.detectTimeSec = Converter::getDecData(canLine.messData, 8, 8);
-        dConfig->collDetState.detectTimeSec *= resDetectTime;
+        dConfig->collDetState.detectTimeSec *= resCollDetTime;
         dConfig->collDetState.measCount = Converter::getDecData(canLine.messData, 16, 16);
         dConfig->updateCollDetStateUI();
     }
@@ -388,10 +413,10 @@ void DisplayData::applyFilters(){
 
 void DisplayData::updateShowFlags(){
     int sz = ui->gridProps->rowCount();
-    ui->wDraw->showProperties.resize(sz);
+    ui->vDraw->showProperties.resize(sz);
     for (int i = 0; i < sz; i++) {
         QRadioButton* rb = static_cast<QRadioButton*>(ui->gridProps->itemAtPosition(i, 0)->widget());
-        ui->wDraw->showProperties[i] = rb->isChecked();
+        ui->vDraw->showProperties[i] = rb->isChecked();
     }
 }
 
@@ -549,8 +574,8 @@ void DisplayData::updateWarningsUI(){
 }
 
 void DisplayData::chooseDist(const QString &data){
-    ui->wDraw->aspect = 100.0f / data.toFloat();
-    ui->wDraw->resizeAspect();
+    ui->vDraw->aspect = 100.0f / data.toFloat();
+    ui->vDraw->resizeAspect();
 }
 
 void DisplayData::radNum(int index){
@@ -559,7 +584,7 @@ void DisplayData::radNum(int index){
 }
 
 void DisplayData::info(bool checked){
-    ui->wDraw->isShowInfo = checked;
+    ui->vDraw->isShowInfo = checked;
 }
 
 void DisplayData::configRadarCall(){

@@ -407,7 +407,7 @@ void DialogConfig::genClObjConfComm(){
         strAzim.replace(6, 1, "1"); // valid
         strAzim.replace(1, 4, "0010"); // index        
         if(ui->cBSetClObjAzimA->isChecked()){ // active
-            strAzim.replace(5, 1, "1"); // active  // NOTE: azimuth objects left/right?
+            strAzim.replace(5, 1, "1"); // active
             QString azMin = QString::number((uint16_t)((ui->sBSetClObjAzimMin->value() - offsetFiltAzim) / resFiltAzim));
             strAzim.replace(12, bitLen, Converter::decToBin(azMin, bitLen));
             QString azMax = QString::number((uint16_t)((ui->sBSetClObjAzimMax->value() - offsetFiltAzim) / resFiltAzim));

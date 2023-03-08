@@ -89,7 +89,16 @@ const float offsetFiltX     = -500.0f;
 const float offsetFiltY     = -409.5f;
 
 // --- collisions ---
-const float resDetectTime   = 0.1f;
+const float resCollDetTime  = 0.1f;
+const float resCollPt1X     = 0.2f;
+const float resCollPt1Y     = 0.2f;
+const float resCollPt2X     = 0.2f;
+const float resCollPt2Y     = 0.2f;
+
+const float offsetCollPt1X = -204.6f;
+const float offsetCollPt1Y = -500.0f;
+const float offsetCollPt2X = -204.6f;
+const float offsetCollPt2Y = -500.0f;
 
 enum class MsgType : uint64_t {Undefined = 0, OpenCVImage = 1001, Detections = 1003, CANMsg = 1005,
                                RadarData = 1200, AutoExposeData = 1203, ObjectInfo = 1300};
@@ -262,7 +271,7 @@ struct ObjectInfo{
     DynProp type    = DynProp::unknown;
     ObjectClass objClass = ObjectClass::reserved;
     bool collRegs[COLL_REG_NUM] = {false};
-    // methods
+    // --- methods ---
     void clacAzimuth(){azimuth = std::atan(distLat / distLong) * 180.0f / M_PI;}
     QString getClassStr() const{
         switch (objClass) {
@@ -291,7 +300,7 @@ struct ObjectInfo{
             return "rs";
             break;
         default:
-            return "--";
+            return "---";
             break;
         }
     }

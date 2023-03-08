@@ -17,6 +17,7 @@ void VisImage::paintEvent(QPaintEvent *){
     painter->eraseRect(rect());
 
     drawZones();
+    drawRegions();
     drawAxes();
     drawRadar();    
     drawClusters();
@@ -65,6 +66,27 @@ void VisImage::drawZones(){
     painter->setPen(penZoneBlue);
     painter->setBrush(lightBlue);
     painter->drawPath(nearPath);
+}
+
+void VisImage::drawRegions(){
+    for (const auto &reg : regions) {
+        QPen penReg = QPen(Qt::black, 1);
+        QVector<qreal> dashes {10, 10};
+        penReg.setDashPattern(dashes);
+        painter->setPen(penReg);
+        painter->setBrush(QColor(210, 210, 210)); // light gray
+        // ---
+        int x1 = width()/2 + reg.pt1X / (float)gridStepM * gridStepPx;
+        int y1 = height() - reg.pt1Y / (float)gridStepM * gridStepPx;
+        QPointF pt1(x1, y1);
+
+        int x2 = width()/2 + reg.pt2X / (float)gridStepM * gridStepPx;
+        int y2 = height() - reg.pt2Y / (float)gridStepM * gridStepPx;
+        QPointF pt2(x2, y2);
+
+        QRectF rect(pt2, pt1);
+        painter->drawRect(rect);
+    }
 }
 
 void VisImage::drawAxes(){

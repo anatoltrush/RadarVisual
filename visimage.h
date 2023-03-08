@@ -46,6 +46,7 @@ private:
     void resizeEvent(QResizeEvent *event) override;
 
     void drawZones();
+    void drawRegions();
     void drawAxes();
     void drawRadar();    
     void drawClusters();
