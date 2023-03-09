@@ -20,6 +20,8 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     connect(ui->pBClearResStr, SIGNAL(clicked()), this, SLOT(clearResStr()));
     connect(ui->pBGenRadConf, SIGNAL(clicked()), this, SLOT(genRadConfComm()));
     connect(ui->pBGenClObjConf, SIGNAL(clicked()), this, SLOT(genClObjConfComm()));
+    connect(ui->pBGenCollState, SIGNAL(clicked()), this, SLOT(genCollState()));
+    connect(ui->pBGenCollRegion, SIGNAL(clicked()), this, SLOT(genCollRegion()));
     connect(ui->pBSend, SIGNAL(clicked()), this, SLOT(send()));
 
     connect(ui->cBSetRadQual, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadQual(bool)));
@@ -675,8 +677,44 @@ void DialogConfig::genClObjConfComm(){
     ui->cBResStr->addItems(commands);
 }
 
+void DialogConfig::genCollState(){
+    QString collStatStr(16, '0');
+
+    // --- cansend + bin to hex ---
+    QString resStr;
+    if(*inUse == InUse::can)
+        resStr = ("cansend " + QString::fromStdString(deviceName) + " 4" + QString::number(configRadar.id) + "0#");
+    else
+        resStr = ("cansend can" + QString::number(configRadar.canNum) + " 4" + QString::number(configRadar.id) + "0#");
+    resStr += Converter::binToHex(collStatStr);
+
+    // --- canline for zmq line ---
+
+    // --- UI ---
+    ui->lEResStr->setText(resStr);
+}
+
+void DialogConfig::genCollRegion(){
+    QString collRegStr(64, '0');
+
+    // --- cansend + bin to hex ---
+    QString resStr;
+    if(*inUse == InUse::can)
+        resStr = ("cansend " + QString::fromStdString(deviceName) + " 4" + QString::number(configRadar.id) + "1#");
+    else
+        resStr = ("cansend can" + QString::number(configRadar.canNum) + " 4" + QString::number(configRadar.id) + "1#");
+    resStr += Converter::binToHex(collRegStr);
+
+    // --- canline for zmq line ---
+
+    // --- UI ---
+    ui->lEResStr->setText(resStr);
+}
+
 void DialogConfig::send(){
-    ui->tWConfig->currentIndex() == 0 ? sendOne() : sendMulti();
+    if(ui->tWConfig->currentIndex() == 0 || ui->tWConfig->currentIndex() == 2)
+        sendOne();
+    else sendMulti();
 }
 
 void DialogConfig::sendOne(){
@@ -903,7 +941,7 @@ void DialogConfig::showHideSetRadId(bool checked){
 }
 
 void DialogConfig::tabChanged(int index){
-    if(index == 0){
+    if(index == 0 || index == 2){
         ui->lEResStr->show();
         ui->cBResStr->hide();
     }

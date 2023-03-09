@@ -39,6 +39,8 @@ private slots:
     void clearResStr();
     void genRadConfComm();
     void genClObjConfComm();
+    void genCollState();
+    void genCollRegion();
     void send();
     void sendOne();
     void sendMulti();
@@ -103,3 +105,5 @@ private:
 };
 
 #endif // DIALOGCONFIG_H
+// TODO: coll state + coll reg -> zmq
+// TODO: valid + active
