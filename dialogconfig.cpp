@@ -7,6 +7,9 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     for(int i = 0; i < RADAR_NUM; i++)
         ui->cBoxSetRadId->addItem("ID " + QString::number(i));
 
+    ui->lineRadar->setStyleSheet("background-color: gray");
+    ui->tBRegion->setStyleSheet("background-color: pink");
+
     // --- connections ---
     connect(ui->tWConfig, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     ui->tWConfig->setCurrentIndex(1);

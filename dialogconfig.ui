@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1040</width>
+    <width>1062</width>
     <height>660</height>
    </rect>
   </property>
@@ -26,6 +26,7 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -51,6 +52,7 @@
        </property>
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -69,6 +71,7 @@
        </property>
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -95,6 +98,7 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -1123,6 +1127,7 @@
            <widget class="QPushButton" name="pBGenRadConf">
             <property name="font">
              <font>
+              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -2842,6 +2847,7 @@
              <widget class="QRadioButton" name="rBSetClObjTypeCl">
               <property name="font">
                <font>
+                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2854,6 +2860,7 @@
              <widget class="QRadioButton" name="rBSetClObjTypeObj">
               <property name="font">
                <font>
+                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2866,6 +2873,7 @@
              <widget class="QLabel" name="lFiltersCl">
               <property name="font">
                <font>
+                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2878,6 +2886,7 @@
              <widget class="QLabel" name="lFiltersObj">
               <property name="font">
                <font>
+                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2893,6 +2902,7 @@
           <widget class="QPushButton" name="pBGenClObjConf">
            <property name="font">
             <font>
+             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -3130,6 +3140,7 @@
             </property>
             <property name="font">
              <font>
+              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -3275,13 +3286,13 @@
               <enum>Qt::Vertical</enum>
              </property>
             </widget>
-            <widget class="QToolButton" name="toolButton">
+            <widget class="QToolButton" name="tBRegion">
              <property name="geometry">
               <rect>
-               <x>112</x>
-               <y>144</y>
-               <width>271</width>
-               <height>151</height>
+               <x>124</x>
+               <y>150</y>
+               <width>251</width>
+               <height>140</height>
               </rect>
              </property>
              <property name="text">
@@ -3296,7 +3307,7 @@
               <rect>
                <x>30</x>
                <y>350</y>
-               <width>49</width>
+               <width>71</width>
                <height>16</height>
               </rect>
              </property>
@@ -3309,8 +3320,8 @@
               <rect>
                <x>260</x>
                <y>30</y>
-               <width>81</width>
-               <height>16</height>
+               <width>111</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -3329,6 +3340,7 @@
              <property name="font">
               <font>
                <pointsize>11</pointsize>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -3348,6 +3360,7 @@
              <property name="font">
               <font>
                <pointsize>11</pointsize>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -3355,7 +3368,7 @@
               <string>-</string>
              </property>
             </widget>
-            <widget class="Line" name="line_3">
+            <widget class="Line" name="lineRadar">
              <property name="geometry">
               <rect>
                <x>224</x>
@@ -3377,10 +3390,10 @@
             <widget class="QLabel" name="label_70">
              <property name="geometry">
               <rect>
-               <x>120</x>
+               <x>100</x>
                <y>370</y>
-               <width>81</width>
-               <height>16</height>
+               <width>101</width>
+               <height>20</height>
               </rect>
              </property>
              <property name="text">
@@ -3406,7 +3419,7 @@
               <enum>Qt::Horizontal</enum>
              </property>
             </widget>
-            <widget class="QWidget" name="">
+            <widget class="QWidget" name="layoutWidget">
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -3442,13 +3455,13 @@
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="">
+            <widget class="QWidget" name="layoutWidget">
              <property name="geometry">
               <rect>
                <x>10</x>
                <y>90</y>
-               <width>99</width>
-               <height>52</height>
+               <width>128</width>
+               <height>53</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -3508,13 +3521,13 @@
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="">
+            <widget class="QWidget" name="layoutWidget">
              <property name="geometry">
               <rect>
-               <x>390</x>
+               <x>370</x>
                <y>300</y>
-               <width>99</width>
-               <height>52</height>
+               <width>128</width>
+               <height>53</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -3574,13 +3587,13 @@
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="">
+            <widget class="QWidget" name="layoutWidget">
              <property name="geometry">
               <rect>
-               <x>40</x>
-               <y>60</y>
+               <x>30</x>
+               <y>50</y>
                <width>71</width>
-               <height>24</height>
+               <height>27</height>
               </rect>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -3648,26 +3661,20 @@
               </item>
              </layout>
             </widget>
-            <zorder>toolButton</zorder>
+            <zorder>layoutWidget</zorder>
+            <zorder>layoutWidget</zorder>
+            <zorder>layoutWidget</zorder>
+            <zorder>layoutWidget</zorder>
+            <zorder>tBRegion</zorder>
             <zorder>line</zorder>
             <zorder>line_2</zorder>
-            <zorder>label_63</zorder>
-            <zorder>label_64</zorder>
-            <zorder>label_65</zorder>
-            <zorder>cBCollRegAct</zorder>
-            <zorder>cBCollRegVal</zorder>
             <zorder>label_66</zorder>
             <zorder>label_67</zorder>
             <zorder>label_68</zorder>
             <zorder>label_69</zorder>
-            <zorder>sBP2x</zorder>
-            <zorder>sBP2y</zorder>
-            <zorder>sBP1x</zorder>
-            <zorder>sBP1y</zorder>
-            <zorder>line_3</zorder>
+            <zorder>lineRadar</zorder>
             <zorder>label_70</zorder>
             <zorder>line_4</zorder>
-            <zorder>cBCollRegId</zorder>
            </widget>
           </item>
           <item row="1" column="0" colspan="2">
@@ -3693,6 +3700,7 @@
             </property>
             <property name="font">
              <font>
+              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
