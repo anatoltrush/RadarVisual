@@ -35,8 +35,6 @@ signals:
 
 private:
     Ui::DisplayData *ui;
-    // ---
-    std::vector<QColor> colors;
 
     // --- clusters ---
     ClusterList clustList;

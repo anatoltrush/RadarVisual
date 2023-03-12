@@ -7,30 +7,38 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     for(int i = 0; i < RADAR_NUM; i++)
         ui->cBRadNum->addItem("Radar " + QString::number(i));
 
-    ui->vDraw->colors = &this->colors;
-    colors = std::vector<QColor>(ui->gridTypes->rowCount(), Qt::gray);
-    if(colors.size() >= 8){
-        colors[0] = Qt::red;
-        colors[1] = Qt::yellow;
-        colors[2] = Qt::blue;
-        colors[3] = QColor(70, 220, 70); // green
-        colors[4] = Qt::darkGray;
-        colors[5] = Qt::darkGreen;
-        colors[6] = QColor(255, 140, 0); // orange
-        colors[7] = Qt::black;
+    // --- colors properties ---
+    ui->vDraw->colorsDynProp = std::vector<QColor>(ui->gridTypes->rowCount(), Qt::gray);
+    if(ui->vDraw->colorsDynProp.size() >= 8){
+        ui->vDraw->colorsDynProp[0] = Qt::red;
+        ui->vDraw->colorsDynProp[1] = Qt::yellow;
+        ui->vDraw->colorsDynProp[2] = Qt::blue;
+        ui->vDraw->colorsDynProp[3] = QColor(70, 220, 70); // green
+        ui->vDraw->colorsDynProp[4] = Qt::darkGray;
+        ui->vDraw->colorsDynProp[5] = Qt::darkGreen;
+        ui->vDraw->colorsDynProp[6] = QColor(255, 140, 0); // orange
+        ui->vDraw->colorsDynProp[7] = Qt::black;
     }
 
     // set colors
-    int sz = 15;
+    int sz = 50;
     QPixmap px(sz, sz);
     for (int i = 0; i < ui->gridTypes->rowCount(); i++) {
-        px.fill(colors[i]);
+        px.fill(ui->vDraw->colorsDynProp[i]);
         QToolButton* tButton = static_cast<QToolButton*>(ui->gridTypes->itemAtPosition(i, 0)->widget());
         tButton->setIcon(px);
     }
 
     // --- config ---
     dConfig = new DialogConfig(this);
+
+    // --- colors warnings ---
+    uint8_t transp = 140;
+    ui->vDraw->colorsWarnLevel[0] = QColor(160, 255, 160, transp); // no warn
+    ui->vDraw->colorsWarnLevel[1] = QColor(255, 140, 140, transp); // warn
+    ui->vDraw->colorsWarnLevel[2] = QColor(128, 128, 128, transp); // unused
+    ui->vDraw->colorsWarnLevel[3] = QColor(255, 150, 50, transp); // left
+    dConfig->colorsWarnLevel = &ui->vDraw->colorsWarnLevel;
 
     // --- connections ---
     connect(ui->pBConfigRadar, SIGNAL(clicked()), this, SLOT(configRadarCall()));
@@ -350,10 +358,12 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         collRegion.pt1X = Converter::getDecData(canLine.messData, 21, 11);
         collRegion.pt1X *= resCollPt1X;
         collRegion.pt1X += offsetCollPt1X;
+        //collRegion.pt1X = 35.5f; // FIXME: delete
         // --- Y1 ---
         collRegion.pt1Y = Converter::getDecData(canLine.messData, 8, 13);
         collRegion.pt1Y *= resCollPt1Y;
         collRegion.pt1Y += offsetCollPt1Y;
+        //collRegion.pt1Y = 7.5f; // FIXME: delete
         // --- X2 ---
         collRegion.pt2X = Converter::getDecData(canLine.messData, 45, 11);
         collRegion.pt2X *= resCollPt2X;

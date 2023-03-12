@@ -8,7 +8,6 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
         ui->cBoxSetRadId->addItem("ID " + QString::number(i));
 
     ui->lineRadar->setStyleSheet("background-color: gray");
-    ui->tBRegion->setStyleSheet("background-color: pink");
 
     // --- connections ---
     connect(ui->tWConfig, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
@@ -20,9 +19,9 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     ui->rBSetClObjTypeCl->click();
 
     // --- radar ---
-    connect(ui->pBClearResStr, SIGNAL(clicked()), this, SLOT(clearResStr()));
-    connect(ui->pBGenRadConf, SIGNAL(clicked()), this, SLOT(genRadConfComm()));
-    connect(ui->pBGenClObjConf, SIGNAL(clicked()), this, SLOT(genClObjConfComm()));
+    connect(ui->pBClearResStr, SIGNAL(clicked()), this, SLOT(clearResString()));
+    connect(ui->pBGenRadConf, SIGNAL(clicked()), this, SLOT(genRadConfigCommand()));
+    connect(ui->pBGenClObjConf, SIGNAL(clicked()), this, SLOT(genClObjConfigCommand()));
     connect(ui->pBGenCollState, SIGNAL(clicked()), this, SLOT(genCollState()));
     connect(ui->pBGenCollRegion, SIGNAL(clicked()), this, SLOT(genCollRegion()));
     connect(ui->pBSend, SIGNAL(clicked()), this, SLOT(send()));
@@ -248,12 +247,12 @@ void DialogConfig::updateCollDetStateUI(){
     ui->lCurrCollStMeas->setText(QString::number(collDetState.measCount));
 }
 
-void DialogConfig::clearResStr(){
+void DialogConfig::clearResString(){
     ui->lEResStr->clear();
     ui->cBResStr->clear();
 }
 
-void DialogConfig::genRadConfComm(){
+void DialogConfig::genRadConfigCommand(){
     QString binStr(64, '0');
 
     // --- id ---
@@ -369,7 +368,7 @@ void DialogConfig::genRadConfComm(){
     ui->lEResStr->setText(resStr);
 }
 
-void DialogConfig::genClObjConfComm(){
+void DialogConfig::genClObjConfigCommand(){
     ui->cBResStr->clear();
     QList<QString> commands;
     uint8_t bitLen = 12;
@@ -716,7 +715,17 @@ void DialogConfig::genCollRegion(){
 
     // --- valid ---
     if(ui->cBCollRegVal->isChecked()){
-        // TODO: void DialogConfig::genCollRegion()
+        uint8_t bitLenX = 11;
+        uint8_t bitLenY = 13;
+        collRegStr.replace(5, 1, "1");
+        QString strPt1x = QString::number((uint16_t)((ui->sBP1x->value() - offsetCollPt1X) / resCollPt1X));
+        collRegStr.replace(29, bitLenX, Converter::decToBin(strPt1x, bitLenX));
+        QString strPt1y = QString::number((uint16_t)((ui->sBP1y->value() - offsetCollPt1Y) / resCollPt1Y));
+        collRegStr.replace(16, bitLenY, Converter::decToBin(strPt1y, bitLenY));
+        QString strPt2x = QString::number((uint16_t)((ui->sBP2x->value() - offsetCollPt2X) / resCollPt2X));
+        collRegStr.replace(53, bitLenX, Converter::decToBin(strPt2x, bitLenX));
+        QString strPt2y = QString::number((uint16_t)((ui->sBP2y->value() - offsetCollPt2Y) / resCollPt2Y));
+        collRegStr.replace(40, bitLenY, Converter::decToBin(strPt2y, bitLenY));
     }
 
     // --- cansend + bin to hex ---
@@ -1044,6 +1053,21 @@ void DialogConfig::selectedUIRegion(QTableWidgetItem *item){
             ui->sBP2y->setValue(rg.pt2Y);
             // --- Activated ---
             ui->cBCollRegAct->setChecked(true);
+            // --- Warnings ---
+            uint8_t indWarn = static_cast<uint8_t>(rg.warnLevel);
+            ui->cBoxCollWarn->setCurrentIndex(indWarn);
+            // --- Colors ---
+            uint8_t indCol = static_cast<uint8_t>(rg.warnLevel);
+            QSize buttonSize = ui->tBRegion->size();
+            ui->tBRegion->setIconSize(buttonSize);
+            QPixmap px(buttonSize);
+            px.fill(colorsWarnLevel->at(indCol));
+            ui->tBRegion->setIcon(px);
+            // --- w, h ---
+            float regWid = rg.pt1X - rg.pt2X;
+            ui->lRegWidth->setText("width: " + Converter::floatCutOff(regWid, 1) + "m");
+            float regLen = rg.pt1Y - rg.pt2Y;
+            ui->lRegLength->setText("length: " + Converter::floatCutOff(regLen, 1) + "m");
         }
     }
 }

@@ -3284,9 +3284,9 @@
             <widget class="QToolButton" name="tBRegion">
              <property name="geometry">
               <rect>
-               <x>124</x>
+               <x>140</x>
                <y>150</y>
-               <width>251</width>
+               <width>241</width>
                <height>140</height>
               </rect>
              </property>
@@ -3313,7 +3313,7 @@
             <widget class="QLabel" name="label_67">
              <property name="geometry">
               <rect>
-               <x>260</x>
+               <x>140</x>
                <y>30</y>
                <width>111</width>
                <height>21</height>
@@ -3411,42 +3411,6 @@
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
-            </widget>
-            <widget class="QWidget" name="layoutWidget">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>20</y>
-               <width>182</width>
-               <height>26</height>
-              </rect>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
-              <item>
-               <widget class="QCheckBox" name="cBCollRegVal">
-                <property name="font">
-                 <font>
-                  <pointsize>11</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Valid</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="cBCollRegAct">
-                <property name="font">
-                 <font>
-                  <pointsize>11</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Active</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </widget>
             <widget class="QWidget" name="layoutWidget">
              <property name="geometry">
@@ -3580,20 +3544,71 @@
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="layoutWidget">
+            <widget class="QLabel" name="lRegWidth">
              <property name="geometry">
               <rect>
-               <x>30</x>
-               <y>50</y>
-               <width>71</width>
-               <height>27</height>
+               <x>150</x>
+               <y>130</y>
+               <width>111</width>
+               <height>16</height>
               </rect>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_11">
-              <item>
-               <widget class="QLabel" name="label_65">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>width: ---</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lRegLength">
+             <property name="geometry">
+              <rect>
+               <x>24</x>
+               <y>225</y>
+               <width>111</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>length: ---</string>
+             </property>
+            </widget>
+            <widget class="QWidget" name="">
+             <property name="geometry">
+              <rect>
+               <x>280</x>
+               <y>20</y>
+               <width>191</width>
+               <height>120</height>
+              </rect>
+             </property>
+             <layout class="QFormLayout" name="formLayout">
+              <property name="labelAlignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <item row="0" column="1">
+               <widget class="QCheckBox" name="cBCollRegVal">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -3604,12 +3619,62 @@
                  </font>
                 </property>
                 <property name="text">
-                 <string>ID:</string>
+                 <string>Valid</string>
                 </property>
                </widget>
               </item>
-              <item>
+              <item row="1" column="1">
+               <widget class="QCheckBox" name="cBCollRegAct">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>11</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Active</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_65">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>11</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>              ID</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
                <widget class="QComboBox" name="cBoxCollRegId">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>11</pointsize>
+                 </font>
+                </property>
                 <item>
                  <property name="text">
                   <string>0</string>
@@ -3652,33 +3717,63 @@
                 </item>
                </widget>
               </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_76">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>11</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Warn level</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QComboBox" name="cBoxCollWarn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>11</pointsize>
+                 </font>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>no warning</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>object warning</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>unused</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>warning deact</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
              </layout>
-            </widget>
-            <widget class="QLabel" name="label_74">
-             <property name="geometry">
-              <rect>
-               <x>190</x>
-               <y>130</y>
-               <width>49</width>
-               <height>16</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>w: ---</string>
-             </property>
-            </widget>
-            <widget class="QLabel" name="label_75">
-             <property name="geometry">
-              <rect>
-               <x>70</x>
-               <y>220</y>
-               <width>49</width>
-               <height>16</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>h: ---</string>
-             </property>
             </widget>
             <zorder>layoutWidget</zorder>
             <zorder>layoutWidget</zorder>
@@ -3694,8 +3789,10 @@
             <zorder>lineRadar</zorder>
             <zorder>label_70</zorder>
             <zorder>line_4</zorder>
-            <zorder>label_74</zorder>
-            <zorder>label_75</zorder>
+            <zorder>lRegWidth</zorder>
+            <zorder>lRegLength</zorder>
+            <zorder>label_76</zorder>
+            <zorder>cBoxCollWarn</zorder>
            </widget>
           </item>
           <item row="1" column="0" colspan="2">

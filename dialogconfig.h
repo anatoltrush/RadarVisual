@@ -23,9 +23,10 @@ public:
     ConfigRadar configRadar;
     CollDetState collDetState;
     std::vector<CollRegion> regions;
+    std::vector<QColor>* colorsWarnLevel = nullptr;
 
-    uint64_t prev402GotMs = 0;
-    uint64_t period402GotMs = 900;
+    uint64_t prev402GotMs   = 0;
+    uint64_t period402GotMs = 950; // every 1 sec
 
     InUse* inUse = nullptr;
     std::string deviceName;
@@ -41,9 +42,9 @@ signals:
     int signalCanSend(const QString& strData);
 
 private slots:
-    void clearResStr();
-    void genRadConfComm();
-    void genClObjConfComm();
+    void clearResString();
+    void genRadConfigCommand();
+    void genClObjConfigCommand();
     void genCollState();
     void genCollRegion();
     void send();
@@ -114,4 +115,4 @@ private:
 };
 
 #endif // DIALOGCONFIG_H
-// TODO: collis state + collis reg -> zmq
+// TODO: collis state + collis reg test -> collis reg zmq

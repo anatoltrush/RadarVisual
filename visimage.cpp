@@ -39,6 +39,7 @@ void VisImage::resizeEvent(QResizeEvent *event){
 }
 
 void VisImage::drawZones(){
+    uint8_t transp = 230;
     // --- red ---
     int farRadius = (configRadar.getFarZone() / (float)gridStepM) * gridStepPx;
     QPainterPath farPath;
@@ -46,7 +47,7 @@ void VisImage::drawZones(){
     QRectF rectFar(width() / 2 - farRadius, height() - farRadius, farRadius * 2, farRadius * 2);
     farPath.arcTo(rectFar, 81, 18);
 
-    QColor lightRed(255, 200, 200);
+    QColor lightRed(255, 200, 200, transp);
     QPen penZoneRed = QPen(lightRed, 1);
     painter->setPen(penZoneRed);
     painter->setBrush(lightRed);
@@ -59,7 +60,7 @@ void VisImage::drawZones(){
     QRectF rectNear(width() / 2 - nearRadius, height() - nearRadius, nearRadius * 2, nearRadius * 2);
     nearPath.arcTo(rectNear, 30, 120);
 
-    QColor lightBlue(160, 210, 255);
+    QColor lightBlue(160, 210, 255, transp);
     QPen penZoneBlue = QPen(lightBlue, 1);
     painter->setPen(penZoneBlue);
     painter->setBrush(lightBlue);
@@ -67,12 +68,15 @@ void VisImage::drawZones(){
 }
 
 void VisImage::drawRegions(){
+    // TODO: add ID
+    // TODO: change black border
     for (const auto &reg : regions) {
+        QColor regCol = (colorsWarnLevel)[static_cast<uint8_t>(reg.warnLevel)];
         QPen penReg = QPen(Qt::black, 1);
         QVector<qreal> dashes {10, 10};
         penReg.setDashPattern(dashes);
         painter->setPen(penReg);
-        painter->setBrush(QColor(210, 210, 210)); // light gray
+        painter->setBrush(regCol);
         // ---
         int x1 = width()/2 + reg.pt1X / (float)gridStepM * gridStepPx;
         int y1 = height() - reg.pt1Y / (float)gridStepM * gridStepPx;
@@ -137,8 +141,8 @@ void VisImage::drawClusters(){
     if(gridStepPx <= 0) return;
 
     for (const auto& cl : clusters) {
-        QColor currCol = (*colors)[static_cast<uint8_t>(cl.type)];
-        painter->setBrush(currCol);
+        QColor clustCol = (colorsDynProp)[static_cast<uint8_t>(cl.type)];
+        painter->setBrush(clustCol);
         int wCl = width()/2 + cl.distLat / (float)gridStepM * gridStepPx;
         int hCl = height() - cl.distLong / (float)gridStepM * gridStepPx;
         int radius = calcRadius(cl.RCS);
@@ -175,7 +179,7 @@ void VisImage::drawObjectsInfo(){
     if(gridStepPx <= 0) return;
 
     for (const auto& obj : objects) {
-        QColor colObjInfo = (*colors)[static_cast<uint8_t>(obj.type)];
+        QColor colObjInfo = (colorsDynProp)[static_cast<uint8_t>(obj.type)];
         painter->setBrush(colObjInfo);
         int wObj = width()/2 + obj.distLat / (float)gridStepM * gridStepPx;
         int hObj = height() - obj.distLong / (float)gridStepM * gridStepPx;
@@ -205,7 +209,7 @@ void VisImage::drawObjectsExt(){
     painter->setBrush(QBrush());
 
     for (const auto& obj : objects) {
-        QColor colObjExt = (*colors)[static_cast<uint8_t>(obj.type)];
+        QColor colObjExt = (colorsDynProp)[static_cast<uint8_t>(obj.type)];
         painter->setPen(QPen(colObjExt, 2));
         int xObj = width()/2 + obj.distLat / (float)gridStepM * gridStepPx;
         int yObj = height() - obj.distLong / (float)gridStepM * gridStepPx;
