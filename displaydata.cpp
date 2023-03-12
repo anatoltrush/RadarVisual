@@ -31,16 +31,14 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
 
     // --- config ---
     dConfig = new DialogConfig(this);
-    // --- bind ---
-    ui->vDraw->configRadar = &dConfig->configRadar;
-    ui->vDraw->collDetState = &dConfig->collDetState;
 
     // --- connections ---
     connect(ui->pBConfigRadar, SIGNAL(clicked()), this, SLOT(configRadarCall()));
     connect(ui->cBInfo, SIGNAL(clicked(bool)), this, SLOT(info(bool)));
     connect(ui->cBRadNum, SIGNAL(currentIndexChanged(int)), this, SLOT(radNum(int)));
     connect(ui->cBChsDist, SIGNAL(currentTextChanged(QString)), this, SLOT(chooseDist(QString)));
-    connect(this, SIGNAL(signalWarningsUI()), this, SLOT(updateWarningsUI()));
+    connect(this, SIGNAL(signRadaeWarningsUI()), this, SLOT(updateWarningsUI()));
+    connect(this, SIGNAL(signUpdRegionList()), dConfig, SLOT(updRegList()));
 
     // --- post events ---
     ui->cBInfo->click();
@@ -207,8 +205,9 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         dConfig->configRadar.thrRcs = Converter::getDecData(canLine.messData, 59, 3);
 
         // --- --- ---
+        ui->vDraw->configRadar = dConfig->configRadar;
         dConfig->updateConfigUI();
-        emit signalWarningsUI();
+        emit signRadaeWarningsUI();
     }
     if(canLine.messId[0] == '2' && canLine.messId[2] == '3'){ // FILTERS
         dConfig->is203Got = true;
@@ -334,32 +333,41 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
 
     // --- COLLISIONS ---
     if(canLine.messId[0] == '4' && canLine.messId[2] == '2'){ // REGION DATA
-        uint8_t idReg = Converter::getDecData(canLine.messData, 0, 3);
-        for (uint8_t i = 0; i < COLL_REG_NUM; i++) {
-            if(ui->vDraw->regions[i].id == idReg){
-                // --- warn level ---
-                uint8_t warn = Converter::getDecData(canLine.messData, 3, 2);
-                ui->vDraw->regions[i].warnLevel = static_cast<WarningLevel>(warn);
-                // --- X1 ---
-                ui->vDraw->regions[i].pt1X = Converter::getDecData(canLine.messData, 21, 11);
-                ui->vDraw->regions[i].pt1X *= resCollPt1X;
-                ui->vDraw->regions[i].pt1X += offsetCollPt1X;
-                // --- Y1 ---
-                ui->vDraw->regions[i].pt1Y = Converter::getDecData(canLine.messData, 8, 13);
-                ui->vDraw->regions[i].pt1Y *= resCollPt1Y;
-                ui->vDraw->regions[i].pt1Y += offsetCollPt1Y;
-                // --- X2 ---
-                ui->vDraw->regions[i].pt2X = Converter::getDecData(canLine.messData, 45, 11);
-                ui->vDraw->regions[i].pt2X *= resCollPt2X;
-                ui->vDraw->regions[i].pt2X += offsetCollPt2X;
-                // --- Y2 ---
-                ui->vDraw->regions[i].pt2Y = Converter::getDecData(canLine.messData, 32,13);
-                ui->vDraw->regions[i].pt2Y *= resCollPt2Y;
-                ui->vDraw->regions[i].pt2Y += offsetCollPt2Y;
-                // --- nof ---
-                ui->vDraw->regions[i].nofObj = Converter::getDecData(canLine.messData, 56, 8);
-            }
+        // --- time ---
+        uint64_t diffTime = GET_CUR_TIME_MILLI - dConfig->prev402GotMs;
+        if(diffTime > dConfig->period402GotMs){
+            dConfig->prev402GotMs = GET_CUR_TIME_MILLI;
+            dConfig->regions.clear();
         }
+        // ---
+        CollRegion collRegion;
+        // --- id ---
+        collRegion.id = Converter::getDecData(canLine.messData, 0, 3);
+        // --- warn level ---
+        uint8_t warn = Converter::getDecData(canLine.messData, 3, 2);
+        collRegion.warnLevel = static_cast<WarningLevel>(warn);
+        // --- X1 ---
+        collRegion.pt1X = Converter::getDecData(canLine.messData, 21, 11);
+        collRegion.pt1X *= resCollPt1X;
+        collRegion.pt1X += offsetCollPt1X;
+        // --- Y1 ---
+        collRegion.pt1Y = Converter::getDecData(canLine.messData, 8, 13);
+        collRegion.pt1Y *= resCollPt1Y;
+        collRegion.pt1Y += offsetCollPt1Y;
+        // --- X2 ---
+        collRegion.pt2X = Converter::getDecData(canLine.messData, 45, 11);
+        collRegion.pt2X *= resCollPt2X;
+        collRegion.pt2X += offsetCollPt2X;
+        // --- Y2 ---
+        collRegion.pt2Y = Converter::getDecData(canLine.messData, 32,13);
+        collRegion.pt2Y *= resCollPt2Y;
+        collRegion.pt2Y += offsetCollPt2Y;
+        // --- nof ---
+        collRegion.nofObj = Converter::getDecData(canLine.messData, 56, 8);
+        // ---
+        dConfig->regions.push_back(collRegion);
+        ui->vDraw->regions = dConfig->regions;
+        emit signUpdRegionList();
     }
     if(canLine.messId[0] == '4' && canLine.messId[2] == '8'){ // COLLISION STATE
         dConfig->collDetState.isActive = Converter::getDecData(canLine.messData, 6, 1);

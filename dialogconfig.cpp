@@ -109,6 +109,11 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     connect(ui->cBSetClObjYV, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjYVal(bool))); // Y
     connect(ui->cBSetClObjYA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjYAct(bool)));
     emit ui->cBSetClObjYV->clicked(false);
+
+    // --- regions ---
+    connect(ui->cBCollRegVal, SIGNAL(clicked(bool)), this, SLOT(showHideRegionCoordinates(bool))); // valid
+    emit ui->cBCollRegVal->clicked(false);
+    connect(ui->tWRegions, SIGNAL(itemClicked(QTableWidgetItem *)), this, SLOT(selectedUIRegion(QTableWidgetItem *))); // reg UI
 }
 
 DialogConfig::~DialogConfig(){
@@ -251,7 +256,7 @@ void DialogConfig::clearResStr(){
 void DialogConfig::genRadConfComm(){
     QString binStr(64, '0');
 
-    // --- ID ---
+    // --- id ---
     if(ui->cBSetRadId->isChecked()){
         binStr.replace(6, 1, "1");
         int cBInd = ui->cBoxSetRadId->currentIndex();
@@ -700,6 +705,20 @@ void DialogConfig::genCollState(){
 void DialogConfig::genCollRegion(){
     QString collRegStr(64, '0');
 
+    // --- id ---
+    QString cBInd = ui->cBoxCollRegId->currentText();
+    QString binId = Converter::decToBin(cBInd, 3);
+    collRegStr.replace(13, 3, binId);
+
+    // --- active ---
+    if(ui->cBCollRegAct->isChecked())
+        collRegStr.replace(6, 1, "1") ;
+
+    // --- valid ---
+    if(ui->cBCollRegVal->isChecked()){
+        // TODO: void DialogConfig::genCollRegion()
+    }
+
     // --- cansend + bin to hex ---
     QString resStr;
     if(*inUse == InUse::can)
@@ -891,6 +910,14 @@ void DialogConfig::sendMulti(){
     }
 }
 
+void DialogConfig::updRegList(){
+    ui->tWRegions->setRowCount(0);
+    for (const auto &rg : regions) {
+        ui->tWRegions->insertRow(ui->tWRegions->rowCount());
+        ui->tWRegions->setItem(ui->tWRegions->rowCount() - 1, 0, new QTableWidgetItem("Region ID: " + QString::number(rg.id)));
+    }
+}
+
 void DialogConfig::showHideSetRadQual(bool checked){
     ui->rBSetRadQualIn->setEnabled(checked);
     ui->rBSetRadQualAct->setEnabled(checked);
@@ -998,6 +1025,27 @@ void DialogConfig::selectedUIObjects(){
     ui->gBSetClObjLTim->setEnabled(true);
     ui->gBSetClObjSz->setEnabled(true);
     ui->gBSetClObjProb->setEnabled(true);
+}
+
+void DialogConfig::selectedUIRegion(QTableWidgetItem *item){
+    QString itemText = item->text();
+    uint8_t dtrId = QString(itemText.back()).toUInt();
+
+    for (const auto &rg : regions) {
+        if(rg.id == dtrId){
+            // --- ID ---
+            int indId = ui->cBoxCollRegId->findText(QString::number(rg.id));
+            ui->cBoxCollRegId->setCurrentIndex(indId);
+            // --- P1 ---
+            ui->sBP1x->setValue(rg.pt1X);
+            ui->sBP1y->setValue(rg.pt1Y);
+            // --- P2 ---
+            ui->sBP2x->setValue(rg.pt2X);
+            ui->sBP2y->setValue(rg.pt2Y);
+            // --- Activated ---
+            ui->cBCollRegAct->setChecked(true);
+        }
+    }
 }
 
 void DialogConfig::showHideSetClObjNofVal(bool checked){
@@ -1161,4 +1209,11 @@ void DialogConfig::showHideSetClObjYVal(bool checked){
 void DialogConfig::showHideSetClObjYAct(bool checked){
     ui->sBSetClObjYMin->setEnabled(checked);
     ui->sBSetClObjYMax->setEnabled(checked);
+}
+
+void DialogConfig::showHideRegionCoordinates(bool checked){
+    ui->sBP1x->setEnabled(checked);
+    ui->sBP1y->setEnabled(checked);
+    ui->sBP2x->setEnabled(checked);
+    ui->sBP2y->setEnabled(checked);
 }

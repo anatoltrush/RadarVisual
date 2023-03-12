@@ -2,8 +2,6 @@
 
 VisImage::VisImage(QWidget *parent) : QWidget(parent){
     this->setStyleSheet("background-color: #F5F5F5"); // start color
-    for (uint8_t i = 0; i < COLL_REG_NUM; i++)
-        regions[i].id = i;
 }
 
 void VisImage::resizeAspect(){
@@ -42,7 +40,7 @@ void VisImage::resizeEvent(QResizeEvent *event){
 
 void VisImage::drawZones(){
     // --- red ---
-    int farRadius = (configRadar->getFarZone() / (float)gridStepM) * gridStepPx;
+    int farRadius = (configRadar.getFarZone() / (float)gridStepM) * gridStepPx;
     QPainterPath farPath;
     farPath.moveTo(width() / 2, height());
     QRectF rectFar(width() / 2 - farRadius, height() - farRadius, farRadius * 2, farRadius * 2);
@@ -55,7 +53,7 @@ void VisImage::drawZones(){
     painter->drawPath(farPath);
 
     // --- blue ---
-    int nearRadius = (configRadar->nearZone / (float)gridStepM) * gridStepPx;
+    int nearRadius = (configRadar.nearZone / (float)gridStepM) * gridStepPx;
     QPainterPath nearPath;
     nearPath.moveTo(width() / 2, height());
     QRectF rectNear(width() / 2 - nearRadius, height() - nearRadius, nearRadius * 2, nearRadius * 2);
@@ -162,9 +160,9 @@ void VisImage::drawClusters(){
     painter->drawText(1, 26, "Measure count: " + QString::number(clustList.measCount));
     painter->drawText(1, 40, "Clusters in frame (filtered): " + QString::number(clusters.size()));
     painter->drawText(1, 54, "Clusters in frame (all): " + QString::number(clustList.numExpectSumm));
-    painter->drawText(1, 68, "Far zone (" + QString::number(configRadar->getFarZone()) + "m): " +
+    painter->drawText(1, 68, "Far zone (" + QString::number(configRadar.getFarZone()) + "m): " +
                       QString::number(clustList.numExpectFar));
-    painter->drawText(1, 82, "Near zone (" + QString::number(configRadar->nearZone) + "m): " +
+    painter->drawText(1, 82, "Near zone (" + QString::number(configRadar.nearZone) + "m): " +
                       QString::number(clustList.numExpectNear));
     // ---
     clustList = ClusterList();

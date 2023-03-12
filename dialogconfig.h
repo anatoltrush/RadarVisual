@@ -2,6 +2,7 @@
 #define DIALOGCONFIG_H
 
 #include <QDialog>
+#include <QTableWidgetItem>
 
 #include "entity.h"
 #include "converter.h"
@@ -21,6 +22,10 @@ public:
 
     ConfigRadar configRadar;
     CollDetState collDetState;
+    std::vector<CollRegion> regions;
+
+    uint64_t prev402GotMs = 0;
+    uint64_t period402GotMs = 900;
 
     InUse* inUse = nullptr;
     std::string deviceName;
@@ -44,6 +49,7 @@ private slots:
     void send();
     void sendOne();
     void sendMulti();
+    void updRegList();
 
     void showHideSetRadQual(bool checked);
     void showHideSetRadExt(bool checked);
@@ -59,6 +65,7 @@ private slots:
     void tabChanged(int index);
     void selectedUIClusters();
     void selectedUIObjects();
+    void selectedUIRegion(QTableWidgetItem *item);
 
     void showHideSetClObjNofVal(bool checked); // Nof objects
     void showHideSetClObjNofAct(bool checked);
@@ -91,6 +98,8 @@ private slots:
     void showHideSetClObjYVal(bool checked); // Y
     void showHideSetClObjYAct(bool checked);
 
+    void showHideRegionCoordinates(bool checked);
+
 private:
     Ui::DialogConfig *ui;
 
@@ -105,5 +114,4 @@ private:
 };
 
 #endif // DIALOGCONFIG_H
-// TODO: coll state + coll reg -> zmq
-// TODO: valid + active
+// TODO: collis state + collis reg -> zmq

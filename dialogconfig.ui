@@ -26,7 +26,6 @@
       <widget class="QPushButton" name="pBClearResStr">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -52,7 +51,6 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -71,7 +69,6 @@
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -98,7 +95,6 @@
       <widget class="QPushButton" name="pBSend">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -1127,7 +1123,6 @@
            <widget class="QPushButton" name="pBGenRadConf">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -2847,7 +2842,6 @@
              <widget class="QRadioButton" name="rBSetClObjTypeCl">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2860,7 +2854,6 @@
              <widget class="QRadioButton" name="rBSetClObjTypeObj">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2873,7 +2866,6 @@
              <widget class="QLabel" name="lFiltersCl">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2886,7 +2878,6 @@
              <widget class="QLabel" name="lFiltersObj">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -2902,7 +2893,6 @@
           <widget class="QPushButton" name="pBGenClObjConf">
            <property name="font">
             <font>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -3140,7 +3130,6 @@
             </property>
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -3165,7 +3154,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_62">
           <item row="0" column="0">
-           <widget class="QTableWidget" name="tableWidget">
+           <widget class="QTableWidget" name="tWRegions">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -3177,6 +3166,12 @@
               <width>160</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::SingleSelection</enum>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
             </property>
             <row>
              <property name="text">
@@ -3220,7 +3215,7 @@
             </row>
             <column>
              <property name="text">
-              <string>ID</string>
+              <string>Regions</string>
              </property>
             </column>
            </widget>
@@ -3340,7 +3335,6 @@
              <property name="font">
               <font>
                <pointsize>11</pointsize>
-               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -3360,7 +3354,6 @@
              <property name="font">
               <font>
                <pointsize>11</pointsize>
-               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -3616,7 +3609,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="cBCollRegId">
+               <widget class="QComboBox" name="cBoxCollRegId">
                 <item>
                  <property name="text">
                   <string>0</string>
@@ -3661,6 +3654,32 @@
               </item>
              </layout>
             </widget>
+            <widget class="QLabel" name="label_74">
+             <property name="geometry">
+              <rect>
+               <x>190</x>
+               <y>130</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>w: ---</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_75">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>220</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>h: ---</string>
+             </property>
+            </widget>
             <zorder>layoutWidget</zorder>
             <zorder>layoutWidget</zorder>
             <zorder>layoutWidget</zorder>
@@ -3675,6 +3694,8 @@
             <zorder>lineRadar</zorder>
             <zorder>label_70</zorder>
             <zorder>line_4</zorder>
+            <zorder>label_74</zorder>
+            <zorder>label_75</zorder>
            </widget>
           </item>
           <item row="1" column="0" colspan="2">
@@ -3700,7 +3721,6 @@
             </property>
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>

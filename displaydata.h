@@ -30,7 +30,8 @@ private slots:
     void updateWarningsUI();
 
 signals:
-    void signalWarningsUI();
+    void signRadaeWarningsUI();
+    void signUpdRegionList();
 
 private:
     Ui::DisplayData *ui;

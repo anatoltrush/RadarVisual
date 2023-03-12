@@ -18,9 +18,8 @@ public:
     std::vector<QColor>* colors;
     std::vector<bool> showProperties;
 
-    ConfigRadar *configRadar = nullptr;
-    CollDetState *collDetState = nullptr;
-    CollRegion regions[COLL_REG_NUM];
+    ConfigRadar configRadar;
+    std::vector<CollRegion> regions;
 
     // --- clusters ---
     ClusterList clustList;
