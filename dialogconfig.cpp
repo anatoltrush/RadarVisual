@@ -22,9 +22,9 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     connect(ui->pBClearResStr, SIGNAL(clicked()), this, SLOT(clearResString()));
     connect(ui->pBGenRadConf, SIGNAL(clicked()), this, SLOT(genRadConfigCommand()));
     connect(ui->pBGenClObjConf, SIGNAL(clicked()), this, SLOT(genClObjConfigCommand()));
-    connect(ui->pBGenCollState, SIGNAL(clicked()), this, SLOT(genCollState()));
-    connect(ui->pBGenCollRegion, SIGNAL(clicked()), this, SLOT(genCollRegion()));
-    connect(ui->pBSend, SIGNAL(clicked()), this, SLOT(send()));
+    connect(ui->pBGenCollState, SIGNAL(clicked()), this, SLOT(genCollStateCommand()));
+    connect(ui->pBGenCollRegion, SIGNAL(clicked()), this, SLOT(genCollRegionCommand()));
+    connect(ui->pBSend, SIGNAL(clicked()), this, SLOT(onPBSend()));
 
     connect(ui->cBSetRadQual, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadQual(bool)));
     connect(ui->cBSetRadExt, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadExt(bool)));
@@ -109,10 +109,13 @@ DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogC
     connect(ui->cBSetClObjYA, SIGNAL(clicked(bool)), this, SLOT(showHideSetClObjYAct(bool)));
     emit ui->cBSetClObjYV->clicked(false);
 
-    // --- regions ---
-    connect(ui->cBCollRegVal, SIGNAL(clicked(bool)), this, SLOT(showHideRegionCoordinates(bool))); // valid
+    // --- collisions ---
+    connect(ui->cBCollRegVal, SIGNAL(clicked(bool)), this, SLOT(showHideSetRegCoordinates(bool))); // valid
     emit ui->cBCollRegVal->clicked(false);
-    connect(ui->tWRegions, SIGNAL(itemClicked(QTableWidgetItem *)), this, SLOT(selectedUIRegion(QTableWidgetItem *))); // reg UI
+    connect(ui->tWRegions, SIGNAL(itemClicked(QTableWidgetItem*)), this, SLOT(selectedUIRegion(QTableWidgetItem*))); // reg UI
+
+    connect(ui->cBSetCollTimVal, SIGNAL(clicked(bool)), this, SLOT(showHideSetCollDetectTime(bool))); // time
+    emit ui->cBSetCollTimVal->clicked(false);
 }
 
 DialogConfig::~DialogConfig(){
@@ -356,14 +359,13 @@ void DialogConfig::genRadConfigCommand(){
     resStr += Converter::binToHex(binStr);
 
     // --- canline for zmq line ---
-    if(resStr.length() >= 40){
-        QStringList listData = resStr.split(' ');
-        zmqCanLine.timeStamp = GET_CUR_TIME_MICRO;
-        zmqCanLine.canNum = listData[1];
-        zmqCanLine.messId = listData[2].mid(0, 3);
-        zmqCanLine.messData = listData[2].mid(4, 23);
-        zmqCanLine.messData.remove('.');
-    }
+    QStringList listRadarConf = resStr.split(' ');
+    zmqCanLine.timeStamp = GET_CUR_TIME_MICRO;
+    zmqCanLine.canNum = listRadarConf[1];
+    zmqCanLine.messId = listRadarConf[2].mid(0, 3);
+    zmqCanLine.messData = listRadarConf[2].mid(4, 23);
+    zmqCanLine.messData.remove('.');
+
     // --- UI ---
     ui->lEResStr->setText(resStr);
 }
@@ -684,8 +686,27 @@ void DialogConfig::genClObjConfigCommand(){
     ui->cBResStr->addItems(commands);
 }
 
-void DialogConfig::genCollState(){
+void DialogConfig::genCollStateCommand(){
     QString collStatStr(16, '0');
+
+    // --- activation ---
+    if(ui->cBSetCollDetAct->isChecked())
+        collStatStr.replace(6, 1, "1");
+
+    // --- warns res ---
+    if(ui->cBSetCollWarnRes->isChecked())
+        collStatStr.replace(7, 1, "1");
+
+    // --- clear regs ---
+    if(ui->cBSetCollClearReg->isChecked())
+        collStatStr.replace(0, 1, "1");
+
+    // --- valid & time ---
+    if(ui->cBSetCollTimVal->isChecked()){
+        collStatStr.replace(4, 1, "1");
+        QString strTim = QString::number((uint16_t)(ui->sBSetCollTime->value() / resCollDetTime));
+        collStatStr.replace(8, 8, Converter::decToBin(strTim, 8));
+    }
 
     // --- cansend + bin to hex ---
     QString resStr;
@@ -696,12 +717,18 @@ void DialogConfig::genCollState(){
     resStr += Converter::binToHex(collStatStr);
 
     // --- canline for zmq line ---
+    QStringList listCollConf = resStr.split(' ');
+    zmqCanLine.timeStamp = GET_CUR_TIME_MICRO;
+    zmqCanLine.canNum = listCollConf[1];
+    zmqCanLine.messId = listCollConf[2].mid(0, 3);
+    zmqCanLine.messData = listCollConf[2].mid(4, 5);
+    zmqCanLine.messData.remove('.');
 
     // --- UI ---
     ui->lEResStr->setText(resStr);
 }
 
-void DialogConfig::genCollRegion(){
+void DialogConfig::genCollRegionCommand(){
     QString collRegStr(64, '0');
 
     // --- id ---
@@ -713,7 +740,7 @@ void DialogConfig::genCollRegion(){
     if(ui->cBCollRegAct->isChecked())
         collRegStr.replace(6, 1, "1") ;
 
-    // --- valid ---
+    // --- valid & coords ---
     if(ui->cBCollRegVal->isChecked()){
         uint8_t bitLenX = 11;
         uint8_t bitLenY = 13;
@@ -737,12 +764,18 @@ void DialogConfig::genCollRegion(){
     resStr += Converter::binToHex(collRegStr);
 
     // --- canline for zmq line ---
+    QStringList listRegionConf = resStr.split(' ');
+    zmqCanLine.timeStamp = GET_CUR_TIME_MICRO;
+    zmqCanLine.canNum = listRegionConf[1];
+    zmqCanLine.messId = listRegionConf[2].mid(0, 3);
+    zmqCanLine.messData = listRegionConf[2].mid(4, 23);
+    zmqCanLine.messData.remove('.');
 
     // --- UI ---
     ui->lEResStr->setText(resStr);
 }
 
-void DialogConfig::send(){
+void DialogConfig::onPBSend(){
     if(ui->tWConfig->currentIndex() == 0 || ui->tWConfig->currentIndex() == 2)
         sendOne();
     else sendMulti();
@@ -919,7 +952,7 @@ void DialogConfig::sendMulti(){
     }
 }
 
-void DialogConfig::updRegList(){
+void DialogConfig::updRegListUI(){
     ui->tWRegions->setRowCount(0);
     for (const auto &rg : regions) {
         ui->tWRegions->insertRow(ui->tWRegions->rowCount());
@@ -1063,11 +1096,13 @@ void DialogConfig::selectedUIRegion(QTableWidgetItem *item){
             QPixmap px(buttonSize);
             px.fill(colorsWarnLevel->at(indCol));
             ui->tBRegion->setIcon(px);
-            // --- w, h ---
+            // --- w, h, s ---
             float regWid = rg.pt1X - rg.pt2X;
             ui->lRegWidth->setText("width: " + Converter::floatCutOff(regWid, 1) + "m");
-            float regLen = rg.pt1Y - rg.pt2Y;
+            float regLen = rg.pt2Y - rg.pt1Y;
             ui->lRegLength->setText("length: " + Converter::floatCutOff(regLen, 1) + "m");
+            float regS = regWid * regLen;
+            ui->lRegS->setText("S: " + Converter::floatCutOff(regS, 1) + "m2");
         }
     }
 }
@@ -1235,9 +1270,13 @@ void DialogConfig::showHideSetClObjYAct(bool checked){
     ui->sBSetClObjYMax->setEnabled(checked);
 }
 
-void DialogConfig::showHideRegionCoordinates(bool checked){
+void DialogConfig::showHideSetRegCoordinates(bool checked){
     ui->sBP1x->setEnabled(checked);
     ui->sBP1y->setEnabled(checked);
     ui->sBP2x->setEnabled(checked);
     ui->sBP2y->setEnabled(checked);
+}
+
+void DialogConfig::showHideSetCollDetectTime(bool checked){
+    ui->sBSetCollTime->setEnabled(checked);
 }

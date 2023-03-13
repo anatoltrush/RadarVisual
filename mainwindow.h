@@ -88,6 +88,6 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: ?Collisions #400, #401
 // TODO: ?Calc spent dist + Supports + Make objs
 // TODO: ?Redo visImg, panels (add ID) + write log + color legend for regions
+// BUG: Clear regs when no 402, 408

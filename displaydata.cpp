@@ -32,13 +32,14 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     // --- config ---
     dConfig = new DialogConfig(this);
 
-    // --- colors warnings ---
+    // --- bindings ---
     uint8_t transp = 140;
     ui->vDraw->colorsWarnLevel[0] = QColor(160, 255, 160, transp); // no warn
     ui->vDraw->colorsWarnLevel[1] = QColor(255, 140, 140, transp); // warn
     ui->vDraw->colorsWarnLevel[2] = QColor(128, 128, 128, transp); // unused
     ui->vDraw->colorsWarnLevel[3] = QColor(255, 150, 50, transp); // left
     dConfig->colorsWarnLevel = &ui->vDraw->colorsWarnLevel;
+    ui->vDraw->regions = &dConfig->regions;
 
     // --- connections ---
     connect(ui->pBConfigRadar, SIGNAL(clicked()), this, SLOT(configRadarCall()));
@@ -46,7 +47,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     connect(ui->cBRadNum, SIGNAL(currentIndexChanged(int)), this, SLOT(radNum(int)));
     connect(ui->cBChsDist, SIGNAL(currentTextChanged(QString)), this, SLOT(chooseDist(QString)));
     connect(this, SIGNAL(signRadaeWarningsUI()), this, SLOT(updateWarningsUI()));
-    connect(this, SIGNAL(signUpdRegionList()), dConfig, SLOT(updRegList()));
+    connect(this, SIGNAL(signUpdRegionList()), dConfig, SLOT(updRegListUI()));
 
     // --- post events ---
     ui->cBInfo->click();
@@ -355,28 +356,25 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         uint8_t warn = Converter::getDecData(canLine.messData, 3, 2);
         collRegion.warnLevel = static_cast<WarningLevel>(warn);
         // --- X1 ---
-        collRegion.pt1X = Converter::getDecData(canLine.messData, 21, 11);
+        collRegion.pt1X = Converter::getDecData(canLine.messData, 45, 11); // 21?
         collRegion.pt1X *= resCollPt1X;
         collRegion.pt1X += offsetCollPt1X;
-        //collRegion.pt1X = 35.5f; // FIXME: delete
         // --- Y1 ---
         collRegion.pt1Y = Converter::getDecData(canLine.messData, 8, 13);
         collRegion.pt1Y *= resCollPt1Y;
         collRegion.pt1Y += offsetCollPt1Y;
-        //collRegion.pt1Y = 7.5f; // FIXME: delete
         // --- X2 ---
-        collRegion.pt2X = Converter::getDecData(canLine.messData, 45, 11);
+        collRegion.pt2X = Converter::getDecData(canLine.messData, 21, 11); // 45?
         collRegion.pt2X *= resCollPt2X;
         collRegion.pt2X += offsetCollPt2X;
         // --- Y2 ---
-        collRegion.pt2Y = Converter::getDecData(canLine.messData, 32,13);
+        collRegion.pt2Y = Converter::getDecData(canLine.messData, 32, 13);
         collRegion.pt2Y *= resCollPt2Y;
         collRegion.pt2Y += offsetCollPt2Y;
         // --- nof ---
         collRegion.nofObj = Converter::getDecData(canLine.messData, 56, 8);
         // ---
         dConfig->regions.push_back(collRegion);
-        ui->vDraw->regions = dConfig->regions;
         emit signUpdRegionList();
     }
     if(canLine.messId[0] == '4' && canLine.messId[2] == '8'){ // COLLISION STATE
@@ -386,6 +384,11 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         dConfig->collDetState.detectTimeSec *= resCollDetTime;
         dConfig->collDetState.measCount = Converter::getDecData(canLine.messData, 16, 16);
         dConfig->updateCollDetStateUI();
+        // --- 0 regions left ---
+        if(dConfig->collDetState.nofRegs == 0){
+            dConfig->regions.clear();
+            emit signUpdRegionList();
+        }
     }
 }
 

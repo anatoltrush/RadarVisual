@@ -68,15 +68,15 @@ void VisImage::drawZones(){
 }
 
 void VisImage::drawRegions(){
-    // TODO: add ID
-    // TODO: change black border
-    for (const auto &reg : regions) {
-        QColor regCol = (colorsWarnLevel)[static_cast<uint8_t>(reg.warnLevel)];
-        QPen penReg = QPen(Qt::black, 1);
-        QVector<qreal> dashes {10, 10};
+    for (const auto &reg : *regions) {
+        QColor colFill = (colorsWarnLevel)[static_cast<uint8_t>(reg.warnLevel)];
+        uint8_t colDown = 30;
+        QColor colBord(colFill.red()-colDown, colFill.green()-colDown, colFill.blue()-colDown, colFill.alpha());
+        QPen penReg = QPen(colBord, 2);
+        QVector<qreal> dashes {10, 6};
         penReg.setDashPattern(dashes);
         painter->setPen(penReg);
-        painter->setBrush(regCol);
+        painter->setBrush(colFill);
         // ---
         int x1 = width()/2 + reg.pt1X / (float)gridStepM * gridStepPx;
         int y1 = height() - reg.pt1Y / (float)gridStepM * gridStepPx;
@@ -88,6 +88,11 @@ void VisImage::drawRegions(){
 
         QRectF rect(pt2, pt1);
         painter->drawRect(rect);
+
+        // --- id ---
+        QPen penText = QPen(Qt::black, 1);
+        painter->setPen(penText);
+        painter->drawText(x2, y2-2, "ID:" + QString::number(reg.id));
     }
 }
 

@@ -16,11 +16,11 @@ public:
     bool isShowInfo = false;
     float aspect    = 0.0f;
     std::vector<QColor> colorsDynProp;
-    std::vector<QColor>colorsWarnLevel = std::vector<QColor>(4);
+    std::vector<QColor> colorsWarnLevel = std::vector<QColor>(4);
     std::vector<bool> showProperties;
 
     ConfigRadar configRadar;
-    std::vector<CollRegion> regions;
+    std::vector<CollRegion>* regions = nullptr;
 
     // --- clusters ---
     ClusterList clustList;

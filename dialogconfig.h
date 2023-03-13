@@ -45,12 +45,12 @@ private slots:
     void clearResString();
     void genRadConfigCommand();
     void genClObjConfigCommand();
-    void genCollState();
-    void genCollRegion();
-    void send();
+    void genCollStateCommand();
+    void genCollRegionCommand();
+    void onPBSend();
     void sendOne();
     void sendMulti();
-    void updRegList();
+    void updRegListUI();
 
     void showHideSetRadQual(bool checked);
     void showHideSetRadExt(bool checked);
@@ -99,7 +99,8 @@ private slots:
     void showHideSetClObjYVal(bool checked); // Y
     void showHideSetClObjYAct(bool checked);
 
-    void showHideRegionCoordinates(bool checked);
+    void showHideSetRegCoordinates(bool checked);
+    void showHideSetCollDetectTime(bool checked);
 
 private:
     Ui::DialogConfig *ui;
@@ -115,4 +116,4 @@ private:
 };
 
 #endif // DIALOGCONFIG_H
-// TODO: collis state + collis reg test -> collis reg zmq
+// TODO: collis state + reg (zmq test)
