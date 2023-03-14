@@ -227,6 +227,19 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
 
     // --- ------ OBJECTS --- --- ---
     if(canLine.messId[0] == '6' && (canLine.messId[2] == 'a' || canLine.messId[2] == 'A')){ // OBJS LIST
+        // --- time for clearing ---
+        uint64_t diffCollState = GET_CUR_TIME_MILLI - dConfig->prev408GotMs;
+        if(diffCollState > dConfig->period408GotMs){
+            if(dConfig->is408Got){
+                dConfig->is408Got = false;
+            }
+            else{
+                dConfig->regions.clear();
+                emit signUpdRegionList();
+            }
+            dConfig->prev408GotMs = GET_CUR_TIME_MILLI;
+        }
+
         // NOTE: Send object frame to visual
         updateShowFlags();
         applyFilters();
@@ -342,9 +355,9 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
 
     // --- COLLISIONS ---
     if(canLine.messId[0] == '4' && canLine.messId[2] == '2'){ // REGION DATA
-        // --- time ---
-        uint64_t diffTime = GET_CUR_TIME_MILLI - dConfig->prev402GotMs;
-        if(diffTime > dConfig->period402GotMs){
+        // --- time for clearing ---
+        uint64_t diffTimeReg = GET_CUR_TIME_MILLI - dConfig->prev402GotMs;
+        if(diffTimeReg > dConfig->period402GotMs){
             dConfig->prev402GotMs = GET_CUR_TIME_MILLI;
             dConfig->regions.clear();
         }
@@ -378,6 +391,7 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         emit signUpdRegionList();
     }
     if(canLine.messId[0] == '4' && canLine.messId[2] == '8'){ // COLLISION STATE
+        dConfig->is408Got = true;
         dConfig->collDetState.isActive = Converter::getDecData(canLine.messData, 6, 1);
         dConfig->collDetState.nofRegs = Converter::getDecData(canLine.messData, 0, 4);
         dConfig->collDetState.detectTimeSec = Converter::getDecData(canLine.messData, 8, 8);

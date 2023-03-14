@@ -26,7 +26,10 @@ public:
     std::vector<QColor>* colorsWarnLevel = nullptr;
 
     uint64_t prev402GotMs   = 0;
-    uint64_t period402GotMs = 950; // every 1 sec
+    uint64_t period402GotMs = 980; // every 1 sec
+    uint64_t prev408GotMs   = 0;
+    uint64_t period408GotMs = 1200;
+    bool is408Got = false;
 
     InUse* inUse = nullptr;
     std::string deviceName;
@@ -116,4 +119,3 @@ private:
 };
 
 #endif // DIALOGCONFIG_H
-// TODO: collis state + reg (zmq test)
