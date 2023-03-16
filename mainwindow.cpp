@@ -557,7 +557,6 @@ void MainWindow::loadFile(){
     // --- --- ---
 
     isFileLoaded = false;
-    pathFileCanLog = ui->lEInpFile->text();
     QFile file(pathFileCanLog);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         ui->pBLoadFile->setStyleSheet("background-color: red");
