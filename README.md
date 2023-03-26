@@ -20,7 +20,7 @@
   * Ubuntu
 
 ### P.S.
-* For using ZMQ you have to have the installed ZMQ-library 
+* For using ZMQ you have to have the installed ZMQ-library (tested with 4.3.0 version [libZmq](https://github.com/zeromq/libzmq/releases/tag/v4.3.0) + [cppZmq](https://github.com/zeromq/cppzmq/releases/tag/v4.3.0))
 * Project not tested with other models of radars
 * __Important!__ Project may contain some issues or bugs. Current software is free, so author is not responsible for the use of the software
 
