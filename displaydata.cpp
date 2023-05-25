@@ -582,8 +582,9 @@ int DisplayData::calcSpeed(){
 }
 
 void DisplayData::showSpeedUI(){
-    ui->lSpeed_M_KM->setText("Speed: " + Converter::floatCutOff(speedVehicle, 1) + "m/s (" +
-                             Converter::floatCutOff(speedVehicle * 3.6f, 1) + "km/h)");
+    QString strSpeed = "Speed: " + Converter::floatCutOff(speedVehicle, 1) + "m/s (" +
+            Converter::floatCutOff(speedVehicle * 3.6f, 1) + "km/h)";
+    ui->lSpeed_M_KM->setText(strSpeed);
 }
 
 void DisplayData::updateWarningsUI(){

@@ -63,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->cBCanPlugin->hide();
     ui->cBCanName->hide();
     ui->gBCanExtInfo->hide();
-    this->resize(440, this->height());
+    this->resize(500, this->height());
 #endif
 
     // --- placing ---
