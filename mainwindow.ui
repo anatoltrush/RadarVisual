@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>680</width>
-    <height>290</height>
+    <width>701</width>
+    <height>283</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,8 +21,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>700</width>
-    <height>295</height>
+    <width>719</width>
+    <height>290</height>
    </size>
   </property>
   <property name="focusPolicy">
@@ -60,6 +60,7 @@
         <widget class="QRadioButton" name="rBInpZMQ">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -79,6 +80,7 @@
          <property name="font">
           <font>
            <pointsize>15</pointsize>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -163,6 +165,7 @@
         <widget class="QRadioButton" name="rBInpCAN">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -207,6 +210,7 @@
          <property name="font">
           <font>
            <pointsize>15</pointsize>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -239,6 +243,7 @@
         <widget class="QRadioButton" name="rBInpFile">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -318,6 +323,21 @@
           <string>CAN ext info</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <item row="1" column="0">
            <widget class="QCheckBox" name="isFlexibleDataRateCapable">
             <property name="enabled">

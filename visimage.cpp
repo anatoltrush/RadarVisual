@@ -155,13 +155,14 @@ void VisImage::drawClusters(){
         // --- text ---
         if(isShowInfo){
             QString textInfo;
-            if(showProperties[0]) textInfo = Converter::floatCutOff(cl.RCS, 1);
-            if(showProperties[1]) textInfo = Converter::floatCutOff(cl.distLong, 1);
-            if(showProperties[2]) textInfo = Converter::floatCutOff(cl.distLat, 1);
-            if(showProperties[3]) textInfo = Converter::floatCutOff(cl.vRelLong, 1);
-            if(showProperties[4]) textInfo = Converter::floatCutOff(cl.vRelLat, 1);
-            if(showProperties[5]) textInfo = Converter::floatCutOff(cl.Pdh0, 1);
-            if(showProperties[6]) textInfo = Converter::floatCutOff(cl.azimuth, 1);
+            if(showProperties[0]) textInfo = QString::number(cl.id);
+            if(showProperties[1]) textInfo = Converter::floatCutOff(cl.RCS, 1);
+            if(showProperties[2]) textInfo = Converter::floatCutOff(cl.distLong, 1);
+            if(showProperties[3]) textInfo = Converter::floatCutOff(cl.distLat, 1);
+            if(showProperties[4]) textInfo = Converter::floatCutOff(cl.vRelLong, 1);
+            if(showProperties[5]) textInfo = Converter::floatCutOff(cl.vRelLat, 1);
+            if(showProperties[6]) textInfo = Converter::floatCutOff(cl.Pdh0, 1);
+            if(showProperties[7]) textInfo = Converter::floatCutOff(cl.azimuth, 1);
             painter->drawText(wCl+2, hCl-2, textInfo);
         }
     }
@@ -178,7 +179,7 @@ void VisImage::drawClusters(){
     clusters.clear();
 }
 
-void VisImage::drawObjectsInfo(){
+void VisImage::drawObjectsInfo(){ // not in use
     QPen penObjInfo = QPen(Qt::black, 1);
     painter->setPen(penObjInfo);
     if(gridStepPx <= 0) return;
@@ -193,13 +194,14 @@ void VisImage::drawObjectsInfo(){
         // --- text ---
         if(isShowInfo){
             QString textInfo;
-            if(showProperties[0]) textInfo = Converter::floatCutOff(obj.RCS, 1);
-            if(showProperties[1]) textInfo = Converter::floatCutOff(obj.distLong, 1);
-            if(showProperties[2]) textInfo = Converter::floatCutOff(obj.distLat, 1);
-            if(showProperties[3]) textInfo = Converter::floatCutOff(obj.vRelLong, 1);
-            if(showProperties[4]) textInfo = Converter::floatCutOff(obj.vRelLat, 1);
-            if(showProperties[5]) textInfo = Converter::floatCutOff(obj.Pdh0, 1);
-            if(showProperties[6]) textInfo = Converter::floatCutOff(obj.azimuth, 1);
+            if(showProperties[0]) textInfo = QString::number(obj.id);
+            if(showProperties[1]) textInfo = Converter::floatCutOff(obj.RCS, 1);
+            if(showProperties[2]) textInfo = Converter::floatCutOff(obj.distLong, 1);
+            if(showProperties[3]) textInfo = Converter::floatCutOff(obj.distLat, 1);
+            if(showProperties[4]) textInfo = Converter::floatCutOff(obj.vRelLong, 1);
+            if(showProperties[5]) textInfo = Converter::floatCutOff(obj.vRelLat, 1);
+            if(showProperties[6]) textInfo = Converter::floatCutOff(obj.Pdh0, 1);
+            if(showProperties[7]) textInfo = Converter::floatCutOff(obj.azimuth, 1);
             painter->drawText(wObj+2, hObj-2, textInfo);
         }
     }
@@ -234,13 +236,14 @@ void VisImage::drawObjectsExt(){
             painter->drawText(xObj-15, yObj-2, "|" + obj.getClassStr() + "|");
             // --- rest ---
             QString textInfo;
-            if(showProperties[0]) textInfo = Converter::floatCutOff(obj.RCS, 1);
-            if(showProperties[1]) textInfo = Converter::floatCutOff(obj.distLong, 1);
-            if(showProperties[2]) textInfo = Converter::floatCutOff(obj.distLat, 1);
-            if(showProperties[3]) textInfo = Converter::floatCutOff(obj.vRelLong, 1);
-            if(showProperties[4]) textInfo = Converter::floatCutOff(obj.vRelLat, 1);
-            if(showProperties[5]) textInfo = Converter::floatCutOff(obj.Pdh0, 1);
-            if(showProperties[6]) textInfo = Converter::floatCutOff(obj.azimuth, 1);
+            if(showProperties[0]) textInfo = QString::number(obj.id);
+            if(showProperties[1]) textInfo = Converter::floatCutOff(obj.RCS, 1);
+            if(showProperties[2]) textInfo = Converter::floatCutOff(obj.distLong, 1);
+            if(showProperties[3]) textInfo = Converter::floatCutOff(obj.distLat, 1);
+            if(showProperties[4]) textInfo = Converter::floatCutOff(obj.vRelLong, 1);
+            if(showProperties[5]) textInfo = Converter::floatCutOff(obj.vRelLat, 1);
+            if(showProperties[6]) textInfo = Converter::floatCutOff(obj.Pdh0, 1);
+            if(showProperties[7]) textInfo = Converter::floatCutOff(obj.azimuth, 1);
             painter->drawText(xObj+2, yObj-2, textInfo);
         }
     }

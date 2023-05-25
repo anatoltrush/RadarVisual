@@ -351,7 +351,7 @@ void MainWindow::procReceivedFrames(){
         sendToDisplay(rcvLine);
 
         // --- status bar ---
-        if(numFramesReceived % 10 == 0){
+        if(numFramesReceived % MSG_NUM_CAN_STEP == 0){
             QString statLocalMess = statusRadMess + " | " + QString::number(sizeof(frame)) +
                             " bytes received. Msg num: " + QString::number(numFramesReceived);
             ui->statBar->showMessage(statLocalMess);
@@ -434,7 +434,7 @@ void MainWindow::zmqRcv(){
             CanLine canLine = Converter::getCanLineFromCanFd(std::to_string(msgId._msg_src), pframe, true);
             sendToDisplay(canLine);
             // --- status bar ---
-            if(msgId._msg_num % 10 == 0){
+            if(msgId._msg_num % MSG_NUM_ZMQ_STEP == 0){
                 statusRadMess = "ZMQ connected (" + zmqAddrRcv + "). Msg num: " + QString::number(msgId._msg_num);
                 ui->statBar->showMessage(statusRadMess);
             }
@@ -463,7 +463,7 @@ void MainWindow::canRcv(){
             sendToDisplay(canLine);
         }
         // --- status bar ---
-        if(numFramesReceived %10 == 0){
+        if(numFramesReceived % MSG_NUM_CAN_STEP == 0){
             statLocalMess = statusRadMess + " | " + QString::number(nbytes) + " bytes received. Msg num: " +
                     QString::number(numFramesReceived);
             ui->statBar->showMessage(statLocalMess);

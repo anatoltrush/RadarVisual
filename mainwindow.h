@@ -89,4 +89,4 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: ?Calc spent dist + Supports + Make objs
-// TODO: ?Redo visImg, panels (add ID) + write log + color legend for regions
+// TODO: ?Redo visImg, write log + color legend for regions

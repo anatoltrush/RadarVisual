@@ -25,12 +25,16 @@
 #include <unistd.h>
 #include <math.h>
 
-#define RADAR_NUM       8
-#define COLL_REG_NUM    8
-#define DATA_SIZE       256
+#define RADAR_NUM       (8)
+#define COLL_REG_NUM    (8)
+#define DATA_SIZE       (256)
+#define MSG_NUM_ZMQ_STEP (20)
+#define MSG_NUM_CAN_STEP (20)
 
 #define GET_CUR_TIME_MILLI (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 #define GET_CUR_TIME_MICRO (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
+
+const QColor colDefault = QColor(239, 239, 239);
 
 // --- clusters ---
 const float resClustRCS         = 0.5f;

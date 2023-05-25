@@ -30,7 +30,7 @@ private slots:
     void updateWarningsUI();
 
 signals:
-    void signRadaeWarningsUI();
+    void signRadarWarningsUI();
     void signUpdRegionList();
 
 private:

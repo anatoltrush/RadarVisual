@@ -46,15 +46,12 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     connect(ui->cBInfo, SIGNAL(clicked(bool)), this, SLOT(info(bool)));
     connect(ui->cBRadNum, SIGNAL(currentIndexChanged(int)), this, SLOT(radNum(int)));
     connect(ui->cBChsDist, SIGNAL(currentTextChanged(QString)), this, SLOT(chooseDist(QString)));
-    connect(this, SIGNAL(signRadaeWarningsUI()), this, SLOT(updateWarningsUI()));
+    connect(this, SIGNAL(signRadarWarningsUI()), this, SLOT(updateWarningsUI()));
     connect(this, SIGNAL(signUpdRegionList()), dConfig, SLOT(updRegListUI()));
 
     // --- post events ---
     ui->cBInfo->click();
     ui->cBChsDist->setCurrentIndex(5); // set 250m
-
-    ui->lWarrning->setStyleSheet("background-color: red");
-    ui->lWarrning->hide();
 }
 
 DisplayData::~DisplayData(){
@@ -216,7 +213,7 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         // --- --- ---
         ui->vDraw->configRadar = dConfig->configRadar;
         dConfig->updateConfigUI();
-        emit signRadaeWarningsUI();
+        emit signRadarWarningsUI();
     }
     if(canLine.messId[0] == '2' && canLine.messId[2] == '3'){ // FILTERS
         dConfig->is203Got = true;
@@ -447,9 +444,9 @@ void DisplayData::applyFilters(){
 }
 
 void DisplayData::updateShowFlags(){
-    int sz = ui->gridProps->rowCount();
-    ui->vDraw->showProperties.resize(sz);
-    for (int i = 0; i < sz; i++) {
+    int flagSize = ui->gridProps->rowCount();
+    ui->vDraw->showProperties.resize(flagSize);
+    for (int i = 0; i < flagSize; i++) {
         QRadioButton* rb = static_cast<QRadioButton*>(ui->gridProps->itemAtPosition(i, 0)->widget());
         ui->vDraw->showProperties[i] = rb->isChecked();
     }
@@ -590,21 +587,42 @@ void DisplayData::showSpeedUI(){
 }
 
 void DisplayData::updateWarningsUI(){
+    QString strNoWarn = "<--- no errors --->";
+    // --- temper ---
     if(dConfig->configRadar.temperatErr){
-        ui->lWarrning->setText("<-TEMPERATURE ERROR!->");
-        ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
+        QString errorString = "<-TEMPERATURE ERROR!->";
+        ui->lWarning->setStyleSheet("background-color: red");
+        ui->lWarning->text() == errorString ?
+                    ui->lWarning->setText("----- ----- ----- ----- -----") :
+                    ui->lWarning->setText(errorString);
     }
-    if(dConfig->configRadar.persistErr){
-        ui->lWarrning->setText("<-PERSISTENT ERROR!->");
-        ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
+    // --- tempor ---
+    else if(dConfig->configRadar.temporarErr){
+        QString errorString = "<-TEMPORARY ERROR!->";
+        ui->lWarning->setStyleSheet("background-color: red");
+        ui->lWarning->text() == errorString ?
+                    ui->lWarning->setText("----- ----- ----- ----- -----") :
+                    ui->lWarning->setText(errorString);
     }
-    if(dConfig->configRadar.temporarErr){
-        ui->lWarrning->setText("<-TEMPORARY ERROR!->");
-        ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
+    // --- persist ---
+    else if(dConfig->configRadar.persistErr){
+        QString errorString = "<-PERSISTENT ERROR!->";
+        ui->lWarning->setStyleSheet("background-color: red");
+        ui->lWarning->text() == errorString ?
+                    ui->lWarning->setText("----- ----- ----- ----- -----") :
+                    ui->lWarning->setText(errorString);
     }
-    if(dConfig->configRadar.interference){
-        ui->lWarrning->setText("<-INTERFERENCE DETECTED->");
-        ui->lWarrning->isHidden() ? ui->lWarrning->show() : ui->lWarrning->hide();
+    // --- interf ---
+    else if(dConfig->configRadar.interference){
+        QString errorString = "<-INTERFERENCE DETECTED->";
+        ui->lWarning->setStyleSheet("background-color: red");
+        ui->lWarning->text() == errorString ?
+                    ui->lWarning->setText("----- ----- ----- ----- -----") :
+                    ui->lWarning->setText(errorString);
+    }
+    else{
+        ui->lWarning->setStyleSheet("background-color: green");
+        ui->lWarning->setText(strNoWarn);
     }
 }
 

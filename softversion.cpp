@@ -4,8 +4,7 @@
 SoftVersion::SoftVersion(QWidget *parent) : QDialog(parent), ui(new Ui::SoftVersion){
     ui->setupUi(this);
 
-    setFixedSize(260, 160);
-
+    setFixedSize(300, 160);
     ui->lHyper->setOpenExternalLinks(true);
 }
 
