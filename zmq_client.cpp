@@ -10,12 +10,8 @@ bool Client::start(std::string &errStr){
 
     _stop = false;
     try{
-        if(_in_queue_size)
-            client.setsockopt(ZMQ_RCVHWM, _in_queue_size);
-
-        if(_out_queue_size)
-            client.setsockopt(ZMQ_SNDHWM, _out_queue_size);
-
+        if(_in_queue_size) client.setsockopt(ZMQ_RCVHWM, _in_queue_size);
+        if(_out_queue_size) client.setsockopt(ZMQ_SNDHWM, _out_queue_size);
         for(const auto &its: senderPoints)
             client.connect(its);
     }
@@ -31,12 +27,8 @@ bool Client::stop(){
     _stop = true;
     bool result = true;
     for(const auto &its: senderPoints){
-        try{
-            client.disconnect(its);
-        }
-        catch(std::exception &e){
-            result = false;
-        }
+        try{client.disconnect(its);}
+        catch(std::exception &e){result = false;}
     }
     _stopped = true;
     return result;

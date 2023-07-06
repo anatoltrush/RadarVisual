@@ -25,5 +25,6 @@
 * __Important!__ Project may contain some issues or bugs. Current software is free, so author is not responsible for the use of the software
 
 ### Few links:
+  * [**PEAK-Drivers**](https://www.peak-system.com/Drivers.523.0.html?&L=1)
   * [**How it works**](https://www.youtube.com/watch?v=mCstMJNNWWk)
   * [**Author=)**](https://www.linkedin.com/in/anatol-trush-1703b0133/)

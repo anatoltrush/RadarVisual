@@ -22,11 +22,21 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     // --- threads ---
     isAppStopped = false;
-    thrCanRcv = std::thread(&MainWindow::canRcv, this);
-    thrZmqRcv = std::thread(&MainWindow::zmqRcv, this);
+    thrCanRcv   = std::thread(&MainWindow::canRcv, this);
+    thrZmqRcv   = std::thread(&MainWindow::zmqRcv, this);
     thrPlayFile = std::thread(&MainWindow::playCanFile, this);
+    thrLog      = std::thread(&TechLogger::dropData, &tLogger, &condVar);
 
-    // ---
+    // --- logger ---
+    tLogger.strDirPath = QDir::currentPath();
+    tLogger.updFileName("/RADAR_VISUAL_");
+    ui->lLogPath->setText("Path: " + tLogger.getFullName());
+
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::slotTimerTick);
+    timer->start(200);
+
+    // --- window ---
     this->setWindowFlags(Qt::WindowCloseButtonHint);
     this->setWindowTitle(this->windowTitle() + " v" +
                          QString::number(VERSION_MAJOR) + "." + QString::number(VERSION_MINOR));
@@ -35,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     // --- connections ---
     connect(ui->pBSoftVersID, SIGNAL(clicked()), sVersion, SLOT(updVersion()));
     connect(ui->pBSoftVersID, SIGNAL(clicked()), sVersion, SLOT(show()));
+    connect(ui->cBMirror, SIGNAL(clicked(bool)), this, SLOT(mirroring(bool)));
 
     connect(ui->pBStart, SIGNAL(clicked()), this, SLOT(start()));
     connect(ui->pBAddDisplay, SIGNAL(clicked()), this, SLOT(addDisplay()));
@@ -93,7 +104,9 @@ MainWindow::~MainWindow(){
     isAppStopped = true;
     if (thrCanRcv.joinable()) thrCanRcv.join();
     if (thrPlayFile.joinable()) thrPlayFile.join();
-    if (thrZmqRcv.joinable()) thrZmqRcv.join();    
+    if (thrZmqRcv.joinable()) thrZmqRcv.join();
+    tLogger.isRunning = false;
+    if(thrLog.joinable()) thrLog.join();
 
     for (uint8_t i = 0; i < RADAR_NUM; i++)
         delete displays[i];
@@ -549,6 +562,23 @@ void MainWindow::addDisplay(){
     QMessageBox::information(this, "Info", "All displays shown");
 }
 
+void MainWindow::slotTimerTick(){
+    if(ui->cBWriteLog->isChecked()){
+        uint8_t len = 5;
+        QString strIndic = QString(len, '-');
+        ui->lLogIndicator->setStyleSheet("background-color: green");
+        strIndic.replace(indicCount, 1, ">");
+        indicCount++;
+        if(indicCount >= len - 1) indicCount = 1;
+        strIndic += "[.log]";
+        ui->lLogIndicator->setText(strIndic);
+    }
+    else{
+        ui->lLogIndicator->setStyleSheet("background-color: red");
+        ui->lLogIndicator->setText("-----X-----");
+    }
+}
+
 void MainWindow::loadFile(){
     if(ui->lEInpFile->text().isEmpty()){
         QMessageBox::information(this, "Input from log file","Empty input data");
@@ -601,11 +631,24 @@ void MainWindow::stopFile(){
     isPlay = false;
 }
 
+void MainWindow::mirroring(bool checked){
+    for (uint8_t i = 0; i < RADAR_NUM; i++)
+        displays[i]->isMirrored = checked;
+}
+
 void MainWindow::sendToDisplay(const CanLine &canLine){
     if(canLine.messId.length() < 2 || canLine.messData.isEmpty()) return;
+    // ---
     uint8_t messIdInd = canLine.messId[1].digitValue();
     for (uint8_t i = 0; i < RADAR_NUM; i++)
         if(!displays[i]->isHidden())
             if(displays[i]->dConfig->configRadar.id == messIdInd)
                 displays[i]->receiveCanLine(canLine); // NOTE: Send line to display
+
+    // --- LOGGING ---
+    if(ui->cBWriteLog->isChecked()){
+        QString strLine = canLine.toQString();
+        std::unique_lock<std::mutex> lockRadRaw(mutLoc);
+        tLogger.data.push_back(strLine.toStdString());
+    }
 }

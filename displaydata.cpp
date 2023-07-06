@@ -111,7 +111,8 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         cluster.distLat = Converter::getDecData(canLine.messData, 22, 10);
         cluster.distLat *= resClustDistLat;
         cluster.distLat += offsetClustDistLat;
-        //cluster.distLat = -cluster.distLat;// NOTE: clusters left/right?
+        if(isMirrored)
+            cluster.distLat = -cluster.distLat;// NOTE: clusters left/right?
         // Type
         uint8_t numType = Converter::getDecData(canLine.messData, 53, 3);
         cluster.type = static_cast<DynProp>(numType);
@@ -275,7 +276,8 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         object.distLat = Converter::getDecData(canLine.messData, 21, 11);
         object.distLat *= resObjDistLat;
         object.distLat += offsetObjDistLat;
-        //object.distLat = -object.distLat; // NOTE: objects left/right?
+        if(isMirrored)
+            object.distLat = -object.distLat; // NOTE: objects left/right?
         // Type
         uint8_t numType = Converter::getDecData(canLine.messData, 53, 3);
         object.type = static_cast<DynProp>(numType);

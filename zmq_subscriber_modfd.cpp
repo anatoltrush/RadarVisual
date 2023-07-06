@@ -9,8 +9,7 @@ bool Subscriber_modfd::start(std::string &errStr){
 
     _stop = false;
     try{
-        if(_in_queue_size)
-            receiver.setsockopt(ZMQ_RCVHWM, _in_queue_size);
+        if(_in_queue_size) receiver.setsockopt(ZMQ_RCVHWM, _in_queue_size);
 
         receiver.setsockopt(ZMQ_SUBSCRIBE, _filter.c_str(), _filter.length());
 
@@ -30,12 +29,8 @@ bool Subscriber_modfd::stop(){
     bool result = true;
     _stop = true;
     for(const auto &it: receiverPoints){
-        try{
-            receiver.disconnect(it);
-        }
-        catch(std::exception &e){
-            result = false;
-        }
+        try{receiver.disconnect(it);}
+        catch(std::exception &e){result = false;}
     }
     _stopped = true;
     return result;

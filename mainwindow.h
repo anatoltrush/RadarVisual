@@ -1,9 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QTimer>
+
 #include "softversion.h"
 #include "displaydata.h"
 #include "zmq_subscriber_modfd.hpp"
+#include "techlogger.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -19,6 +22,7 @@ public:
 private slots:    
     void start();
     void addDisplay();
+    void slotTimerTick();
 
     void inpCAN();
 #ifdef __WIN32
@@ -32,6 +36,7 @@ private slots:
     void loadFile();
     void playFile();
     void stopFile();
+    void mirroring(bool checked);
 
 private:
     Ui::MainWindow *ui;
@@ -84,9 +89,16 @@ private:
     QString pathFileCanLog;
     std::vector<CanLine> canLines;
 
+    // ----- ----- ----- LOGGER ----- ----- -----
+    std::thread thrLog;
+    TechLogger tLogger;
+    std::mutex mutLoc;
+    std::condition_variable condVar;
+    QTimer* timer = nullptr;
+    uint8_t indicCount = 4;
+
     void fillCanLines(QFile &file, int linesAmount);
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: ?Calc spent dist + Supports + Make objs
-// TODO: ?Redo visImg, write log + color legend for regions
+// TODO: Redo visImg

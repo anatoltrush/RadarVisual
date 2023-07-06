@@ -14,6 +14,7 @@ public:
 
     int selfCount = -1;
     VersionID* versID = nullptr;
+    bool isMirrored = false;
 
     // --- conf window ---
     DialogConfig* dConfig = nullptr;

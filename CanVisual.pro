@@ -6,7 +6,7 @@ QMAKE_TARGET_COPYRIGHT = Anatol Trush
 QMAKE_TARGET_DESCRIPTION = For work with ARS 408-21
 
 VERSION_MAJOR = 4
-VERSION_MINOR = 1
+VERSION_MINOR = 2
 VERSION_BUILD = 0
 
 DEFINES += "VERSION_MAJOR=$$VERSION_MAJOR"\
@@ -38,6 +38,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     softversion.cpp \
+    techlogger.cpp \
     visimage.cpp \
     zmq_client.cpp \
     zmq_subscriber_modfd.cpp
@@ -49,6 +50,7 @@ HEADERS += \
     entity.h \
     mainwindow.h \
     softversion.h \
+    techlogger.h \
     visimage.h \
     zmq_client.hpp \
     zmq_subscriber_modfd.hpp
