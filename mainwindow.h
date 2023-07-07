@@ -30,13 +30,14 @@ private slots:
     void pluginChanged(const QString &plugin);
     void interfaceChanged(const QString &interf);
 #endif
-    void inpZMQ();
-    void inpFile();
+    void slotInputZMQ();
+    void slotInputFile();
 
-    void loadFile();
-    void playFile();
-    void stopFile();
-    void mirroring(bool checked);
+    void slotLoadFile();
+    void slotPlayFile();
+    void slotStopFile();
+    void slotMirroring(bool checked);
+    void slotLogging(bool checked);
 
 private:
     Ui::MainWindow *ui;
@@ -95,7 +96,7 @@ private:
     std::mutex mutLoc;
     std::condition_variable condVar;
     QTimer* timer = nullptr;
-    uint8_t indicCount = 4;
+    uint8_t indicCount = 9;
 
     void fillCanLines(QFile &file, int linesAmount);
     void playCanFile();  

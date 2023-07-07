@@ -29,34 +29,33 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     // --- logger ---
     tLogger.strDirPath = QDir::currentPath();
-    tLogger.updFileName("/RADAR_VISUAL_");
-    ui->lLogPath->setText("Path: " + tLogger.getFullName());
-
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::slotTimerTick);
     timer->start(200);
 
     // --- window ---
     this->setWindowFlags(Qt::WindowCloseButtonHint);
-    this->setWindowTitle(this->windowTitle() + " v" +
-                         QString::number(VERSION_MAJOR) + "." + QString::number(VERSION_MINOR));
+    this->setWindowTitle(this->windowTitle() +
+                         " v" + QString::number(VERSION_MAJOR) + "." + QString::number(VERSION_MINOR));
     ui->pBStart->setShortcut(Qt::Key_Return);
 
     // --- connections ---
     connect(ui->pBSoftVersID, SIGNAL(clicked()), sVersion, SLOT(updVersion()));
     connect(ui->pBSoftVersID, SIGNAL(clicked()), sVersion, SLOT(show()));
-    connect(ui->cBMirror, SIGNAL(clicked(bool)), this, SLOT(mirroring(bool)));
+
+    connect(ui->cBMirror, SIGNAL(clicked(bool)), this, SLOT(slotMirroring(bool)));
+    connect(ui->cBWriteLog, SIGNAL(clicked(bool)), this, SLOT(slotLogging(bool)));
 
     connect(ui->pBStart, SIGNAL(clicked()), this, SLOT(start()));
     connect(ui->pBAddDisplay, SIGNAL(clicked()), this, SLOT(addDisplay()));
 
     connect(ui->rBInpCAN, SIGNAL(clicked()), this, SLOT(inpCAN()));
-    connect(ui->rBInpZMQ, SIGNAL(clicked()), this, SLOT(inpZMQ()));
-    connect(ui->rBInpFile, SIGNAL(clicked()), this, SLOT(inpFile()));
+    connect(ui->rBInpZMQ, SIGNAL(clicked()), this, SLOT(slotInputZMQ()));
+    connect(ui->rBInpFile, SIGNAL(clicked()), this, SLOT(slotInputFile()));
 
-    connect(ui->pBLoadFile, SIGNAL(clicked()), this, SLOT(loadFile()));
-    connect(ui->pBPlayFile, SIGNAL(clicked()), this, SLOT(playFile()));
-    connect(ui->pBStopFile, SIGNAL(clicked()), this, SLOT(stopFile()));
+    connect(ui->pBLoadFile, SIGNAL(clicked()), this, SLOT(slotLoadFile()));
+    connect(ui->pBPlayFile, SIGNAL(clicked()), this, SLOT(slotPlayFile()));
+    connect(ui->pBStopFile, SIGNAL(clicked()), this, SLOT(slotStopFile()));
 
 #ifdef __WIN32
     connect(ui->cBCanPlugin, SIGNAL(currentTextChanged(QString)), this, SLOT(pluginChanged(QString)));
@@ -263,11 +262,11 @@ void MainWindow::interfaceChanged(const QString &interf){
 }
 #endif
 
-void MainWindow::inpZMQ(){
+void MainWindow::slotInputZMQ(){
     ui->pBStart->setEnabled(true);
 }
 
-void MainWindow::inpFile(){
+void MainWindow::slotInputFile(){
     ui->pBStart->setEnabled(false);
 
     pathFileCanLog = QFileDialog::getOpenFileName(this, tr("Open CAN log"), "", tr("Log files (*.log)"));
@@ -564,7 +563,7 @@ void MainWindow::addDisplay(){
 
 void MainWindow::slotTimerTick(){
     if(ui->cBWriteLog->isChecked()){
-        uint8_t len = 5;
+        uint8_t len = 10;
         QString strIndic = QString(len, '-');
         ui->lLogIndicator->setStyleSheet("background-color: green");
         strIndic.replace(indicCount, 1, ">");
@@ -579,7 +578,7 @@ void MainWindow::slotTimerTick(){
     }
 }
 
-void MainWindow::loadFile(){
+void MainWindow::slotLoadFile(){
     if(ui->lEInpFile->text().isEmpty()){
         QMessageBox::information(this, "Input from log file","Empty input data");
         return;
@@ -614,7 +613,7 @@ void MainWindow::loadFile(){
     }
 }
 
-void MainWindow::playFile(){
+void MainWindow::slotPlayFile(){
     ui->pBLoadFile->setEnabled(false);
     ui->pBPlayFile->setEnabled(false);
     ui->pBStopFile->setEnabled(true);
@@ -624,16 +623,23 @@ void MainWindow::playFile(){
             displays[i]->statusBar()->showMessage("Source: log file (" + canLines.front().canNum + ")");
 }
 
-void MainWindow::stopFile(){
+void MainWindow::slotStopFile(){
     ui->pBLoadFile->setEnabled(true);
     ui->pBStopFile->setEnabled(false);
     ui->pBPlayFile->setEnabled(true);
     isPlay = false;
 }
 
-void MainWindow::mirroring(bool checked){
+void MainWindow::slotMirroring(bool checked){
     for (uint8_t i = 0; i < RADAR_NUM; i++)
         displays[i]->isMirrored = checked;
+}
+
+void MainWindow::slotLogging(bool checked){
+    if(checked){
+        tLogger.updFileName("/RADAR_VISUAL_");
+        ui->lELogPath->setText("Path: " + tLogger.getFullName());
+    }
 }
 
 void MainWindow::sendToDisplay(const CanLine &canLine){
