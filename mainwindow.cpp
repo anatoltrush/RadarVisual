@@ -346,20 +346,18 @@ void MainWindow::procReceivedFrames(){
             data = canDevice->interpretErrorFrame(frame);
         else
             data = QLatin1String(frame.payload().toHex(' ').toUpper());
-
-        const QString time = QString::fromLatin1("%1.%2  ")
-                .arg(frame.timeStamp().seconds(), 10, 10, QLatin1Char(' '))
-                .arg(frame.timeStamp().microSeconds() / 100, 4, 10, QLatin1Char('0'));
+        QString tmSec = QString::number(frame.timeStamp().seconds());
+        QString tmMcs = QString::number(frame.timeStamp().microSeconds());
+        while (tmMcs.length() < 6) tmMcs.prepend("0");
+        QString time = tmSec + tmMcs;
         const QString id = QString::number(frame.frameId(), 16);
-
         // --- --- ---
         CanLine rcvLine;
-        rcvLine.canNum = QString::fromStdString(deviceName);
+        rcvLine.canNum = canSets.deviceInterfaceName;
         rcvLine.messId = id;
         rcvLine.messData = data;
         rcvLine.messData.remove(QChar(' '));
-        QString locTime = time;
-        rcvLine.timeStamp = locTime.remove(QChar('.')).toDouble();
+        rcvLine.timeStamp = time.toDouble();
         sendToDisplay(rcvLine);
 
         // --- status bar ---

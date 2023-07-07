@@ -52,6 +52,12 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     // --- post events ---
     ui->cBInfo->click();
     ui->cBChsDist->setCurrentIndex(5); // set 250m
+
+#ifdef __WIN32
+    QFont font = ui->lSpeed_M_KM->font();
+    font.setPointSize(10);
+    ui->lSpeed_M_KM->setFont(font);
+#endif
 }
 
 DisplayData::~DisplayData(){
