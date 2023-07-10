@@ -180,22 +180,14 @@ struct CanLine{
     QString messData;
 
     QString toQString() const {
-        //QString strTime = QString::number(timeStamp);
-        //QLocale locale(QLocale::English);
-        //QString strTime = locale.toString(timeStamp);
-
         double locDouble = timeStamp / 1000000.0;
         QString strTime = QString::number(locDouble, 'f', 6);
         // ---
         QString resStr;
-        resStr += "("  + strTime + ")";
-        resStr += " ";
-        resStr += canNum;
-        resStr += " ";
-        resStr += messId;
-        resStr += "#";
-        resStr += messData.toUpper();
-        resStr += "\n";
+        resStr += "("  + strTime + ") ";
+        resStr += canNum + " ";
+        resStr += messId + "#";
+        resStr += messData.toUpper() + "\n";
         return resStr;
     }
 };

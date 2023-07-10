@@ -20,11 +20,11 @@ public:
     ~MainWindow();
 
 private slots:    
-    void start();
-    void addDisplay();
+    void slotStart();
+    void slotAddDisplay();
     void slotTimerTick();
 
-    void inpCAN();
+    void slotInputCAN();
 #ifdef __WIN32
     int sendCanFrame(const QString& canStr);
     void pluginChanged(const QString &plugin);

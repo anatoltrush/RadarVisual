@@ -46,10 +46,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     connect(ui->cBMirror, SIGNAL(clicked(bool)), this, SLOT(slotMirroring(bool)));
     connect(ui->cBWriteLog, SIGNAL(clicked(bool)), this, SLOT(slotLogging(bool)));
 
-    connect(ui->pBStart, SIGNAL(clicked()), this, SLOT(start()));
-    connect(ui->pBAddDisplay, SIGNAL(clicked()), this, SLOT(addDisplay()));
+    connect(ui->pBStart, SIGNAL(clicked()), this, SLOT(slotStart()));
+    connect(ui->pBAddDisplay, SIGNAL(clicked()), this, SLOT(slotAddDisplay()));
 
-    connect(ui->rBInpCAN, SIGNAL(clicked()), this, SLOT(inpCAN()));
+    connect(ui->rBInpCAN, SIGNAL(clicked()), this, SLOT(slotInputCAN()));
     connect(ui->rBInpZMQ, SIGNAL(clicked()), this, SLOT(slotInputZMQ()));
     connect(ui->rBInpFile, SIGNAL(clicked()), this, SLOT(slotInputFile()));
 
@@ -115,7 +115,7 @@ MainWindow::~MainWindow(){
     delete ui;
 }
 
-void MainWindow::start(){
+void MainWindow::slotStart(){
     // --- --- --- from CAN --- --- ---
     if(ui->rBInpCAN->isChecked()){
 #ifdef __WIN32
@@ -205,7 +205,7 @@ void MainWindow::start(){
     }
 }
 
-void MainWindow::inpCAN(){
+void MainWindow::slotInputCAN(){
     ui->pBStart->setEnabled(true);
 }
 
@@ -548,7 +548,7 @@ void MainWindow::playCanFile(){
     }
 }
 
-void MainWindow::addDisplay(){
+void MainWindow::slotAddDisplay(){
     for (uint8_t i = 0; i < RADAR_NUM; i++){
         if(displays[i]->isHidden()){
             displays[i]->move(this->geometry().topRight().x(), this->pos().y());
