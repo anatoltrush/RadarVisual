@@ -1,7 +1,10 @@
 #ifndef DISPLAYDATA_H
 #define DISPLAYDATA_H
 
+#include <QScrollBar>
+
 #include "dialogconfig.h"
+#include "visimage.h"
 
 namespace Ui {class DisplayData;}
 
@@ -21,7 +24,6 @@ public:
     void receiveCanLine(const CanLine &canLine);
 
 private slots:
-    void chooseDist(const QString &data);
     void radNum(int index);
     void info(bool checked);
 
@@ -29,6 +31,7 @@ private slots:
     void configRadarCall();
     // ---
     void updateWarningsUI();
+    void slotZoomChanged(int val);
 
 signals:
     void signRadarWarningsUI();
@@ -36,6 +39,9 @@ signals:
 
 private:
     Ui::DisplayData *ui;
+
+    VisImage *vDraw = nullptr;
+    const float aspect = 0.46f;
 
     // --- clusters ---
     ClusterList clustList;

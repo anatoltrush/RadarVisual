@@ -4,12 +4,6 @@ VisImage::VisImage(QWidget *parent) : QWidget(parent){
     this->setStyleSheet("background-color: #F5F5F5"); // start color
 }
 
-void VisImage::resizeAspect(){
-    int hei = width() / aspect;
-    QSize size(width(), hei);
-    resize(size);
-}
-
 void VisImage::paintEvent(QPaintEvent *){
     painter = new QPainter(this);
     painter->eraseRect(rect());
@@ -24,18 +18,6 @@ void VisImage::paintEvent(QPaintEvent *){
     drawCursor();
 
     painter->end();
-}
-
-void VisImage::resizeEvent(QResizeEvent *event){
-    QMainWindow* locParent = static_cast<QMainWindow*>(parent());
-    int parentHeight = locParent->height();
-    parentHeight -= 10;
-    setMaximumHeight(parentHeight);
-
-    int wid = event->size().width();
-    int hei = wid / aspect;
-    QSize size(wid, hei);
-    resize(size);
 }
 
 void VisImage::drawZones(){
@@ -68,6 +50,7 @@ void VisImage::drawZones(){
 }
 
 void VisImage::drawRegions(){
+    if(!regions) return;
     for (const auto &reg : *regions) {
         QColor colFill = (colorsWarnLevel)[static_cast<uint8_t>(reg.warnLevel)];
         uint8_t colDown = 30;

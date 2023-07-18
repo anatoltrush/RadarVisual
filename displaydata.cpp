@@ -4,27 +4,33 @@
 DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::DisplayData){
     ui->setupUi(this);
 
+    const int w = 400; // 400...2000
+    vDraw = new VisImage(this);
+    vDraw->setFixedSize(w, w / aspect);
+    ui->sAVisual->setWidget(vDraw);
+    ui->sAVisual->verticalScrollBar()->setValue(vDraw->height());
+
     for(int i = 0; i < RADAR_NUM; i++)
         ui->cBRadNum->addItem("Radar " + QString::number(i));
 
     // --- colors properties ---
-    ui->vDraw->colorsDynProp = std::vector<QColor>(ui->gridTypes->rowCount(), Qt::gray);
-    if(ui->vDraw->colorsDynProp.size() >= 8){
-        ui->vDraw->colorsDynProp[0] = Qt::red;
-        ui->vDraw->colorsDynProp[1] = Qt::yellow;
-        ui->vDraw->colorsDynProp[2] = Qt::blue;
-        ui->vDraw->colorsDynProp[3] = QColor(70, 220, 70); // green
-        ui->vDraw->colorsDynProp[4] = Qt::darkGray;
-        ui->vDraw->colorsDynProp[5] = Qt::darkGreen;
-        ui->vDraw->colorsDynProp[6] = QColor(255, 140, 0); // orange
-        ui->vDraw->colorsDynProp[7] = Qt::black;
+    vDraw->colorsDynProp = std::vector<QColor>(ui->gridTypes->rowCount(), Qt::gray);
+    if(vDraw->colorsDynProp.size() >= 8){
+        vDraw->colorsDynProp[0] = Qt::red;
+        vDraw->colorsDynProp[1] = Qt::yellow;
+        vDraw->colorsDynProp[2] = Qt::blue;
+        vDraw->colorsDynProp[3] = QColor(70, 220, 70); // green
+        vDraw->colorsDynProp[4] = Qt::darkGray;
+        vDraw->colorsDynProp[5] = Qt::darkGreen;
+        vDraw->colorsDynProp[6] = QColor(255, 140, 0); // orange
+        vDraw->colorsDynProp[7] = Qt::black;
     }
 
     // set colors
     int sz = 50;
     QPixmap px(sz, sz);
     for (int i = 0; i < ui->gridTypes->rowCount(); i++) {
-        px.fill(ui->vDraw->colorsDynProp[i]);
+        px.fill(vDraw->colorsDynProp[i]);
         QToolButton* tButton = static_cast<QToolButton*>(ui->gridTypes->itemAtPosition(i, 0)->widget());
         tButton->setIcon(px);
     }
@@ -34,24 +40,23 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
 
     // --- bindings ---
     uint8_t transp = 140;
-    ui->vDraw->colorsWarnLevel[0] = QColor(160, 255, 160, transp); // no warn
-    ui->vDraw->colorsWarnLevel[1] = QColor(255, 140, 140, transp); // warn
-    ui->vDraw->colorsWarnLevel[2] = QColor(128, 128, 128, transp); // unused
-    ui->vDraw->colorsWarnLevel[3] = QColor(255, 150, 50, transp); // left
-    dConfig->colorsWarnLevel = &ui->vDraw->colorsWarnLevel;
-    ui->vDraw->regions = &dConfig->regions;
+    vDraw->colorsWarnLevel[0] = QColor(160, 255, 160, transp); // no warn
+    vDraw->colorsWarnLevel[1] = QColor(255, 140, 140, transp); // warn
+    vDraw->colorsWarnLevel[2] = QColor(128, 128, 128, transp); // unused
+    vDraw->colorsWarnLevel[3] = QColor(255, 150, 50, transp); // left
+    dConfig->colorsWarnLevel = &vDraw->colorsWarnLevel;
+    vDraw->regions = &dConfig->regions;
 
     // --- connections ---
     connect(ui->pBConfigRadar, SIGNAL(clicked()), this, SLOT(configRadarCall()));
     connect(ui->cBInfo, SIGNAL(clicked(bool)), this, SLOT(info(bool)));
     connect(ui->cBRadNum, SIGNAL(currentIndexChanged(int)), this, SLOT(radNum(int)));
-    connect(ui->cBChsDist, SIGNAL(currentTextChanged(QString)), this, SLOT(chooseDist(QString)));
     connect(this, SIGNAL(signRadarWarningsUI()), this, SLOT(updateWarningsUI()));
     connect(this, SIGNAL(signUpdRegionList()), dConfig, SLOT(updRegListUI()));
+    connect(ui->hSZoom, SIGNAL(valueChanged(int)), this, SLOT(slotZoomChanged(int)));
 
     // --- post events ---
     ui->cBInfo->click();
-    ui->cBChsDist->setCurrentIndex(5); // set 250m
 
 #ifdef __WIN32
     QFont font = ui->lSpeed_M_KM->font();
@@ -74,9 +79,9 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         updateShowFlags();
         applyFilters();
 
-        ui->vDraw->clusters = clustersFiltered;
-        ui->vDraw->clustList = clustList;
-        ui->vDraw->update();
+        vDraw->clusters = clustersFiltered;
+        vDraw->clustList = clustList;
+        vDraw->update();
         // ---
         clustersAll.clear();
         // ---
@@ -218,7 +223,7 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         dConfig->configRadar.thrRcs = Converter::getDecData(canLine.messData, 59, 3);
 
         // --- --- ---
-        ui->vDraw->configRadar = dConfig->configRadar;
+        vDraw->configRadar = dConfig->configRadar;
         dConfig->updateConfigUI();
         emit signRadarWarningsUI();
     }
@@ -248,9 +253,9 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
         updateShowFlags();
         applyFilters();
 
-        ui->vDraw->objects = objectsFiltered;
-        ui->vDraw->objList = objList;
-        ui->vDraw->update();
+        vDraw->objects = objectsFiltered;
+        vDraw->objList = objList;
+        vDraw->update();
         // ---
         objectsAll.clear();
         // ---
@@ -453,10 +458,10 @@ void DisplayData::applyFilters(){
 
 void DisplayData::updateShowFlags(){
     int flagSize = ui->gridProps->rowCount();
-    ui->vDraw->showProperties.resize(flagSize);
+    vDraw->showProperties.resize(flagSize);
     for (int i = 0; i < flagSize; i++) {
         QRadioButton* rb = static_cast<QRadioButton*>(ui->gridProps->itemAtPosition(i, 0)->widget());
-        ui->vDraw->showProperties[i] = rb->isChecked();
+        vDraw->showProperties[i] = rb->isChecked();
     }
 }
 
@@ -635,9 +640,10 @@ void DisplayData::updateWarningsUI(){
     }
 }
 
-void DisplayData::chooseDist(const QString &data){
-    ui->vDraw->aspect = 100.0f / data.toFloat();
-    ui->vDraw->resizeAspect();
+void DisplayData::slotZoomChanged(int val){
+    int hei = val / aspect;
+    vDraw->setFixedSize(val, hei);
+    ui->sAVisual->horizontalScrollBar()->setValue(ui->sAVisual->horizontalScrollBar()->maximum() / 2);
 }
 
 void DisplayData::radNum(int index){
@@ -646,7 +652,7 @@ void DisplayData::radNum(int index){
 }
 
 void DisplayData::info(bool checked){
-    ui->vDraw->isShowInfo = checked;
+    vDraw->isShowInfo = checked;
 }
 
 void DisplayData::configRadarCall(){

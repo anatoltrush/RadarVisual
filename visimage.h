@@ -14,7 +14,6 @@ public:
     VisImage(QWidget *parent = nullptr);
 
     bool isShowInfo = false;
-    float aspect    = 0.0f;
     std::vector<QColor> colorsDynProp;
     std::vector<QColor> colorsWarnLevel = std::vector<QColor>(4);
     std::vector<bool> showProperties;
@@ -30,8 +29,6 @@ public:
     ObjectList objList;
     std::vector<ObjectInfo> objects;
 
-    void resizeAspect();
-
 private:
     QPainter *painter;
     QPoint curs;
@@ -43,7 +40,6 @@ private:
     float gridStepM     = 0.0f;
 
     void paintEvent(QPaintEvent *) override;
-    void resizeEvent(QResizeEvent *event) override;
 
     void drawZones();
     void drawRegions();
