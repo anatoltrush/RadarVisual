@@ -21,6 +21,9 @@ public:
     ConfigRadar configRadar;
     std::vector<CollRegion>* regions = nullptr;
 
+    QPoint sACls;
+    QPoint sAObj;
+
     // --- clusters ---
     ClusterList clustList;
     std::vector<ClusterInfo> clusters;    

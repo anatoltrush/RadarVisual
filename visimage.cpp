@@ -61,11 +61,11 @@ void VisImage::drawRegions(){
         painter->setPen(penReg);
         painter->setBrush(colFill);
         // ---
-        int x1 = width()/2 + reg.pt1X / (float)gridStepM * gridStepPx;
+        int x1 = width() / 2 + reg.pt1X / (float)gridStepM * gridStepPx;
         int y1 = height() - reg.pt1Y / (float)gridStepM * gridStepPx;
         QPointF pt1(x1, y1);
 
-        int x2 = width()/2 + reg.pt2X / (float)gridStepM * gridStepPx;
+        int x2 = width() / 2 + reg.pt2X / (float)gridStepM * gridStepPx;
         int y2 = height() - reg.pt2Y / (float)gridStepM * gridStepPx;
         QPointF pt2(x2, y2);
 
@@ -101,14 +101,14 @@ void VisImage::drawAxes(){
         int xCoord = i * gridStepPx;
         painter->drawLine(QLine(xCoord, 0 + (crossSize/2), xCoord, height()));
         // ---m---
-        painter->drawText(QPoint(xCoord-3, height()-2), QString::number(minLeftM + i * gridStepM) + "m");
+        painter->drawText(QPoint(xCoord - 3, height() - 2), QString::number(minLeftM + i * gridStepM) + "m");
     }
     // --- horiz lines ---
     for (int i = 0; i < height() / gridStepPx + 1; i++) {
         int yCoord = height() - i * gridStepPx;
-        painter->drawLine(QLine(-crossSize/2, yCoord, width(), yCoord));
+        painter->drawLine(QLine(-crossSize / 2, yCoord, width(), yCoord));
         // ---m---
-        painter->drawText(QPoint(width()/2, yCoord), QString::number(i * gridStepM) + "m");
+        painter->drawText(QPoint(width() / 2, yCoord), QString::number(i * gridStepM) + "m");
     }
 }
 
@@ -120,7 +120,7 @@ void VisImage::drawRadar(){
     if(gridStepPx <= 0) return;
     int wRad = gridStepPx * 0.5f;
     int hRad = gridStepPx * 0.15f;
-    painter->drawRect(width()/2 - wRad/2, height() - hRad, wRad, hRad);
+    painter->drawRect(width() / 2 - wRad / 2, height() - hRad, wRad, hRad);
 }
 
 void VisImage::drawClusters(){
@@ -131,7 +131,7 @@ void VisImage::drawClusters(){
     for (const auto& cl : clusters) {
         QColor clustCol = (colorsDynProp)[static_cast<uint8_t>(cl.type)];
         painter->setBrush(clustCol);
-        int wCl = width()/2 + cl.distLat / (float)gridStepM * gridStepPx;
+        int wCl = width() / 2 + cl.distLat / (float)gridStepM * gridStepPx;
         int hCl = height() - cl.distLong / (float)gridStepM * gridStepPx;
         int radius = calcRadius(cl.RCS);
         painter->drawEllipse(QPoint(wCl, hCl), radius, radius);
@@ -146,16 +146,16 @@ void VisImage::drawClusters(){
             if(showProperties[5]) textInfo = Converter::floatCutOff(cl.vRelLat, 1);
             if(showProperties[6]) textInfo = Converter::floatCutOff(cl.Pdh0, 1);
             if(showProperties[7]) textInfo = Converter::floatCutOff(cl.azimuth, 1);
-            painter->drawText(wCl+2, hCl-2, textInfo);
+            painter->drawText(wCl + 2, hCl-2, textInfo);
         }
     }
-    painter->drawText(1, 12, "<---Clusters--->");
-    painter->drawText(1, 26, "Measure count: " + QString::number(clustList.measCount));
-    painter->drawText(1, 40, "Clusters in frame (filtered): " + QString::number(clusters.size()));
-    painter->drawText(1, 54, "Clusters in frame (all): " + QString::number(clustList.numExpectSumm));
-    painter->drawText(1, 68, "Far zone (" + QString::number(configRadar.getFarZone()) + "m): " +
+    painter->drawText(sACls.x() + 1, sACls.y() + 12,"<---Clusters--->");
+    painter->drawText(sACls.x() + 1, sACls.y() + 26, "Measure count: " + QString::number(clustList.measCount));
+    painter->drawText(sACls.x() + 1, sACls.y() + 40, "In frame (filter): " + QString::number(clusters.size()));
+    painter->drawText(sACls.x() + 1, sACls.y() + 54, "In frame (all): " + QString::number(clustList.numExpectSumm));
+    painter->drawText(sACls.x() + 1, sACls.y() + 68, "Far zone (" + QString::number(configRadar.getFarZone()) + "m): " +
                       QString::number(clustList.numExpectFar));
-    painter->drawText(1, 82, "Near zone (" + QString::number(configRadar.nearZone) + "m): " +
+    painter->drawText(sACls.x() + 1, sACls.y() + 82, "Near zone (" + QString::number(configRadar.nearZone) + "m): " +
                       QString::number(clustList.numExpectNear));
     // ---
     clustList = ClusterList();
@@ -188,10 +188,10 @@ void VisImage::drawObjectsInfo(){ // not in use
             painter->drawText(wObj+2, hObj-2, textInfo);
         }
     }
-    painter->drawText(width()/2+1, 12, "<---Objects--->");
-    painter->drawText(width()/2+1, 26, "Measure count: " + QString::number(objList.measCount));
-    painter->drawText(width()/2+1, 40, "Objects in frame (filtered): " + QString::number(objects.size()));
-    painter->drawText(width()/2+1, 54, "Objects in frame (all): " + QString::number(objList.numExpect));
+    painter->drawText(width()/2 + 1, 12, "<---Objects--->");
+    painter->drawText(width()/2 + 1, 26, "Measure count: " + QString::number(objList.measCount));
+    painter->drawText(width()/2 + 1, 40, "Objects in frame (filter): " + QString::number(objects.size()));
+    painter->drawText(width()/2 + 1, 54, "Objects in frame (all): " + QString::number(objList.numExpect));
 }
 
 void VisImage::drawObjectsExt(){
@@ -201,7 +201,7 @@ void VisImage::drawObjectsExt(){
     for (const auto& obj : objects) {
         QColor colObjExt = (colorsDynProp)[static_cast<uint8_t>(obj.type)];
         painter->setPen(QPen(colObjExt, 2));
-        int xObj = width()/2 + obj.distLat / (float)gridStepM * gridStepPx;
+        int xObj = width() / 2 + obj.distLat / (float)gridStepM * gridStepPx;
         int yObj = height() - obj.distLong / (float)gridStepM * gridStepPx;
         int wPx = obj.width / (float)gridStepM * gridStepPx;
         if(wPx < 1) wPx = 1;
@@ -209,14 +209,14 @@ void VisImage::drawObjectsExt(){
         if(lPx < 1) lPx = 1;
         painter->translate(xObj, yObj);
         painter->rotate(obj.angle);
-        painter->drawRect(-wPx/2, -lPx, wPx, lPx);
+        painter->drawRect(-wPx / 2, -lPx, wPx, lPx);
         painter->resetTransform();
         // --- text ---
         QPen penObjInfo = QPen(Qt::black, 1);
         painter->setPen(penObjInfo);
         if(isShowInfo){
             // --- class ---
-            painter->drawText(xObj-15, yObj-2, "|" + obj.getClassStr() + "|");
+            painter->drawText(xObj - 15, yObj - 2, "|" + obj.getClassStr() + "|");
             // --- rest ---
             QString textInfo;
             if(showProperties[0]) textInfo = QString::number(obj.id);
@@ -227,13 +227,14 @@ void VisImage::drawObjectsExt(){
             if(showProperties[5]) textInfo = Converter::floatCutOff(obj.vRelLat, 1);
             if(showProperties[6]) textInfo = Converter::floatCutOff(obj.Pdh0, 1);
             if(showProperties[7]) textInfo = Converter::floatCutOff(obj.azimuth, 1);
-            painter->drawText(xObj+2, yObj-2, textInfo);
+            painter->drawText(xObj + 2, yObj - 2, textInfo);
         }
     }
-    painter->drawText(width()/2+1, 12, "<---Objects--->");
-    painter->drawText(width()/2+1, 26, "Measure count: " + QString::number(objList.measCount));
-    painter->drawText(width()/2+1, 40, "Objects in frame (filtered): " + QString::number(objects.size()));
-    painter->drawText(width()/2+1, 54, "Objects in frame (all): " + QString::number(objList.numExpect));
+    uint8_t horGap = 2;
+    painter->drawText(sAObj.x() + horGap, sACls.y() + 12, "<---Objects--->");
+    painter->drawText(sAObj.x() + horGap, sACls.y() + 26, "Measure count: " + QString::number(objList.measCount));
+    painter->drawText(sAObj.x() + horGap, sACls.y() + 40, "In frame (filter): " + QString::number(objects.size()));
+    painter->drawText(sAObj.x() + horGap, sACls.y() + 54, "In frame (all): " + QString::number(objList.numExpect));
     // ---
     objList = ObjectList();
     objects.clear();

@@ -24,14 +24,15 @@ public:
     void receiveCanLine(const CanLine &canLine);
 
 private slots:
-    void radNum(int index);
-    void info(bool checked);
+    void slotRadNum(int index);
+    void slotInfo(bool checked);
 
-    // --- CONFIGS ---
-    void configRadarCall();
-    // ---
-    void updateWarningsUI();
+    void slotConfigRadarCall();
+    void slotUpdateWarningsUI();
+    // --- visual ---
     void slotZoomChanged(int val);
+    void slotSAVertChanged(int val);
+    void slotSAHorizChanged(int val);
 
 signals:
     void signRadarWarningsUI();
@@ -42,6 +43,8 @@ private:
 
     VisImage *vDraw = nullptr;
     const float aspect = 0.46f;
+
+    void resizeEvent(QResizeEvent *event) override;
 
     // --- clusters ---
     ClusterList clustList;

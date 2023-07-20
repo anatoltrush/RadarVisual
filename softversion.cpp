@@ -12,7 +12,7 @@ SoftVersion::~SoftVersion(){
     delete ui;
 }
 
-void SoftVersion::updVersion(){
+void SoftVersion::slotUpdVersion(){
     if(versID.major < 255){
         ui->lMajData->setText(QString::number(versID.major));
         ui->lMinData->setText(QString::number(versID.minor));

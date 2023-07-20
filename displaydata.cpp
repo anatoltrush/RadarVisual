@@ -48,12 +48,15 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     vDraw->regions = &dConfig->regions;
 
     // --- connections ---
-    connect(ui->pBConfigRadar, SIGNAL(clicked()), this, SLOT(configRadarCall()));
-    connect(ui->cBInfo, SIGNAL(clicked(bool)), this, SLOT(info(bool)));
-    connect(ui->cBRadNum, SIGNAL(currentIndexChanged(int)), this, SLOT(radNum(int)));
-    connect(this, SIGNAL(signRadarWarningsUI()), this, SLOT(updateWarningsUI()));
+    connect(ui->pBConfigRadar, SIGNAL(clicked()), this, SLOT(slotConfigRadarCall()));
+    connect(ui->cBInfo, SIGNAL(clicked(bool)), this, SLOT(slotInfo(bool)));
+    connect(ui->cBRadNum, SIGNAL(currentIndexChanged(int)), this, SLOT(slotRadNum(int)));
+    connect(this, SIGNAL(signRadarWarningsUI()), this, SLOT(slotUpdateWarningsUI()));
     connect(this, SIGNAL(signUpdRegionList()), dConfig, SLOT(updRegListUI()));
+    // --- visual ---
     connect(ui->hSZoom, SIGNAL(valueChanged(int)), this, SLOT(slotZoomChanged(int)));
+    connect(ui->sAVisual->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotSAVertChanged(int)));
+    connect(ui->sAVisual->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotSAHorizChanged(int)));
 
     // --- post events ---
     ui->cBInfo->click();
@@ -600,7 +603,7 @@ void DisplayData::showSpeedUI(){
     ui->lSpeed_M_KM->setText(strSpeed);
 }
 
-void DisplayData::updateWarningsUI(){
+void DisplayData::slotUpdateWarningsUI(){
     QString strNoWarn = "<--- no errors --->";
     // --- temper ---
     if(dConfig->configRadar.temperatErr){
@@ -643,19 +646,47 @@ void DisplayData::updateWarningsUI(){
 void DisplayData::slotZoomChanged(int val){
     int hei = val / aspect;
     vDraw->setFixedSize(val, hei);
-    ui->sAVisual->horizontalScrollBar()->setValue(ui->sAVisual->horizontalScrollBar()->maximum() / 2);
+
+    //ui->sAVisual->horizontalScrollBar()->setValue(ui->sAVisual->horizontalScrollBar()->maximum() / 2);
+
+    if(vDraw->width() >= ui->sAVisual->width())
+        vDraw->sAObj.setX(vDraw->sACls.x() + ui->sAVisual->width() / 2);
+    else
+        vDraw->sAObj.setX(vDraw->width() / 2);
 }
 
-void DisplayData::radNum(int index){
+void DisplayData::slotSAVertChanged(int val){
+    vDraw->sACls.setY(val);
+    vDraw->sAObj.setY(val);
+}
+
+void DisplayData::slotSAHorizChanged(int val){
+    vDraw->sACls.setX(val);
+    vDraw->sAObj.setX(val + ui->sAVisual->width() / 2);
+}
+
+void DisplayData::resizeEvent(QResizeEvent *event){
+    static uint8_t countStartResize = 0;
+    if(countStartResize > 0){
+        if(vDraw->width() >= ui->sAVisual->width())
+            vDraw->sAObj.setX(vDraw->sACls.x() + ui->sAVisual->width() / 2);
+    }
+    else{
+        vDraw->sAObj.setX(200);
+        countStartResize++;
+    }
+}
+
+void DisplayData::slotRadNum(int index){
     dConfig->configRadar.id = index;
     clustersFiltered.clear();
 }
 
-void DisplayData::info(bool checked){
+void DisplayData::slotInfo(bool checked){
     vDraw->isShowInfo = checked;
 }
 
-void DisplayData::configRadarCall(){
+void DisplayData::slotConfigRadarCall(){
     dConfig->setWindowTitle("Radar " + QString::number(dConfig->configRadar.id));
     dConfig->show();
 }

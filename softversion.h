@@ -22,7 +22,7 @@ private:
     Ui::SoftVersion *ui;
 
 public slots:
-    void updVersion();
+    void slotUpdVersion();
 };
 
 #endif // SOFTVERSION_H
