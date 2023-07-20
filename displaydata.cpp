@@ -644,10 +644,14 @@ void DisplayData::slotUpdateWarningsUI(){
 }
 
 void DisplayData::slotZoomChanged(int val){
+    QPoint oldCent(saCentr.x() * vDraw->width(), saCentr.y() * vDraw->height());
+
     int hei = val / aspect;
     vDraw->setFixedSize(val, hei);
 
-    //ui->sAVisual->horizontalScrollBar()->setValue(ui->sAVisual->horizontalScrollBar()->maximum() / 2);
+    QPoint newCent(saCentr.x() * vDraw->width(), saCentr.y() * vDraw->height());
+    ui->sAVisual->horizontalScrollBar()->setValue(newCent.x() - (ui->sAVisual->width() / 2));
+    ui->sAVisual->verticalScrollBar()->setValue(newCent.y() - (ui->sAVisual->height() / 2));
 
     if(vDraw->width() >= ui->sAVisual->width())
         vDraw->sAObj.setX(vDraw->sACls.x() + ui->sAVisual->width() / 2);
@@ -655,14 +659,18 @@ void DisplayData::slotZoomChanged(int val){
         vDraw->sAObj.setX(vDraw->width() / 2);
 }
 
-void DisplayData::slotSAVertChanged(int val){
-    vDraw->sACls.setY(val);
-    vDraw->sAObj.setY(val);
-}
-
 void DisplayData::slotSAHorizChanged(int val){
     vDraw->sACls.setX(val);
     vDraw->sAObj.setX(val + ui->sAVisual->width() / 2);
+
+    saCentr.setX((ui->sAVisual->horizontalScrollBar()->value() + ui->sAVisual->width() / 2) / (float)vDraw->width());
+}
+
+void DisplayData::slotSAVertChanged(int val){
+    vDraw->sACls.setY(val);
+    vDraw->sAObj.setY(val);
+
+    saCentr.setY((ui->sAVisual->verticalScrollBar()->value() + ui->sAVisual->height() / 2) / (float)vDraw->height());
 }
 
 void DisplayData::resizeEvent(QResizeEvent *event){

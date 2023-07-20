@@ -31,8 +31,8 @@ private slots:
     void slotUpdateWarningsUI();
     // --- visual ---
     void slotZoomChanged(int val);
-    void slotSAVertChanged(int val);
     void slotSAHorizChanged(int val);
+    void slotSAVertChanged(int val);    
 
 signals:
     void signRadarWarningsUI();
@@ -43,6 +43,7 @@ private:
 
     VisImage *vDraw = nullptr;
     const float aspect = 0.46f;
+    QPointF saCentr = QPointF(0.5f, 0);
 
     void resizeEvent(QResizeEvent *event) override;
 
