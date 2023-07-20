@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->pBStart->setShortcut(Qt::Key_Return);
 
     // --- connections ---
-    connect(ui->pBSoftVersID, SIGNAL(clicked()), sVersion, SLOT(updVersion()));
+    connect(ui->pBSoftVersID, SIGNAL(clicked()), sVersion, SLOT(slotUpdVersion()));
     connect(ui->pBSoftVersID, SIGNAL(clicked()), sVersion, SLOT(show()));
 
     connect(ui->cBMirror, SIGNAL(clicked(bool)), this, SLOT(slotMirroring(bool)));
