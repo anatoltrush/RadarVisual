@@ -6,7 +6,7 @@ QMAKE_TARGET_COPYRIGHT = Anatol Trush
 QMAKE_TARGET_DESCRIPTION = For work with ARS 408-21
 
 VERSION_MAJOR = 4
-VERSION_MINOR = 2
+VERSION_MINOR = 3
 VERSION_BUILD = 0
 
 DEFINES += "VERSION_MAJOR=$$VERSION_MAJOR"\
@@ -37,7 +37,6 @@ SOURCES += \
     displaydata.cpp \
     main.cpp \
     mainwindow.cpp \
-    scrollarea.cpp \
     softversion.cpp \
     techlogger.cpp \
     visimage.cpp \
@@ -50,7 +49,6 @@ HEADERS += \
     displaydata.h \
     entity.h \
     mainwindow.h \
-    scrollarea.h \
     softversion.h \
     techlogger.h \
     visimage.h \

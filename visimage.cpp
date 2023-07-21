@@ -2,6 +2,7 @@
 
 VisImage::VisImage(QWidget *parent) : QWidget(parent){
     this->setStyleSheet("background-color: #F5F5F5"); // start color
+    this->setMouseTracking(true);
 }
 
 void VisImage::paintEvent(QPaintEvent *){

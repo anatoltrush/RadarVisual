@@ -23,7 +23,6 @@ public:
 
     QPoint sACls;
     QPoint sAObj;
-    QPoint curs;
 
     // --- clusters ---
     ClusterList clustList;
@@ -34,7 +33,8 @@ public:
     std::vector<ObjectInfo> objects;
 
 private:
-    QPainter *painter;    
+    QPainter *painter;
+    QPoint curs;
 
     // NOTE: Config grid
     int slicesOneSide   = 6; // parts
@@ -55,7 +55,7 @@ private:
     int calcRadius(float rcs);
 
 protected:
-    void mouseMoveEvent(QMouseEvent *event) override {curs = event->pos();};
+    void mouseMoveEvent(QMouseEvent *event) override {curs = event->pos();}
 };
 
 #endif // VISIMAGE_H

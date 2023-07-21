@@ -691,7 +691,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="ScrollArea" name="sAVisual">
+       <widget class="QScrollArea" name="sAVisual">
         <property name="mouseTracking">
          <bool>true</bool>
         </property>
@@ -756,18 +756,6 @@
   </widget>
   <widget class="QStatusBar" name="statBarDisp"/>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>ScrollArea</class>
-   <extends>QScrollArea</extends>
-   <header location="global">scrollarea.h</header>
-   <container>1</container>
-   <slots>
-    <signal>signal1()</signal>
-    <slot>slot1()</slot>
-   </slots>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
