@@ -37,6 +37,7 @@ SOURCES += \
     displaydata.cpp \
     main.cpp \
     mainwindow.cpp \
+    scrollarea.cpp \
     softversion.cpp \
     techlogger.cpp \
     visimage.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
     displaydata.h \
     entity.h \
     mainwindow.h \
+    scrollarea.h \
     softversion.h \
     techlogger.h \
     visimage.h \

@@ -23,6 +23,7 @@ public:
 
     QPoint sACls;
     QPoint sAObj;
+    QPoint curs;
 
     // --- clusters ---
     ClusterList clustList;
@@ -33,8 +34,7 @@ public:
     std::vector<ObjectInfo> objects;
 
 private:
-    QPainter *painter;
-    QPoint curs;
+    QPainter *painter;    
 
     // NOTE: Config grid
     int slicesOneSide   = 6; // parts

@@ -9,6 +9,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     vDraw->setFixedSize(w, w / aspect);
     ui->sAVisual->setWidget(vDraw);
     ui->sAVisual->verticalScrollBar()->setValue(vDraw->height());
+    ui->sAVisual->curs = &vDraw->curs;
 
     for(int i = 0; i < RADAR_NUM; i++)
         ui->cBRadNum->addItem("Radar " + QString::number(i));
