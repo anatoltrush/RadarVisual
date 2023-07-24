@@ -44,6 +44,7 @@ private:
     VisImage *vDraw = nullptr;
     const float aspect = 0.46f;
     QPointF saCentr = QPointF(0.5f, 0);
+    uint8_t countStartResize = 0;
 
     void resizeEvent(QResizeEvent *event) override;
 

@@ -69,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->hLInputs->insertWidget(1, lPlug);
     ui->hLInputs->insertWidget(3, lInName);
     ui->cBCanPlugin->addItems(QCanBus::instance()->plugins());
+    this->resize(600, this->height());
 #else
     ui->cBCanPlugin->hide();
     ui->cBCanName->hide();
