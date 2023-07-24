@@ -9,6 +9,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     vDraw->setFixedSize(w, w / aspect);
     ui->sAVisual->setWidget(vDraw);
     ui->sAVisual->verticalScrollBar()->setValue(vDraw->height());
+    vDraw->sAObj.setX(200);
 
     for(int i = 0; i < RADAR_NUM; i++)
         ui->cBRadNum->addItem("Radar " + QString::number(i));
@@ -674,15 +675,8 @@ void DisplayData::slotSAVertChanged(int val){
 }
 
 void DisplayData::resizeEvent(QResizeEvent *event){
-    static uint8_t countStartResize = 0;
-    if(countStartResize > 0){
-        if(vDraw->width() >= ui->sAVisual->width())
-            vDraw->sAObj.setX(vDraw->sACls.x() + ui->sAVisual->width() / 2);
-    }
-    else{
-        vDraw->sAObj.setX(200);
-        countStartResize++;
-    }
+    if(vDraw->width() >= ui->sAVisual->width())
+        vDraw->sAObj.setX(vDraw->sACls.x() + ui->sAVisual->width() / 2);
 }
 
 void DisplayData::slotRadNum(int index){
