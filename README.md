@@ -1,13 +1,13 @@
 ## About RadarVisual
-**RadarVisual** is a open project for working with radar [**Continental ARS 408-21**](https://conti-engineering.com/components/ars-408/) (visualization and configuration)
+**RadarVisual** is an open project for working with radar [**Continental ARS 408-21**](https://conti-engineering.com/components/ars-408/) (visualization and configuration)
 
 ![Example](Example.JPG)
 
 ### Features:
 * Ability to get data in 3 ways:
   * via PEAK-CAN (USB)
-  * via .log file
   * via ZMQ
+  * via .log file
 * Ability to use up to 8 radars simultaneously
 * Configuration:
   * Radar state configuration 
