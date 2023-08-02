@@ -76,6 +76,9 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
     // --- ------ CLUSTERS --- --- ---
     if(canLine.messId[0] == '6' && canLine.messId[2] == '0'){ // CLUST LIST
         calcSpeed();
+        if(speedVehicle >= HIGH_SPEED) statusSpeed = StatusSpeed::backward;
+        if(speedVehicle < HIGH_SPEED && speedVehicle > LOW_SPEED) statusSpeed = StatusSpeed::slowSpeed;
+        if(speedVehicle <= LOW_SPEED) statusSpeed = StatusSpeed::forward;
         showSpeedUI();
 
         // NOTE: Send cluster frame to visual
@@ -601,6 +604,7 @@ void DisplayData::showSpeedUI(){
     QString strSpeed = "Speed: " + Converter::floatCutOff(speedVehicle, 1) + "m/s (" +
             Converter::floatCutOff(speedVehicle * 3.6f, 1) + "km/h)";
     ui->lSpeed_M_KM->setText(strSpeed);
+    //std::cout << "Speed: " << strSpeed.toStdString() << std::endl;
 }
 
 void DisplayData::slotUpdateWarningsUI(){

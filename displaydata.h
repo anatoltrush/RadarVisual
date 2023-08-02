@@ -70,7 +70,7 @@ private:
     float speedVehicle      = 0.0f;
     float speedQuality      = 0.0f;
 
-    float koeffKalmanSpeed  = 0.5f;
+    float koeffKalmanSpeed  = 0.1f; // 0.1...1.0 smooth...sharp
     float koeffKalmanQuality = 0.2f;
     int16_t zonaAnalyseQuality = 10;
 
