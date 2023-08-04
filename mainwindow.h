@@ -103,4 +103,3 @@ private:
 };
 #endif // MAINWINDOW_H
 // TODO: spent distance
-// TODO: bugfix in calcspeed

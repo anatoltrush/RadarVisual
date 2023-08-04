@@ -11,7 +11,7 @@ uint16_t Converter::getDecData(const QString &hexData, uint8_t indBeg, uint8_t l
     return res;
 }
 
-QString Converter::floatCutOff(float value, int afterDot){
+QString Converter::floatCutOff(const float &value, int afterDot){
     std::stringstream stream;
     stream << std::fixed << std::setprecision(afterDot) << value;
     return QString::fromStdString(stream.str());

@@ -472,9 +472,10 @@ void DisplayData::updateShowFlags(){
 }
 
 int DisplayData::calcSpeed(){
-    uint8_t posMax = 127;
-    uint8_t valMax = 0;
-    uint8_t val = 0;
+    uint8_t indMaxValInHist = 127;
+    uint8_t valMaxInHist = 0;
+    uint8_t valForHist = 0;
+
     float koeff = 60.0f;
     float averSpeedRes = 0.0f;
     float qualitySpeed = 60.0f;
@@ -493,8 +494,8 @@ int DisplayData::calcSpeed(){
     if(statusSpeed == StatusSpeed::forward){
         for (uint8_t a = 1; a < 0xFF; a++){
             if (m_dataInfo[a].type == DynProp::oncoming){
-                val = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
-                pHistoArray[val]++;
+                valForHist = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
+                pHistoArray[valForHist]++;
             }
         }
     }
@@ -503,99 +504,104 @@ int DisplayData::calcSpeed(){
             if (m_dataInfo[a].type == DynProp::oncoming ||
                     m_dataInfo[a].type == DynProp::stationary ||
                     m_dataInfo[a].type == DynProp::moving){
-                val = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
-                pHistoArray[val]++;
+                valForHist = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
+                pHistoArray[valForHist]++;
             }
         }
     }
     if(statusSpeed == StatusSpeed::backward){
         for (uint8_t a = 1; a < 0xFF; a++){
             if (m_dataInfo[a].type == DynProp::moving){
-                val = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
-                pHistoArray[val]++;
+                valForHist = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
+                pHistoArray[valForHist]++;
             }
         }
     }
 
     for (uint8_t i = 4; i < 0xFF - 4; i++){
         if (pHistoArray[i] > 0){
-            if (valMax < pHistoArray[i]){
-                valMax = pHistoArray[i];
-                posMax = i;
+            if (valMaxInHist < pHistoArray[i]){
+                valMaxInHist = pHistoArray[i];
+                indMaxValInHist = i;
             }
         }
     }
 
-    pointMax = pHistoArray[posMax];
-    point1LMax = pHistoArray[posMax-1];
-    point2LMax = pHistoArray[posMax-2];
-    point1RMax = pHistoArray[posMax+1];
-    point2RMax = pHistoArray[posMax+2];
+    pointMax = pHistoArray[indMaxValInHist];
+    point1LMax = pHistoArray[indMaxValInHist-1];
+    point2LMax = pHistoArray[indMaxValInHist-2];
+    point1RMax = pHistoArray[indMaxValInHist+1];
+    point2RMax = pHistoArray[indMaxValInHist+2];
 
-    valMax = point1LMax + pointMax + point1RMax;
+    valMaxInHist = point1LMax + pointMax + point1RMax;
 
     if (point1LMax + point1RMax)
         koeff = static_cast<float>(pointMax) / static_cast<float>(point1LMax + point1RMax);
 
-    if (valMax > 8 && clustList.numExpectSumm > 8){
+    if (valMaxInHist > 8 && clustList.numExpectSumm > 8){
         float averSpeed4 = 0.0f;
         float valMax4 = 0.0f;
 
-        float averSpeed = (point1LMax * (posMax - 1) + pointMax * (posMax) + point1RMax * (posMax + 1))
+        float averSpeed = (point1LMax * (indMaxValInHist - 1) + pointMax * (indMaxValInHist) + point1RMax * (indMaxValInHist + 1))
                 / static_cast<float>(point1LMax+pointMax+point1RMax);
 
         if (point1LMax > point1RMax){
             valMax4 = point2LMax + point1LMax + pointMax + point1RMax;
-            averSpeed4 = (point2LMax * (posMax - 2) + point1LMax * (posMax - 1) + pointMax * (posMax) + point1RMax * (posMax + 1))
+            averSpeed4 = (point2LMax * (indMaxValInHist - 2) + point1LMax * (indMaxValInHist - 1) + pointMax * (indMaxValInHist) + point1RMax * (indMaxValInHist + 1))
                     / static_cast<float>(valMax4);
         }
         else{
             valMax4 = point1LMax + pointMax + point1RMax + point2RMax;
 
-            averSpeed4 = (point1LMax * (posMax - 1) + pointMax * (posMax) + point1RMax * (posMax + 1) + point2RMax * (posMax + 2))
+            averSpeed4 = (point1LMax * (indMaxValInHist - 1) + pointMax * (indMaxValInHist) + point1RMax * (indMaxValInHist + 1) + point2RMax * (indMaxValInHist + 2))
                     / static_cast<float>(valMax4);
         }
 
         if (koeff > 3) averSpeedRes = averSpeed;
         else averSpeedRes = averSpeed4;
+        //std::cout << "k:" << koeff << "\t|S: " << averSpeed << "\t| S4: " << averSpeed4 << std::endl;
 
-        if (fabs(averSpeedKalman - 127) > 0.01f){
-            averSpeedKalman = (averSpeedRes * koeffKalmanSpeed + averSpeedKalman * (1-koeffKalmanSpeed));
+        // --- --- ---
+        /*if (fabs(averSpeedKalman - 127) > 0.01f){
+            averSpeedKalman = (averSpeedRes * koeffKalmanSpeed + averSpeedKalman * (1 - koeffKalmanSpeed));
+            std::cout << "averSpeedKalman1: " << averSpeedKalman <<std::endl;
         }
         else{
             averSpeedKalman = averSpeedRes;
-        }
+        }*/
+        averSpeedKalman = averSpeedRes;
 
-        if (posMax >= zonaAnalyseQuality && posMax < DATA_SIZE - zonaAnalyseQuality){
+        // --- QUALITY ---
+        if (indMaxValInHist >= zonaAnalyseQuality && indMaxValInHist < DATA_SIZE - zonaAnalyseQuality){
             float var3 = 0.0f;
             float summ3 = 0.0f;
-            pHistoArray[posMax - 1] += 2;
-            pHistoArray[posMax + 1] += 2;
+            pHistoArray[indMaxValInHist - 1] += 2;
+            pHistoArray[indMaxValInHist + 1] += 2;
 
             for (int16_t i = -zonaAnalyseQuality; i <= zonaAnalyseQuality; ++i){
-                var3 += pHistoArray[posMax + i] * i*i;
-                summ3 += pHistoArray[posMax + i];
+                var3 += pHistoArray[indMaxValInHist + i] * i * i;
+                summ3 += pHistoArray[indMaxValInHist + i];
             }
             var3 /= summ3;
-            qualitySpeed = (5 * var3) / valMax;
+            qualitySpeed = (5 * var3) / valMaxInHist;
         }
         else{
             qualitySpeed = 60.0f;
         }
 
         if (averQuality < 59)
-            averQuality = (1 - koeffKalmanQuality)*averQuality + koeffKalmanQuality*(qualitySpeed);
+            averQuality = (1 - koeffKalmanQuality) * averQuality + koeffKalmanQuality * qualitySpeed;
         else
             averQuality = qualitySpeed;
 
         speedVehicle = (averSpeedKalman - 127.f) * 0.25f;
         speedQuality = averQuality;
-        // std::cout << static_cast<int32_t>(valMax) << " : " << static_cast<int32_t>(posMax)
+        //std::cout << "speedVehicle: " << speedVehicle <<std::endl;
     }
     else{
         speedQuality = 60.0f;
         speedVehicle = 0;
-        return -1;
+        return 0;
     }
     return 0;
 }
@@ -604,7 +610,6 @@ void DisplayData::showSpeedUI(){
     QString strSpeed = "Speed: " + Converter::floatCutOff(speedVehicle, 1) + "m/s (" +
             Converter::floatCutOff(speedVehicle * 3.6f, 1) + "km/h)";
     ui->lSpeed_M_KM->setText(strSpeed);
-    //std::cout << "Speed: " << strSpeed.toStdString() << std::endl;
 }
 
 void DisplayData::slotUpdateWarningsUI(){

@@ -8,7 +8,7 @@
 class Converter{
 public:    
     static uint16_t getDecData(const QString& hexData, uint8_t indBeg, uint8_t len);
-    static QString floatCutOff(float value, int afterDot);
+    static QString floatCutOff(const float &value, int afterDot);
 
     static void getZmqFromCanFd(zmq::message_t& message, const canfd_frame& frame, const MessageId& id);
     static void getCanFdFromZmq(const zmq::message_t& message, canfd_frame& frame, MessageId& id);

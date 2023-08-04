@@ -573,7 +573,7 @@ void MainWindow::slotTimerTick(){
     }
     else{
         ui->lLogIndicator->setStyleSheet("background-color: red");
-        ui->lLogIndicator->setText("-----X-----");
+        ui->lLogIndicator->setText("--- no logging ---");
     }
 }
 
