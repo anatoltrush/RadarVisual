@@ -503,7 +503,8 @@ int DisplayData::calcSpeed(){
         for (uint8_t a = 1; a < 0xFF; a++){
             if (m_dataInfo[a].type == DynProp::oncoming ||
                     m_dataInfo[a].type == DynProp::stationary ||
-                    m_dataInfo[a].type == DynProp::moving){
+                    m_dataInfo[a].type == DynProp::moving ||
+                    m_dataInfo[a].type == DynProp::stationaryCandidate){
                 valForHist = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
                 pHistoArray[valForHist]++;
             }
