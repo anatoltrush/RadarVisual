@@ -49,6 +49,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
 
     // --- connections ---
     connect(ui->pBConfigRadar, SIGNAL(clicked()), this, SLOT(slotConfigRadarCall()));
+    connect(ui->pBPathReset, SIGNAL(clicked()), this, SLOT(slotPathReset()));
     connect(ui->cBInfo, SIGNAL(clicked(bool)), this, SLOT(slotInfo(bool)));
     connect(ui->cBRadNum, SIGNAL(currentIndexChanged(int)), this, SLOT(slotRadNum(int)));
     connect(this, SIGNAL(signRadarWarningsUI()), this, SLOT(slotUpdateWarningsUI()));
@@ -56,7 +57,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     // --- visual ---
     connect(ui->hSZoom, SIGNAL(valueChanged(int)), this, SLOT(slotZoomChanged(int)));
     connect(ui->sAVisual->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotSAVertChanged(int)));
-    connect(ui->sAVisual->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotSAHorizChanged(int)));
+    connect(ui->sAVisual->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotSAHorizChanged(int)));    
 
     // --- post events ---
     ui->cBInfo->click();
@@ -76,10 +77,12 @@ void DisplayData::receiveCanLine(const CanLine &canLine){
     // --- ------ CLUSTERS --- --- ---
     if(canLine.messId[0] == '6' && canLine.messId[2] == '0'){ // CLUST LIST
         calcSpeed();
+        calcPath();
+
         if(speedVehicle >= HIGH_SPEED) statusSpeed = StatusSpeed::backward;
         if(speedVehicle < HIGH_SPEED && speedVehicle > LOW_SPEED) statusSpeed = StatusSpeed::slowSpeed;
         if(speedVehicle <= LOW_SPEED) statusSpeed = StatusSpeed::forward;
-        showSpeedUI();
+        showSpeedPathUI();
 
         // NOTE: Send cluster frame to visual
         updateShowFlags();
@@ -607,10 +610,27 @@ int DisplayData::calcSpeed(){
     return 0;
 }
 
-void DisplayData::showSpeedUI(){
+void DisplayData::calcPath(){
+    uint64_t differTime = GET_CUR_TIME_MILLI - lastRadar600Ms;
+    lastRadar600Ms = GET_CUR_TIME_MILLI;
+    if(differTime > (RADAR_TIME_DATA_MS + RADAR_TIME_GAP_MS))
+        differTime = RADAR_TIME_DATA_MS;
+
+    uint32_t smallDistCm = speedVehicle * 100 * (differTime/1000.0);
+    radarPathCm += smallDistCm;
+}
+
+void DisplayData::showSpeedPathUI(){
+    // --- SPEED ---
     QString strSpeed = "Speed: " + Converter::floatCutOff(speedVehicle, 1) + "m/s (" +
             Converter::floatCutOff(speedVehicle * 3.6f, 1) + "km/h)";
     ui->lSpeed_M_KM->setText(strSpeed);
+
+    // --- PATH ---
+    float spentPath = radarPathCm/100.0f;
+    QString spentFloat = Converter::floatCutOff(spentPath, 1);
+    QString strPath = "Distance: " + spentFloat + "m";
+    ui->lPath_m->setText(strPath);
 }
 
 void DisplayData::slotUpdateWarningsUI(){

@@ -32,7 +32,8 @@ private slots:
     // --- visual ---
     void slotZoomChanged(int val);
     void slotSAHorizChanged(int val);
-    void slotSAVertChanged(int val);    
+    void slotSAVertChanged(int val);
+    void slotPathReset(){radarPathCm = 0;}
 
 signals:
     void signRadarWarningsUI();
@@ -74,8 +75,12 @@ private:
     float koeffKalmanQuality = 0.2f;
     int16_t zonaAnalyseQuality = 10;
 
+    int32_t radarPathCm  = 0; // cm
+    uint64_t lastRadar600Ms = 0;
+
     int calcSpeed();
-    void showSpeedUI();
+    void calcPath();
+    void showSpeedPathUI();
 };
 
 #endif // DISPLAYDATA_H

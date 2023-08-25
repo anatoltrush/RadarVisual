@@ -102,4 +102,3 @@ private:
     void playCanFile();  
 };
 #endif // MAINWINDOW_H
-// TODO: spent distance
