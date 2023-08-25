@@ -66,6 +66,7 @@ DisplayData::DisplayData(QWidget *parent) : QMainWindow(parent), ui(new Ui::Disp
     QFont font = ui->lSpeed_M_KM->font();
     font.setPointSize(10);
     ui->lSpeed_M_KM->setFont(font);
+    ui->lPath_m->setFont(font);
 #endif
 }
 

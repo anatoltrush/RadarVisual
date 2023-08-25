@@ -38,7 +38,6 @@
         <property name="font">
          <font>
           <pointsize>11</pointsize>
-          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -61,7 +60,6 @@
         <property name="font">
          <font>
           <pointsize>12</pointsize>
-          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -83,7 +81,6 @@
           <property name="font">
            <font>
             <pointsize>12</pointsize>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -100,9 +97,15 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="maximumSize">
+           <size>
+            <width>60</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="font">
            <font>
-            <weight>75</weight>
+            <pointsize>11</pointsize>
             <bold>true</bold>
            </font>
           </property>
@@ -165,7 +168,6 @@
           <property name="font">
            <font>
             <pointsize>11</pointsize>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -762,8 +764,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>413</width>
-           <height>617</height>
+           <width>473</width>
+           <height>613</height>
           </rect>
          </property>
         </widget>
