@@ -490,7 +490,7 @@ void MainWindow::fillCanLines(QFile &file, int linesAmount){
     while (!in.atEnd()){
         QString line = in.readLine();
         QStringList strList1 = line.split(u' ', Qt::SkipEmptyParts);
-        if(strList1.size() < 3) break;
+        if(strList1.size() < 3) continue;;
 
         CanLine canLine;
         QString tmStmp = strList1[0];
@@ -501,7 +501,7 @@ void MainWindow::fillCanLines(QFile &file, int linesAmount){
         canLine.canNum = strList1[1];
 
         QStringList strList2 = strList1[2].split(u'#', Qt::SkipEmptyParts);
-        if(strList2.size() < 2) break;
+        if(strList2.size() < 2) continue;;
         canLine.messId = strList2[0];
         canLine.messData = strList2[1];
         canLines.push_back(canLine);

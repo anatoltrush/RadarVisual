@@ -14,6 +14,7 @@
   * Filters configuration (cluster, objects)
   * Collisions configuration 
 * Calculates vehicle velocity (if radar is moving)
+* Calculates traveled distance (if radar is moving)
 * Write CAN data to .log file
 
 ### Supported OS
