@@ -29,7 +29,7 @@
 #define COLL_REG_NUM        (8)
 #define DATA_SIZE           (256)
 #define MSG_NUM_ZMQ_STEP    (20)
-#define MSG_NUM_CAN_STEP    (20)
+#define MSG_NUM_CAN_STEP    (50)
 #define LOW_SPEED           (-2.0f)
 #define HIGH_SPEED          (2.0f)
 #define RADAR_TIME_DATA_MS  (74)
