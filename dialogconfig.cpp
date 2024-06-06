@@ -3,39 +3,47 @@
 
 DialogConfig::DialogConfig(QWidget *parent): QDialog(parent), ui(new Ui::DialogConfig){
     ui->setupUi(this);
+    clipboard = QApplication::clipboard();
 
     for(int i = 0; i < RADAR_NUM; i++)
         ui->cBoxSetRadId->addItem("ID " + QString::number(i));
 
     ui->lineRadar->setStyleSheet("background-color: gray");
 
+    // --- copy button ---
+    QPixmap pixmap(QCoreApplication::applicationDirPath() + "/copy.png");
+    QIcon buttIcon(pixmap);
+    ui->pBCopyComms->setIcon(buttIcon);
+    ui->pBCopyComms->setIconSize(QSize(20, 20));
+
     // --- connections ---
     connect(ui->tWConfig, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     ui->tWConfig->setCurrentIndex(1);
     ui->tWConfig->setCurrentIndex(0);
 
-    connect(ui->rBSetClObjTypeCl, SIGNAL(clicked()), this, SLOT(selectedUIClusters()));
-    connect(ui->rBSetClObjTypeObj, SIGNAL(clicked()), this, SLOT(selectedUIObjects()));
+    connect(ui->rBSetClObjTypeCl,   SIGNAL(clicked()), this, SLOT(selectedUIClusters()));
+    connect(ui->rBSetClObjTypeObj,  SIGNAL(clicked()), this, SLOT(selectedUIObjects()));
     ui->rBSetClObjTypeCl->click();
 
     // --- radar ---
-    connect(ui->pBClearResStr, SIGNAL(clicked()), this, SLOT(clearResString()));
-    connect(ui->pBGenRadConf, SIGNAL(clicked()), this, SLOT(genRadConfigCommand()));
+    connect(ui->pBClearResStr,  SIGNAL(clicked()), this, SLOT(clearResString()));
+    connect(ui->pBGenRadConf,   SIGNAL(clicked()), this, SLOT(genRadConfigCommand()));
     connect(ui->pBGenClObjConf, SIGNAL(clicked()), this, SLOT(genClObjConfigCommand()));
     connect(ui->pBGenCollState, SIGNAL(clicked()), this, SLOT(genCollStateCommand()));
     connect(ui->pBGenCollRegion, SIGNAL(clicked()), this, SLOT(genCollRegionCommand()));
-    connect(ui->pBSend, SIGNAL(clicked()), this, SLOT(onPBSend()));
+    connect(ui->pBSend,         SIGNAL(clicked()), this, SLOT(onPBSend()));
+    connect(ui->pBCopyComms,    SIGNAL(clicked()), this, SLOT(copyInClipBoard()));
 
-    connect(ui->cBSetRadQual, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadQual(bool)));
-    connect(ui->cBSetRadExt, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadExt(bool)));
-    connect(ui->cBSetRadThr, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadThr(bool)));
-    connect(ui->cBSetRadStore, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadStore(bool)));
-    connect(ui->cBSetRadRelay, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadRelay(bool)));
-    connect(ui->cBSetRadDist, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadDist(bool)));
-    connect(ui->cBSetRadSort, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadSort(bool)));
-    connect(ui->cBSetRadOut, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadOut(bool)));
-    connect(ui->cBSetRadPow, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadPow(bool)));
-    connect(ui->cBSetRadId, SIGNAL(clicked(bool)), this, SLOT(showHideSetRadId(bool)));
+    connect(ui->cBSetRadQual,   SIGNAL(clicked(bool)), this, SLOT(showHideSetRadQual(bool)));
+    connect(ui->cBSetRadExt,    SIGNAL(clicked(bool)), this, SLOT(showHideSetRadExt(bool)));
+    connect(ui->cBSetRadThr,    SIGNAL(clicked(bool)), this, SLOT(showHideSetRadThr(bool)));
+    connect(ui->cBSetRadStore,  SIGNAL(clicked(bool)), this, SLOT(showHideSetRadStore(bool)));
+    connect(ui->cBSetRadRelay,  SIGNAL(clicked(bool)), this, SLOT(showHideSetRadRelay(bool)));
+    connect(ui->cBSetRadDist,   SIGNAL(clicked(bool)), this, SLOT(showHideSetRadDist(bool)));
+    connect(ui->cBSetRadSort,   SIGNAL(clicked(bool)), this, SLOT(showHideSetRadSort(bool)));
+    connect(ui->cBSetRadOut,    SIGNAL(clicked(bool)), this, SLOT(showHideSetRadOut(bool)));
+    connect(ui->cBSetRadPow,    SIGNAL(clicked(bool)), this, SLOT(showHideSetRadPow(bool)));
+    connect(ui->cBSetRadId,     SIGNAL(clicked(bool)), this, SLOT(showHideSetRadId(bool)));
 
     emit ui->cBSetRadQual->clicked(false);
     emit ui->cBSetRadExt->clicked(false);
@@ -958,6 +966,17 @@ void DialogConfig::updRegListUI(){
         ui->tWRegions->insertRow(ui->tWRegions->rowCount());
         ui->tWRegions->setItem(ui->tWRegions->rowCount() - 1, 0, new QTableWidgetItem("Region ID: " + QString::number(rg.id)));
     }
+}
+
+void DialogConfig::copyInClipBoard(){
+    clipboard->clear();
+    QString strCopy;
+    if(ui->tWConfig->currentIndex() == 0) strCopy = ui->lEResStr->text();
+    else if(ui->tWConfig->currentIndex() == 1)
+        for (int index = 0; index < ui->cBResStr->count(); index++)
+            strCopy.append(ui->cBResStr->itemText(index) + "\n");
+    else{/*nothing*/}
+    clipboard->setText(strCopy);
 }
 
 void DialogConfig::showHideSetRadQual(bool checked){

@@ -33,6 +33,8 @@ public:
     std::vector<ObjectInfo> objects;
 
 private:
+    uint64_t lastDrawMs = 0;
+
     QPainter *painter;
     QPoint curs;
 

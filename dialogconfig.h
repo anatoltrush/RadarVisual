@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QTableWidgetItem>
+#include <QClipboard>
 
 #include "entity.h"
 #include "converter.h"
@@ -54,6 +55,7 @@ private slots:
     void sendOne();
     void sendMulti();
     void updRegListUI();
+    void copyInClipBoard();
 
     void showHideSetRadQual(bool checked);
     void showHideSetRadExt(bool checked);
@@ -107,6 +109,7 @@ private slots:
 
 private:
     Ui::DialogConfig *ui;
+    QClipboard *clipboard = nullptr;
 
     uint8_t delaySendMsg = 50;
 

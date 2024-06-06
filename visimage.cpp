@@ -6,6 +6,11 @@ VisImage::VisImage(QWidget *parent) : QWidget(parent){
 }
 
 void VisImage::paintEvent(QPaintEvent *){
+    uint64_t diffDraw = GET_CUR_TIME_MILLI - lastDrawMs;
+    if(diffDraw < UPDATE_DRAW_MS) return;
+    lastDrawMs = GET_CUR_TIME_MILLI;
+
+    // ---
     painter = new QPainter(this);
     painter->eraseRect(rect());
 

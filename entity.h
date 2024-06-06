@@ -34,6 +34,7 @@
 #define HIGH_SPEED          (2.0f)
 #define RADAR_TIME_DATA_MS  (74)
 #define RADAR_TIME_GAP_MS   (75)
+#define UPDATE_DRAW_MS      (5)
 
 #define GET_CUR_TIME_MILLI (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 #define GET_CUR_TIME_MICRO (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
