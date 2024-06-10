@@ -495,16 +495,15 @@ int DisplayData::calcSpeed(){
     for (size_t i = 0; i < clustersAll.size(); i++)
         m_dataInfo[i] = clustersAll[i];
 
-    if(statusSpeed == StatusSpeed::forward){
-        for (uint8_t a = 1; a < 0xFF; a++){
+    if(statusSpeed == StatusSpeed::forward)
+        for (uint8_t a = 1; a < 0xFF; a++)
             if (m_dataInfo[a].type == DynProp::oncoming){
                 valForHist = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
                 pHistoArray[valForHist]++;
             }
-        }
-    }
-    if(statusSpeed == StatusSpeed::slowSpeed){
-        for (uint8_t a = 1; a < 0xFF; a++){
+
+    if(statusSpeed == StatusSpeed::slowSpeed)
+        for (uint8_t a = 1; a < 0xFF; a++)
             if (m_dataInfo[a].type == DynProp::oncoming ||
                     m_dataInfo[a].type == DynProp::stationary ||
                     m_dataInfo[a].type == DynProp::moving ||
@@ -512,25 +511,28 @@ int DisplayData::calcSpeed(){
                 valForHist = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
                 pHistoArray[valForHist]++;
             }
-        }
-    }
-    if(statusSpeed == StatusSpeed::backward){
-        for (uint8_t a = 1; a < 0xFF; a++){
+
+
+    if(statusSpeed == StatusSpeed::backward)
+        for (uint8_t a = 1; a < 0xFF; a++)
             if (m_dataInfo[a].type == DynProp::moving){
                 valForHist = static_cast<uint8_t>(127.f + m_dataInfo[a].vRelLong * 4.0f + 0.5f);
                 pHistoArray[valForHist]++;
             }
-        }
-    }
 
-    for (uint8_t i = 4; i < 0xFF - 4; i++){
-        if (pHistoArray[i] > 0){
+    for (uint8_t i = 4; i < 0xFF - 4; i++)
+        if (pHistoArray[i] > 0)
             if (valMaxInHist < pHistoArray[i]){
                 valMaxInHist = pHistoArray[i];
                 indMaxValInHist = i;
             }
-        }
+
+    // --- --- ---
+    if(valMaxInHist == 0){
+        speedVehicle = 0.0f;
+        return 0;
     }
+    // --- --- ---
 
     pointMax = pHistoArray[indMaxValInHist];
     point1LMax = pHistoArray[indMaxValInHist-1];
@@ -552,19 +554,18 @@ int DisplayData::calcSpeed(){
 
         if (point1LMax > point1RMax){
             valMax4 = point2LMax + point1LMax + pointMax + point1RMax;
-            averSpeed4 = (point2LMax * (indMaxValInHist - 2) + point1LMax * (indMaxValInHist - 1) + pointMax * (indMaxValInHist) + point1RMax * (indMaxValInHist + 1))
-                    / static_cast<float>(valMax4);
+            averSpeed4 = (point2LMax * (indMaxValInHist - 2) + point1LMax * (indMaxValInHist - 1) + pointMax * (indMaxValInHist) +
+                          point1RMax * (indMaxValInHist + 1)) / static_cast<float>(valMax4);
         }
         else{
             valMax4 = point1LMax + pointMax + point1RMax + point2RMax;
 
-            averSpeed4 = (point1LMax * (indMaxValInHist - 1) + pointMax * (indMaxValInHist) + point1RMax * (indMaxValInHist + 1) + point2RMax * (indMaxValInHist + 2))
-                    / static_cast<float>(valMax4);
+            averSpeed4 = (point1LMax * (indMaxValInHist - 1) + pointMax * (indMaxValInHist) + point1RMax * (indMaxValInHist + 1) +
+                          point2RMax * (indMaxValInHist + 2)) / static_cast<float>(valMax4);
         }
 
         if (koeff > 3) averSpeedRes = averSpeed;
         else averSpeedRes = averSpeed4;
-        //std::cout << "k:" << koeff << "\t|S: " << averSpeed << "\t| S4: " << averSpeed4 << std::endl;
 
         // --- --- ---
         /*if (fabs(averSpeedKalman - 127) > 0.01f){
