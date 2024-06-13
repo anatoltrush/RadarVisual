@@ -971,7 +971,8 @@ void DialogConfig::updRegListUI(){
 void DialogConfig::copyInClipBoard(){
     clipboard->clear();
     QString strCopy;
-    if(ui->tWConfig->currentIndex() == 0) strCopy = ui->lEResStr->text();
+    if(ui->tWConfig->currentIndex() == 0 || ui->tWConfig->currentIndex() == 2)
+        strCopy = ui->lEResStr->text();
     else if(ui->tWConfig->currentIndex() == 1)
         for (int index = 0; index < ui->cBResStr->count(); index++)
             strCopy.append(ui->cBResStr->itemText(index) + "\n");
